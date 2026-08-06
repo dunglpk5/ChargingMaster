@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ==== Màu thương hiệu (lấy từ bản thiết kế) ==== -->
+    <color name="teal_primary">#0F7A6E</color>
+    <color name="teal_primary_dark">#0A5F56</color>
+    <color name="green_accent">#00C853</color>
+
+    <!-- ==== Nền & bề mặt ==== -->
+    <color name="bg_screen">#F5F5F5</color>
+    <color name="bg_surface">#FFFFFF</color>
+    <color name="divider">#E0E0E0</color>
+
+    <!-- ==== Chữ ==== -->
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#9E9E9E</color>
+    <color name="text_value">#0F7A6E</color>
+    <color name="text_on_primary">#FFFFFF</color>
+    <color name="text_on_primary_60">#99FFFFFF</color>
+
+    <!-- ==== Trạng thái ==== -->
+    <color name="state_good">#00C853</color>
+    <color name="state_warning">#FFA000</color>
+    <color name="state_danger">#E53935</color>
+
+    <!-- ==== Icon ==== -->
+    <color name="icon_dark">#212121</color>
+    <color name="icon_accent">#00C853</color>
+
+    <!-- ==== Nhiệt kế (màn Nhiệt độ điện thoại) ==== -->
+    <color name="thermo_fill">#FF7A00</color>
+    <color name="thermo_empty">#FCE7DA</color>
+    <color name="thermo_bulb_light">#FFB067</color>
+
+    <!-- ==== Biểu đồ CPU ==== -->
+    <color name="cpu_chart_line">#F4A582</color>
+    <color name="cpu_chart_fill">#33F4A582</color>
+
+    <!-- ==== Thẻ phát hiện (màn Phát hiện sạc) ==== -->
+    <color name="detect_button_border">#FF9800</color>
+    <color name="shield_red">#F6A9A9</color>
+    <color name="shield_orange">#F5C878</color>
+    <color name="shield_yellow">#EFD87A</color>
+    <color name="shield_green">#C6DE8C</color>
+    <color name="badge_red">#D32F2F</color>
+
+    <color name="transparent">#00000000</color>
+</resources>

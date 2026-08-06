@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Tab Công cụ:
+  - Header teal: 3 chỉ số Bộ nhớ / RAM / Nhiệt độ
+  - Nhóm VIP (6 ô) và nhóm Phát hiện (6 ô), mỗi nhóm là lưới 3 cột
+  - Chỗ trống cuối dành cho quảng cáo native (nối ở Phase 8b)
+-->
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_screen"
+    android:fillViewport="true"
+    android:overScrollMode="never">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- ==================== HEADER 3 CHỈ SỐ ==================== -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/teal_primary"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/space_lg"
+            android:paddingBottom="@dimen/space_lg">
+
+            <include
+                android:id="@+id/statStorage"
+                layout="@layout/view_stat_column" />
+
+            <include
+                android:id="@+id/statRam"
+                layout="@layout/view_stat_column" />
+
+            <include
+                android:id="@+id/statTemperature"
+                layout="@layout/view_stat_column" />
+
+        </LinearLayout>
+
+        <!-- ==================== NHÓM VIP ==================== -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/bg_surface"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/space_sm">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/space_md">
+
+                <View
+                    android:layout_width="60dp"
+                    android:layout_height="1dp"
+                    android:layout_marginEnd="@dimen/space_sm"
+                    android:background="@color/divider" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:letterSpacing="0.2"
+                    android:text="@string/tools_group_vip"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_caption"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="60dp"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="@dimen/space_sm"
+                    android:background="@color/divider" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvVipTools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                app:spanCount="3"
+                tools:itemCount="6"
+                tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                tools:listitem="@layout/item_tool" />
+
+        </LinearLayout>
+
+        <!-- ==================== NHÓM PHÁT HIỆN ==================== -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_sm"
+            android:background="@color/bg_surface"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/space_sm">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/space_md"
+                android:paddingTop="@dimen/space_md"
+                android:paddingEnd="@dimen/space_md"
+                android:text="@string/tools_group_detect"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_body" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvDetectTools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                app:spanCount="3"
+                tools:itemCount="6"
+                tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                tools:listitem="@layout/item_tool" />
+
+        </LinearLayout>
+
+        <!-- Quảng cáo native sẽ được gắn vào đây ở Phase 8b -->
+        <FrameLayout
+            android:id="@+id/adContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_sm"
+            android:background="@color/bg_surface"
+            android:minHeight="60dp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

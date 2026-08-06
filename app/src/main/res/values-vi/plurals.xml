@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tiếng Việt không phân biệt số ít/số nhiều nên chỉ cần dạng "other" -->
+<resources>
+    <plurals name="usage_sessions">
+        <item quantity="other">%1$d phiên</item>
+    </plurals>
+
+    <plurals name="clean_found">
+        <item quantity="other">Có %1$d thông báo có thể dọn dẹp</item>
+    </plurals>
+</resources>

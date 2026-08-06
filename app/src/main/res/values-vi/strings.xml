@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Charging Master</string>
+
+    <string name="tab_home">Trang chủ</string>
+    <string name="tab_tools">Công cụ</string>
+    <string name="tab_battery_usage">Sử dụng pin</string>
+
+    <string name="home_detect">PHÁT HIỆN</string>
+    <string name="msg_coming_soon">Sắp có</string>
+    <string name="home_time_remaining">Thời gian còn lại</string>
+    <string name="home_charging_power">Công suất sạc</string>
+    <string name="home_plugged">Đã cắm</string>
+    <string name="home_temperature">Nhiệt độ</string>
+    <string name="home_health">Tình trạng</string>
+    <string name="home_current">Dòng sạc</string>
+    <string name="home_voltage">Điện áp</string>
+    <string name="home_capacity">Dung lượng</string>
+    <string name="home_technology">Công nghệ</string>
+    <string name="home_model">Mẫu</string>
+
+    <string name="plug_ac">Sạc AC</string>
+    <string name="plug_usb">USB</string>
+    <string name="plug_wireless">Không dây</string>
+    <string name="plug_none">Đang dùng pin</string>
+
+    <string name="health_good">Tốt</string>
+    <string name="health_overheat">Quá nóng</string>
+    <string name="health_dead">Hỏng</string>
+    <string name="health_over_voltage">Quá áp</string>
+    <string name="health_cold">Quá lạnh</string>
+    <string name="health_unknown">Không rõ</string>
+
+    <string name="tools_group_vip">VIP</string>
+    <string name="tools_group_detect">Phát hiện</string>
+    <string name="tools_no_ads">Không quảng cáo</string>
+    <string name="tools_charge_alarm">Báo động sạc</string>
+    <string name="tools_priority_support">Phản hồi ưu tiên</string>
+    <string name="tools_charge_history">Lịch sử sạc</string>
+    <string name="tools_x_charge">X-Sạc</string>
+    <string name="tools_more">Thêm</string>
+    <string name="tools_device_info">Thông tin thiết bị</string>
+    <string name="tools_clean_notification">Dọn dẹp thông báo</string>
+    <string name="tools_clean_clipboard">Dọn dẹp clipboard</string>
+    <string name="tools_phone_temperature">Nhiệt độ điện thoại</string>
+    <string name="tools_charge_detect">Phát hiện sạc</string>
+    <string name="tools_cpu_usage">Sử dụng CPU</string>
+
+    <string name="usage_battery_health">Tình trạng pin</string>
+    <string name="usage_health_desc">So sánh dung lượng ước tính của pin với dung lượng thiết kế cho thấy mức độ suy giảm của pin. Chu kỳ sạc dài hơn sẽ cho kết quả ước tính chính xác hơn. Chu kỳ ngắn có thể có sai số đáng kể.</string>
+    <string name="usage_estimated_capacity">Dung lượng ước tính</string>
+    <string name="usage_design_capacity">Dung lượng thiết kế</string>
+    <string name="usage_set_design_capacity">Đặt dung lượng thiết kế</string>
+    <string name="usage_average">Sử dụng pin trung bình</string>
+    <string name="usage_combined">Sử dụng kết hợp</string>
+    <string name="usage_based_on">Dựa trên</string>
+    <string name="usage_screen_on">Màn hình bật</string>
+    <string name="usage_screen_off">Màn hình tắt</string>
+    <string name="usage_last_7_days">trong 7 ngày qua</string>
+    <string name="usage_full_estimate">Ước tính thời gian pin đầy</string>
+    <string name="usage_charged">Pin đã sạc</string>
+    <string name="usage_measuring">đang đo…</string>
+    <string name="usage_chart_legend">Mức độ</string>
+    <string name="usage_no_data">Chưa có dữ liệu cho ngày này</string>
+    <string name="usage_full_estimate_desc">Ước tính này chỉ ra thời gian sử dụng có thể có với pin được sạc đầy (100%%), dựa trên dữ liệu sạc lịch sử.</string>
+    <string name="usage_charge_count">Tổng số lần sạc</string>
+    <string name="usage_charge_average">Sạc trung bình hàng lần</string>
+    <string name="usage_capacity_dialog_title">Dung lượng thiết kế (mAh)</string>
+    <string name="usage_health_note">Đã hao hụt %1$d mAh so với dung lượng thiết kế</string>
+    <string name="usage_capacity_invalid">Nhập giá trị từ 500 đến 30000 mAh</string>
+
+    <string name="value_placeholder">-</string>
+    <string name="action_ok">Đồng ý</string>
+    <string name="action_cancel">Huỷ</string>
+
+    <!-- Màn kiểm tra nguồn sạc -->
+    <string name="check_title">Kiểm tra nguồn sạc</string>
+    <string name="check_average">Trung bình</string>
+    <string name="check_max">Cao nhất</string>
+    <string name="check_turn_off">CÀI ĐẶT</string>
+    <string name="check_settings_unavailable">Máy này không có trang cài đặt tương ứng</string>
+
+    <string name="speed_unknown">ĐANG ĐO</string>
+    <string name="speed_slow">SẠC CHẬM</string>
+    <string name="speed_normal">BÌNH THƯỜNG</string>
+    <string name="speed_fast">SẠC NHANH</string>
+    <string name="speed_very_fast">SẠC SIÊU NHANH</string>
+
+    <!-- Hạng mục phát hiện -->
+    <string name="feature_power_source">Phát hiện nguồn điện</string>
+    <string name="feature_power_source_desc">Sử dụng bộ sạc AC để tăng dòng sạc</string>
+    <string name="feature_location">Phát hiện GPS</string>
+    <string name="feature_location_desc">Tắt dịch vụ GPS có thể giảm tiêu thụ điện năng của điện thoại</string>
+    <string name="feature_brightness">Phát hiện độ sáng</string>
+    <string name="feature_brightness_desc">Bật độ sáng tự động để giảm tiêu thụ điện năng của màn hình</string>
+    <string name="feature_bluetooth">Phát hiện Bluetooth</string>
+    <string name="feature_bluetooth_desc">Tắt Bluetooth để giảm tiêu thụ điện năng</string>
+    <string name="feature_auto_sync">Phát hiện đồng bộ hệ thống</string>
+    <string name="feature_auto_sync_desc">Tắt đồng bộ hệ thống để giảm tiêu thụ điện năng của điện thoại</string>
+    <string name="feature_temperature">Phát hiện nhiệt độ</string>
+    <string name="feature_temperature_desc">Nhiệt độ điện thoại</string>
+
+    <!-- Màn Phát hiện sạc -->
+    <string name="check_current_in">Dòng vào: %1$d mA</string>
+    <string name="check_current_idle">Dòng chờ: %1$d mA</string>
+    <string name="check_power_source">KIỂM TRA NGUỒN ĐIỆN</string>
+    <string name="check_x_charge">X-SẠC</string>
+    <string name="check_detect">Phát hiện</string>
+    <string name="check_ok">Ổn</string>
+
+    <!-- Hộp thoại X-Sạc -->
+    <string name="xcharge_title">Sạc chuyên sâu (chỉ dành cho dùng thử)</string>
+    <string name="xcharge_message">Chuyển sang chế độ sạc chuyên sâu, trong đó các hành động sau sẽ được tự động bật.\n1. Phần mềm sẽ tự động giảm độ sáng hệ thống.\n2. Bắt đầu giám sát nhiệt độ và dòng điện của pin theo thời gian thực, và sẽ được nhắc nhở nếu có bất thường.\n3. Trang sạc sẽ mở để hiển thị thông tin sạc thời gian thực.</string>
+    <string name="xcharge_enable">BẬT</string>
+    <string name="xcharge_enabled">Đã bật chế độ sạc chuyên sâu</string>
+    <string name="xcharge_watch_ad">XEM QUẢNG CÁO ĐỂ NHẬN DÙNG THỬ</string>
+    <string name="xcharge_loading_ad">Đang tải quảng cáo…</string>
+
+    <!-- Màn VIP -->
+    <string name="vip_subtitle">Nâng cấp để gỡ toàn bộ quảng cáo</string>
+    <string name="vip_active">Bạn đang là thành viên VIP</string>
+    <string name="vip_purchase">Nâng cấp VIP</string>
+    <string name="vip_purchase_price">Nâng cấp VIP · %1$s</string>
+    <string name="vip_benefit_format">✓  %1$s</string>
+    <string name="vip_thanks">Cảm ơn bạn! Toàn bộ quảng cáo đã được gỡ bỏ.</string>
+    <string name="vip_unavailable">Hiện chưa mua được. Vui lòng thử lại sau.</string>
+    <string name="vip_note">Thanh toán một lần. Giao dịch gắn với tài khoản Google của bạn và khôi phục được sau khi cài lại ứng dụng.</string>
+
+    <string name="temp_detect">PHÁT HIỆN</string>
+    <string name="temp_state_normal">Nhiệt độ bình thường</string>
+    <string name="temp_state_warm">Pin đang ấm lên</string>
+    <string name="temp_state_hot">Pin quá nóng, hãy để máy nguội bớt</string>
+
+    <!-- Màn Cài đặt -->
+    <string name="settings_title">Cài đặt</string>
+    <string name="settings_version">Phiên bản %1$s</string>
+    <string name="settings_notification_access">Quyền đọc thông báo</string>
+    <string name="settings_app_info">Thông tin ứng dụng</string>
+    <string name="settings_clipboard_confirm">Xoá nội dung đang lưu trong clipboard?</string>
+    <string name="settings_clipboard_cleared">Đã xoá clipboard</string>
+    <string name="settings_clipboard_failed">Không xoá được clipboard</string>
+    <string name="language_system">Theo hệ thống</string>
+
+    <string name="cpu_unavailable">Máy này không cho phép đọc mức sử dụng CPU</string>
+
+    <string name="cpu_frequency">Tần số CPU</string>
+    <string name="cpu_core_count">Số lõi CPU</string>
+    <string name="cpu_core_label">CPU Core %1$d</string>
+    <string name="cpu_freq_range">%1$s ~ %2$s</string>
+
+    <string name="clean_nothing">Không có dữ liệu cần dọn dẹp</string>
+    <string name="clean_card_title">Phát hiện sạc</string>
+    <string name="clean_card_desc">Kiểm tra tốc độ sạc và trạng thái nguồn</string>
+    <string name="clean_need_permission">Cấp quyền đọc thông báo để app dọn dẹp được</string>
+    <string name="clean_done">Đã dọn dẹp thông báo</string>
+
+    <string name="cd_back">Quay lại</string>
+
+    <!-- ===== Lịch sử sạc ===== -->
+    <string name="history_empty">Chưa ghi nhận phiên sạc nào</string>
+    <string name="history_detail_title">Chi tiết phiên sạc</string>
+    <string name="history_gain_format">+%1$d%% (%2$d→%3$d)</string>
+    <string name="history_start_time">Bắt đầu</string>
+    <string name="history_end_time">Kết thúc</string>
+    <string name="history_ongoing">Đang diễn ra</string>
+    <string name="history_duration">Thời lượng</string>
+    <string name="history_gain">Đã sạc được</string>
+    <string name="history_plug_type">Nguồn sạc</string>
+    <string name="history_max_temp">Nhiệt độ cao nhất</string>
+    <string name="history_charged_mah">Điện tích đã nạp</string>
+
+    <!-- ===== Báo động sạc ===== -->
+    <string name="alarm_threshold_setting">Báo khi đạt mức pin</string>
+    <string name="alarm_threshold_desc">Báo khi pin đạt mức bạn đặt. Giữ pin dưới 80%% giúp pin bền lâu hơn.</string>
+    <string name="alarm_full_setting">Báo khi sạc đầy</string>
+    <string name="alarm_full_desc">Báo khi pin đã được sạc đầy.</string>
+    <string name="alarm_overheat_setting">Báo quá nhiệt</string>
+    <string name="alarm_overheat_desc">Báo khi pin quá nóng, kể cả lúc không sạc.</string>
+    <string name="alarm_permission_warning">Thông báo đang bị tắt nên cảnh báo sẽ không hiện được. Hãy bật lại trong cài đặt hệ thống.</string>
+    <string name="alarm_threshold_title">Pin đã đạt mức cài đặt</string>
+    <string name="alarm_threshold_message">Pin đang ở %1$d%%. Rút sạc để giữ pin bền hơn.</string>
+    <string name="alarm_full_title">Pin đã đầy</string>
+    <string name="alarm_full_message">Pin đang ở %1$d%%. Bạn có thể rút sạc.</string>
+    <string name="alarm_overheat_title">Pin quá nóng</string>
+    <string name="alarm_overheat_message">Pin đang quá nhiệt ở mức %1$d%%. Hãy rút sạc và để máy nguội bớt.</string>
+    <string name="notif_channel_alarm">Cảnh báo sạc</string>
+    <string name="notif_channel_alarm_desc">Cảnh báo mức pin, sạc đầy và quá nhiệt</string>
+
+    <!-- ===== Màn Thông tin thiết bị ===== -->
+    <string name="detail_tab_device">THIẾT BỊ</string>
+    <string name="detail_tab_system">HỆ THỐNG</string>
+    <string name="detail_tab_cpu">CPU</string>
+    <string name="detail_tab_display">MÀN HÌNH</string>
+    <string name="detail_tab_network">MẠNG</string>
+    <string name="detail_tab_sensor">CẢM BIẾN</string>
+    <string name="detail_empty">Không có thông tin</string>
+    <string name="detail_yes">Có</string>
+    <string name="detail_no">Không</string>
+
+    <string name="detail_device_name">Tên thiết bị</string>
+    <string name="detail_bluetooth_le">Bluetooth LE</string>
+    <string name="detail_nfc_present">Có NFC</string>
+    <string name="detail_nfc_enabled">NFC đang bật</string>
+    <string name="detail_ring_mode">Chế độ chuông</string>
+    <string name="detail_ring_silent">Im lặng</string>
+    <string name="detail_ring_vibrate">Rung</string>
+    <string name="detail_ring_normal">Bình thường</string>
+    <string name="detail_system_time">Giờ hệ thống</string>
+    <string name="detail_brightness_level">Mức độ sáng</string>
+    <string name="detail_orientation">Hướng màn hình</string>
+    <string name="detail_portrait">Dọc</string>
+    <string name="detail_landscape">Ngang</string>
+    <string name="detail_sdcard">Có thẻ nhớ</string>
+    <string name="detail_emulator">Máy ảo</string>
+
+    <string name="detail_host">Máy dựng</string>
+    <string name="detail_user">Người dựng</string>
+    <string name="detail_build_tags">Nhãn bản dựng</string>
+    <string name="detail_language">Ngôn ngữ</string>
+    <string name="detail_code_name">Tên phiên bản</string>
+    <string name="detail_released_time">Ngày phát hành</string>
+    <string name="detail_device_type">Loại thiết bị</string>
+    <string name="detail_root_access">Đã root</string>
+
+    <string name="detail_processor_name">Tên vi xử lý</string>
+    <string name="detail_cpu_hardware">Phần cứng CPU</string>
+    <string name="detail_processor">Bộ xử lý</string>
+    <string name="detail_running_cpus">Nhân đang chạy</string>
+    <string name="detail_cpu_temperature">Nhiệt độ CPU</string>
+
+    <string name="detail_physical_size">Kích thước thực</string>
+
+    <string name="detail_network_available">Có kết nối mạng</string>
+    <string name="detail_wifi_enabled">Wifi đang bật</string>
+    <string name="detail_wifi_bssid">Wifi BSSID</string>
+    <string name="detail_wifi_link_speed">Tốc độ liên kết Wifi</string>
+    <string name="detail_wifi_ssid">Tên Wifi</string>
+    <string name="detail_wifi_mac">Địa chỉ MAC Wifi</string>
+    <string name="detail_ipv6_address">Địa chỉ IPv6</string>
+    <string name="detail_sim_carrier">Nhà mạng SIM</string>
+
+    <string name="detail_model">Mẫu máy</string>
+    <string name="detail_brand">Thương hiệu</string>
+    <string name="detail_manufacturer">Nhà sản xuất</string>
+    <string name="detail_device">Thiết bị</string>
+    <string name="detail_product">Sản phẩm</string>
+    <string name="detail_board">Bo mạch</string>
+    <string name="detail_hardware">Phần cứng</string>
+    <string name="detail_bootloader">Bootloader</string>
+    <string name="detail_abi">Tập lệnh hỗ trợ</string>
+
+    <string name="detail_android_version">Phiên bản Android</string>
+    <string name="detail_api_level">Mức API</string>
+    <string name="detail_security_patch">Bản vá bảo mật</string>
+    <string name="detail_fingerprint">Chuỗi định danh bản dựng</string>
+    <string name="detail_kernel">Nhân hệ điều hành</string>
+
+    <string name="detail_cores">Số nhân</string>
+    <string name="detail_core_idle">Đang ngủ</string>
+
+    <string name="detail_resolution">Độ phân giải</string>
+    <string name="detail_density">Mật độ điểm ảnh</string>
+    <string name="detail_refresh_rate">Tần số quét</string>
+    <string name="detail_brightness_mode">Chế độ độ sáng</string>
+    <string name="detail_brightness_auto">Tự động</string>
+    <string name="detail_brightness_manual">Thủ công</string>
+
+    <string name="detail_network_type">Kết nối</string>
+    <string name="detail_ip_address">Địa chỉ IPv4</string>
+    <string name="detail_sim_country">Quốc gia SIM</string>
+    <string name="detail_network_none">Không có</string>
+
+    <string name="language_title">Ngôn ngữ</string>
+    <string name="language_en">English</string>
+    <string name="language_vi">Tiếng Việt</string>
+
+    <string name="notif_channel_monitor">Theo dõi sạc</string>
+    <string name="notif_channel_monitor_desc">Liên tục theo dõi phiên sạc hiện tại</string>
+    <string name="notif_charging_title">Đang sạc · %1$d%%</string>
+    <string name="notif_charging_content">%1$d mA · %2$s</string>
+
+    <string name="cd_battery_icon">Biểu tượng pin</string>
+    <string name="cd_remove_ads">Gỡ quảng cáo</string>
+    <string name="cd_menu">Menu</string>
+</resources>

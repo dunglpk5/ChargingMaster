@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Một ô công cụ: icon trên, nhãn dưới (tối đa 2 dòng như bản thiết kế) -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/space_md"
+    android:paddingBottom="@dimen/space_md">
+
+    <ImageView
+        android:id="@+id/imgIcon"
+        android:layout_width="@dimen/tool_icon_size"
+        android:layout_height="@dimen/tool_icon_size"
+        android:importantForAccessibility="no"
+        tools:src="@drawable/ic_tool_history" />
+
+    <TextView
+        android:id="@+id/tvLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_sm"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="2"
+        android:paddingStart="@dimen/space_xs"
+        android:paddingEnd="@dimen/space_xs"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/text_caption"
+        tools:text="Lịch sử sạc" />
+
+</LinearLayout>

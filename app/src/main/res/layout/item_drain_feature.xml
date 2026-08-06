@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Thẻ một hạng mục phát hiện:
+  khiên màu + chấm than đỏ | tiêu đề + mô tả | nút viền cam "Phát hiện"
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/bg_surface"
+    android:paddingStart="@dimen/space_md"
+    android:paddingTop="@dimen/space_md"
+    android:paddingEnd="@dimen/space_md"
+    android:paddingBottom="@dimen/space_md">
+
+    <!-- Khiên nền, đổi màu theo mức độ ưu tiên của hạng mục -->
+    <ImageView
+        android:id="@+id/imgShield"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_shield"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/shield_orange" />
+
+    <!-- Icon riêng của từng hạng mục, đặt chồng lên giữa khiên -->
+    <ImageView
+        android:id="@+id/imgIcon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:importantForAccessibility="no"
+        app:layout_constraintBottom_toBottomOf="@id/imgShield"
+        app:layout_constraintEnd_toEndOf="@id/imgShield"
+        app:layout_constraintStart_toStartOf="@id/imgShield"
+        app:layout_constraintTop_toTopOf="@id/imgShield"
+        app:tint="@color/bg_surface"
+        tools:src="@drawable/ic_feature_wifi" />
+
+    <!-- Chấm than báo hạng mục đang cần xử lý -->
+    <ImageView
+        android:id="@+id/imgBadge"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_badge_warning"
+        app:layout_constraintBottom_toBottomOf="@id/imgShield"
+        app:layout_constraintEnd_toStartOf="@id/imgShield"
+        app:layout_constraintStart_toStartOf="@id/imgShield"
+        app:layout_constraintTop_toBottomOf="@id/imgShield" />
+
+    <TextView
+        android:id="@+id/tvLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_md"
+        android:textColor="@color/text_primary"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@id/btnTurnOff"
+        app:layout_constraintStart_toEndOf="@id/imgShield"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Phát hiện Bluetooth" />
+
+    <TextView
+        android:id="@+id/tvDetail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:lineSpacingExtra="2dp"
+        android:textColor="@color/text_secondary"
+        android:textSize="@dimen/text_body"
+        app:layout_constraintEnd_toEndOf="@id/tvLabel"
+        app:layout_constraintStart_toStartOf="@id/tvLabel"
+        app:layout_constraintTop_toBottomOf="@id/tvLabel"
+        tools:text="Tắt Bluetooth để giảm tiêu thụ điện năng" />
+
+    <TextView
+        android:id="@+id/btnTurnOff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_detect_outline"
+        android:clickable="true"
+        android:focusable="true"
+        android:minWidth="96dp"
+        android:paddingStart="@dimen/space_md"
+        android:paddingTop="@dimen/space_sm"
+        android:paddingEnd="@dimen/space_md"
+        android:paddingBottom="@dimen/space_sm"
+        android:text="@string/check_turn_off"
+        android:textAlignment="center"
+        android:textColor="@color/detect_button_border"
+        android:textSize="@dimen/text_body"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Chỉ sao lưu cấu hình người dùng (ngôn ngữ, dung lượng thiết kế tự đặt).
+  Những gì không khai báo <include> thì mặc định không được sao lưu, nên lịch sử
+  sạc trong charg.db tự động bị loại - đúng ý muốn, vì dữ liệu đo gắn với đúng
+  một thiết bị, khôi phục sang máy khác sẽ cho số liệu sai.
+-->
+<full-backup-content>
+    <include domain="sharedpref" path="charg_prefs.xml" />
+</full-backup-content>

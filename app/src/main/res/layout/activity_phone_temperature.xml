@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Màn Nhiệt độ điện thoại: nhiệt kế hai thang ℉/℃ và nút PHÁT HIỆN dưới cùng -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_surface"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbarInclude"
+        layout="@layout/view_toolbar" />
+
+    <com.dung.chargmagagement.controller.widget.ThermometerView
+        android:id="@+id/thermometer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingTop="@dimen/space_lg"
+        android:paddingBottom="@dimen/space_md" />
+
+    <TextView
+        android:id="@+id/btnDetect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_button_primary"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:paddingTop="18dp"
+        android:paddingBottom="18dp"
+        android:text="@string/temp_detect"
+        android:textColor="@color/text_on_primary"
+        android:textSize="@dimen/text_title" />
+
+</LinearLayout>

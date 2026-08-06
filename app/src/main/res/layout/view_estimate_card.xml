@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Thẻ "Ước tính thời gian pin đầy": một khung duy nhất chia 3 cột
+  (Sử dụng kết hợp / Màn hình bật / Màn hình tắt), đúng như bản thiết kế.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_card_white"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:padding="@dimen/space_md">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/usage_combined"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/text_caption" />
+
+        <TextView
+            android:id="@+id/tvCombined"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_sm"
+            android:text="@string/value_placeholder"
+            android:textColor="@color/state_warning"
+            android:textSize="@dimen/text_body"
+            tools:text="18h 20m" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_sm"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/usage_screen_on"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/text_caption" />
+
+        <TextView
+            android:id="@+id/tvScreenOn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_sm"
+            android:text="@string/value_placeholder"
+            android:textColor="@color/state_warning"
+            android:textSize="@dimen/text_body"
+            tools:text="6h 10m" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_sm"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/usage_screen_off"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/text_caption" />
+
+        <TextView
+            android:id="@+id/tvScreenOff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_sm"
+            android:text="@string/value_placeholder"
+            android:textColor="@color/state_warning"
+            android:textSize="@dimen/text_body"
+            tools:text="42h 05m" />
+
+    </LinearLayout>
+
+</LinearLayout>

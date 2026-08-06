@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Quy tắc sao lưu cho Android 12 trở lên (thay cho backup_rules.xml của bản cũ).
+  Chỉ sao lưu cấu hình người dùng; lịch sử sạc gắn với đúng một thiết bị nên
+  khôi phục sang máy khác sẽ cho số liệu sai.
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <include domain="sharedpref" path="charg_prefs.xml" />
+    </cloud-backup>
+    <device-transfer>
+        <include domain="sharedpref" path="charg_prefs.xml" />
+    </device-transfer>
+</data-extraction-rules>

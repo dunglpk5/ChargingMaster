@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Tab Trang chủ:
+  - Khối header teal: tiêu đề + 2 nút, % pin, nút PHÁT HIỆN, 2 cột số liệu
+  - Danh sách thông tin pin bên dưới (RecyclerView nền trắng)
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_screen">
+
+    <!-- ==================== HEADER ==================== -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/header"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/teal_primary"
+        android:paddingBottom="@dimen/space_lg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_md"
+            android:layout_marginTop="@dimen/space_md"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/app_name"
+            android:textAllCaps="true"
+            android:textColor="@color/text_on_primary"
+            android:textSize="@dimen/text_title"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/btnRemoveAds"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/btnRemoveAds"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/cd_remove_ads"
+            android:padding="@dimen/space_xs"
+            android:src="@drawable/ic_remove_ads"
+            app:layout_constraintBottom_toBottomOf="@id/tvTitle"
+            app:layout_constraintEnd_toStartOf="@id/btnMore"
+            app:layout_constraintTop_toTopOf="@id/tvTitle" />
+
+        <ImageView
+            android:id="@+id/btnMore"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="@dimen/space_md"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/cd_menu"
+            android:padding="@dimen/space_xs"
+            android:src="@drawable/ic_more"
+            app:layout_constraintBottom_toBottomOf="@id/tvTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvTitle" />
+
+        <!-- Cụm icon pin + phần trăm, căn giữa theo cả nhóm -->
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrierTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="tvTitle,btnMore" />
+
+        <LinearLayout
+            android:id="@+id/groupPercent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_lg"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/barrierTitle">
+
+            <ImageView
+                android:id="@+id/imgBattery"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:contentDescription="@string/cd_battery_icon"
+                android:src="@drawable/ic_battery_level"
+                app:tint="@color/text_on_primary" />
+
+            <TextView
+                android:id="@+id/tvPercent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_sm"
+                android:textColor="@color/text_on_primary"
+                android:textSize="@dimen/text_battery_percent"
+                android:textStyle="bold"
+                tools:text="32%" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/btnDetect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_md"
+            android:background="@drawable/bg_detect_button"
+            android:clickable="true"
+            android:focusable="true"
+            android:minWidth="200dp"
+            android:paddingStart="@dimen/space_xl"
+            android:paddingTop="14dp"
+            android:paddingEnd="@dimen/space_xl"
+            android:paddingBottom="14dp"
+            android:text="@string/home_detect"
+            android:textAlignment="center"
+            android:textColor="@color/teal_primary"
+            android:textSize="@dimen/text_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/groupPercent" />
+
+        <!-- Hai cột số liệu: Thời gian còn lại | Công suất sạc -->
+        <TextView
+            android:id="@+id/tvRemainingLabel"
+            style="@style/Text.HeaderLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_lg"
+            android:gravity="center"
+            android:text="@string/home_time_remaining"
+            app:layout_constraintEnd_toStartOf="@id/tvPowerLabel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnDetect" />
+
+        <TextView
+            android:id="@+id/tvRemainingValue"
+            style="@style/Text.HeaderLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_sm"
+            android:gravity="center"
+            android:text="@string/value_placeholder"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/tvRemainingLabel"
+            app:layout_constraintStart_toStartOf="@id/tvRemainingLabel"
+            app:layout_constraintTop_toBottomOf="@id/tvRemainingLabel"
+            tools:text="2h 15m" />
+
+        <TextView
+            android:id="@+id/tvPowerLabel"
+            style="@style/Text.HeaderLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/home_charging_power"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tvRemainingLabel"
+            app:layout_constraintTop_toTopOf="@id/tvRemainingLabel" />
+
+        <TextView
+            android:id="@+id/tvPowerValue"
+            style="@style/Text.HeaderLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_sm"
+            android:gravity="center"
+            android:text="@string/value_placeholder"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/tvPowerLabel"
+            app:layout_constraintStart_toStartOf="@id/tvPowerLabel"
+            app:layout_constraintTop_toBottomOf="@id/tvPowerLabel"
+            tools:text="12.5 W" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- ==================== DANH SÁCH THÔNG TIN ==================== -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvInfo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/bg_surface"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingTop="@dimen/space_sm"
+        android:paddingBottom="@dimen/space_md"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        tools:itemCount="8"
+        tools:listitem="@layout/item_info_row" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

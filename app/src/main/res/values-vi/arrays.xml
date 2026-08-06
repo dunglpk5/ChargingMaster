@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="weekday_short">
+        <item>Th 2</item>
+        <item>Th 3</item>
+        <item>Th 4</item>
+        <item>Th 5</item>
+        <item>Th 6</item>
+        <item>Th 7</item>
+        <item>CN</item>
+    </string-array>
+
+    <string-array name="month_names">
+        <item>tháng 1</item>
+        <item>tháng 2</item>
+        <item>tháng 3</item>
+        <item>tháng 4</item>
+        <item>tháng 5</item>
+        <item>tháng 6</item>
+        <item>tháng 7</item>
+        <item>tháng 8</item>
+        <item>tháng 9</item>
+        <item>tháng 10</item>
+        <item>tháng 11</item>
+        <item>tháng 12</item>
+    </string-array>
+</resources>

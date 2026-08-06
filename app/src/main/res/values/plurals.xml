@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Chuỗi có số đếm phải dùng plurals: tiếng Anh phân biệt số ít/số nhiều
+  ("1 session" và "3 sessions"), nếu ghép chuỗi thủ công sẽ luôn sai một trong hai.
+-->
+<resources>
+    <plurals name="usage_sessions">
+        <item quantity="one">%1$d session</item>
+        <item quantity="other">%1$d sessions</item>
+    </plurals>
+
+    <plurals name="clean_found">
+        <item quantity="one">%1$d notification can be cleaned</item>
+        <item quantity="other">%1$d notifications can be cleaned</item>
+    </plurals>
+</resources>

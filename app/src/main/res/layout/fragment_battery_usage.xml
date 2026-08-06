@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Tab Sử dụng pin:
+  1. Lịch tháng (nền teal) để chọn ngày xem
+  2. Biểu đồ mức pin 0:00-24:00 của ngày đang chọn
+  3. Tình trạng pin (dung lượng ước tính vs thiết kế)
+  4. Sử dụng pin trung bình (4 thẻ)
+  5. Ước tính thời gian pin đầy (3 cột)
+  6. Pin đã sạc (2 thẻ)
+-->
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_screen"
+    android:fillViewport="true"
+    android:overScrollMode="never">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/space_lg">
+
+        <!-- ==================== 1. LỊCH THÁNG ==================== -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/teal_primary"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/space_sm">
+
+            <TextView
+                android:id="@+id/tvYear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_md"
+                android:layout_marginTop="@dimen/space_md"
+                android:textColor="@color/text_on_primary_60"
+                android:textSize="@dimen/text_body"
+                tools:text="2026" />
+
+            <TextView
+                android:id="@+id/tvMonth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_md"
+                android:textColor="@color/text_on_primary"
+                android:textSize="24sp"
+                tools:text="tháng 8" />
+
+            <!-- Hàng tiêu đề thứ trong tuần, bắt đầu từ Thứ 2 -->
+            <LinearLayout
+                android:id="@+id/weekHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_md"
+                android:orientation="horizontal" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvCalendar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xs"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                app:spanCount="7"
+                tools:itemCount="42"
+                tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                tools:listitem="@layout/item_calendar_day" />
+
+        </LinearLayout>
+
+        <!-- ==================== 2. BIỂU ĐỒ MỨC PIN ==================== -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/bg_surface"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/space_sm">
+
+            <com.dung.chargmagagement.controller.widget.BatteryChartView
+                android:id="@+id/chartBattery"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="@dimen/space_sm"
+                android:paddingStart="@dimen/space_sm"
+                android:paddingEnd="@dimen/space_md" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="16dp"
+                    android:layout_height="2dp"
+                    android:background="@color/green_accent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_xs"
+                    android:text="@string/usage_chart_legend"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_caption" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvChartEmpty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="@dimen/space_sm"
+                android:paddingBottom="@dimen/space_sm"
+                android:text="@string/usage_no_data"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_caption"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+        </LinearLayout>
+
+        <!-- ==================== 3. TÌNH TRẠNG PIN ==================== -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_sm"
+            android:background="@color/bg_surface"
+            android:orientation="vertical"
+            android:padding="@dimen/space_md">
+
+            <TextView
+                style="@style/Text.SectionTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/usage_battery_health" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm"
+                android:lineSpacingExtra="2dp"
+                android:text="@string/usage_health_desc"
+                android:textColor="@color/text_primary"
+                android:textSize="@dimen/text_caption" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_md"
+                android:background="@drawable/bg_card_white"
+                android:orientation="vertical"
+                android:padding="@dimen/space_md">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/usage_battery_health"
+                        android:textColor="@color/text_primary"
+                        android:textSize="@dimen/text_body" />
+
+                    <TextView
+                        android:id="@+id/tvHealthState"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/usage_measuring"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="@dimen/text_body"
+                        tools:text="90 %" />
+
+                </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/progressHealth"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="6dp"
+                    android:layout_marginTop="@dimen/space_sm"
+                    android:max="100"
+                    android:progress="0"
+                    android:progressTint="@color/green_accent"
+                    tools:progress="90" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_md"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/usage_estimated_capacity"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="@dimen/text_caption" />
+
+                    <TextView
+                        android:id="@+id/tvEstimatedCapacity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/value_placeholder"
+                        android:textColor="@color/text_primary"
+                        android:textSize="@dimen/text_caption"
+                        tools:text="5400 mAh" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_sm"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/usage_design_capacity"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="@dimen/text_caption" />
+
+                    <TextView
+                        android:id="@+id/tvDesignCapacity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/value_placeholder"
+                        android:textColor="@color/text_primary"
+                        android:textSize="@dimen/text_caption"
+                        tools:text="6000 mAh" />
+
+                </LinearLayout>
+
+                <!-- Mức pin đã hao hụt so với thiết kế; "-" khi chưa ước tính được -->
+                <TextView
+                    android:id="@+id/tvHealthNote"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_md"
+                    android:text="@string/value_placeholder"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_caption"
+                    tools:text="Đã hao hụt 600 mAh so với thiết kế" />
+
+                <TextView
+                    android:id="@+id/btnSetDesignCapacity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="@dimen/space_md"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="@dimen/space_sm"
+                    android:text="@string/usage_set_design_capacity"
+                    android:textColor="@color/teal_primary"
+                    android:textSize="@dimen/text_caption" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- ==================== 4. SỬ DỤNG PIN TRUNG BÌNH ==================== -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_sm"
+            android:background="@color/bg_surface"
+            android:orientation="vertical"
+            android:padding="@dimen/space_md">
+
+            <TextView
+                style="@style/Text.SectionTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/usage_average" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_md"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/cardCombined"
+                    layout="@layout/view_stat_card" />
+
+                <Space
+                    android:layout_width="@dimen/space_sm"
+                    android:layout_height="1dp" />
+
+                <include
+                    android:id="@+id/cardSessions"
+                    layout="@layout/view_stat_card" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/cardScreenOn"
+                    layout="@layout/view_stat_card" />
+
+                <Space
+                    android:layout_width="@dimen/space_sm"
+                    android:layout_height="1dp" />
+
+                <include
+                    android:id="@+id/cardScreenOff"
+                    layout="@layout/view_stat_card" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- ==================== 5. ƯỚC TÍNH THỜI GIAN PIN ĐẦY ==================== -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_sm"
+            android:background="@color/bg_surface"
+            android:orientation="vertical"
+            android:padding="@dimen/space_md">
+
+            <TextView
+                style="@style/Text.SectionTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/usage_full_estimate" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm"
+                android:lineSpacingExtra="2dp"
+                android:text="@string/usage_full_estimate_desc"
+                android:textColor="@color/text_primary"
+                android:textSize="@dimen/text_caption" />
+
+            <include
+                android:id="@+id/cardFullEstimate"
+                layout="@layout/view_estimate_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_md" />
+
+        </LinearLayout>
+
+        <!-- ==================== 6. PIN ĐÃ SẠC ==================== -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_sm"
+            android:background="@color/bg_surface"
+            android:orientation="vertical"
+            android:padding="@dimen/space_md">
+
+            <TextView
+                style="@style/Text.SectionTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/usage_charged" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_md"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/cardChargeCount"
+                    layout="@layout/view_stat_card" />
+
+                <Space
+                    android:layout_width="@dimen/space_sm"
+                    android:layout_height="1dp" />
+
+                <include
+                    android:id="@+id/cardChargeAverage"
+                    layout="@layout/view_stat_card" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

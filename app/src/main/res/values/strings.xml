@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ngôn ngữ mặc định: Tiếng Anh. Bản tiếng Việt nằm ở values-vi/strings.xml -->
+<resources>
+    <string name="app_name">Charging Master</string>
+
+    <!-- Bottom navigation -->
+    <string name="tab_home">Home</string>
+    <string name="tab_tools">Tools</string>
+    <string name="tab_battery_usage">Battery usage</string>
+
+    <!-- Màn Trang chủ -->
+    <string name="home_detect">DETECT</string>
+    <string name="msg_coming_soon">Coming soon</string>
+    <string name="home_time_remaining">Time remaining</string>
+    <string name="home_charging_power">Charging power</string>
+    <string name="home_plugged">Plugged</string>
+    <string name="home_temperature">Temperature</string>
+    <string name="home_health">Health</string>
+    <string name="home_current">Charging current</string>
+    <string name="home_voltage">Voltage</string>
+    <string name="home_capacity">Capacity</string>
+    <string name="home_technology">Technology</string>
+    <string name="home_model">Model</string>
+
+    <!-- Trạng thái nguồn -->
+    <string name="plug_ac">AC charger</string>
+    <string name="plug_usb">USB</string>
+    <string name="plug_wireless">Wireless</string>
+    <string name="plug_none">On battery</string>
+
+    <!-- Tình trạng pin -->
+    <string name="health_good">Good</string>
+    <string name="health_overheat">Overheat</string>
+    <string name="health_dead">Dead</string>
+    <string name="health_over_voltage">Over voltage</string>
+    <string name="health_cold">Cold</string>
+    <string name="health_unknown">Unknown</string>
+
+    <!-- Màn Công cụ -->
+    <string name="tools_group_vip">VIP</string>
+    <string name="tools_group_detect">Detection</string>
+    <string name="tools_no_ads">No ads</string>
+    <string name="tools_charge_alarm">Charge alarm</string>
+    <string name="tools_priority_support">Priority support</string>
+    <string name="tools_charge_history">Charge history</string>
+    <string name="tools_x_charge">X-Charge</string>
+    <string name="tools_more">More</string>
+    <string name="tools_device_info">Device info</string>
+    <string name="tools_clean_notification">Clean notifications</string>
+    <string name="tools_clean_clipboard">Clean clipboard</string>
+    <string name="tools_phone_temperature">Phone temperature</string>
+    <string name="tools_charge_detect">Charge detection</string>
+    <string name="tools_cpu_usage">CPU usage</string>
+
+    <!-- Màn Sử dụng pin -->
+    <string name="usage_battery_health">Battery health</string>
+    <string name="usage_health_desc">Comparing the estimated battery capacity with the design capacity shows how much the battery has degraded. Longer charge cycles give a more accurate estimate.</string>
+    <string name="usage_estimated_capacity">Estimated capacity</string>
+    <string name="usage_design_capacity">Design capacity</string>
+    <string name="usage_set_design_capacity">Set design capacity</string>
+    <string name="usage_average">Average battery usage</string>
+    <string name="usage_combined">Combined use</string>
+    <string name="usage_based_on">Based on</string>
+    <string name="usage_screen_on">Screen on</string>
+    <string name="usage_screen_off">Screen off</string>
+    <string name="usage_last_7_days">in the last 7 days</string>
+    <string name="usage_full_estimate">Estimated time on a full battery</string>
+    <string name="usage_charged">Battery charged</string>
+    <string name="usage_measuring">measuring…</string>
+    <string name="usage_chart_legend">Level</string>
+    <string name="usage_no_data">No data for this day yet</string>
+    <string name="usage_full_estimate_desc">This estimate shows how long a fully charged battery (100%%) may last, based on your charging history.</string>
+    <string name="usage_charge_count">Total charges</string>
+    <string name="usage_charge_average">Average per charge</string>
+    <string name="usage_capacity_dialog_title">Design capacity (mAh)</string>
+    <string name="usage_health_note">Lost %1$d mAh compared to the design capacity</string>
+    <string name="usage_capacity_invalid">Enter a value between 500 and 30000 mAh</string>
+
+    <!-- Chung -->
+    <!-- Các đơn vị (mA, mAh, V, ℃) được ghép trong code bằng Locale.US
+         nên không cần chuỗi dịch riêng. -->
+    <string name="value_placeholder">-</string>
+    <string name="action_ok">OK</string>
+    <string name="action_cancel">Cancel</string>
+
+    <!-- Màn kiểm tra nguồn sạc -->
+    <string name="check_title">Power check</string>
+    <string name="check_average">Average</string>
+    <string name="check_max">Max</string>
+    <string name="check_turn_off">SETTINGS</string>
+    <string name="check_settings_unavailable">This device has no settings page for that</string>
+
+    <!-- Xếp loại tốc độ sạc -->
+    <string name="speed_unknown">MEASURING</string>
+    <string name="speed_slow">SLOW</string>
+    <string name="speed_normal">NORMAL</string>
+    <string name="speed_fast">FAST</string>
+    <string name="speed_very_fast">VERY FAST</string>
+
+    <!-- Hạng mục phát hiện -->
+    <string name="feature_power_source">Power source check</string>
+    <string name="feature_power_source_desc">Use an AC charger to increase charging current</string>
+    <string name="feature_location">GPS check</string>
+    <string name="feature_location_desc">Turning off GPS can reduce power consumption</string>
+    <string name="feature_brightness">Brightness check</string>
+    <string name="feature_brightness_desc">Enable auto brightness to reduce screen power usage</string>
+    <string name="feature_bluetooth">Bluetooth check</string>
+    <string name="feature_bluetooth_desc">Turn off Bluetooth to reduce power consumption</string>
+    <string name="feature_auto_sync">System sync check</string>
+    <string name="feature_auto_sync_desc">Turn off system sync to reduce power consumption</string>
+    <string name="feature_temperature">Temperature check</string>
+    <string name="feature_temperature_desc">Phone temperature</string>
+
+    <!-- Màn Phát hiện sạc -->
+    <string name="check_current_in">Current in: %1$d mA</string>
+    <string name="check_current_idle">Idle current: %1$d mA</string>
+    <string name="check_power_source">CHECK POWER SOURCE</string>
+    <string name="check_x_charge">X-CHARGE</string>
+    <string name="check_detect">Detect</string>
+    <string name="check_ok">OK</string>
+
+    <!-- Hộp thoại X-Sạc -->
+    <string name="xcharge_title">Deep charging (trial only)</string>
+    <string name="xcharge_message">Switch to deep charging mode, in which the following actions are enabled automatically.\n1. The app lowers system brightness.\n2. Battery temperature and current are monitored in real time, with a reminder if anything looks wrong.\n3. The charging page opens to show live charging information.</string>
+    <string name="xcharge_enable">ENABLE</string>
+    <string name="xcharge_enabled">Deep charging enabled</string>
+    <string name="xcharge_watch_ad">WATCH AD FOR A TRIAL</string>
+    <string name="xcharge_loading_ad">Loading ad…</string>
+
+    <!-- Màn VIP -->
+    <string name="vip_subtitle">Upgrade to remove all ads</string>
+    <string name="vip_active">You are a VIP member</string>
+    <string name="vip_purchase">Upgrade to VIP</string>
+    <string name="vip_purchase_price">Upgrade to VIP · %1$s</string>
+    <string name="vip_benefit_format">✓  %1$s</string>
+    <string name="vip_thanks">Thank you! All ads have been removed.</string>
+    <string name="vip_unavailable">Purchase is not available right now. Please try again later.</string>
+    <string name="vip_note">A one-time payment. Your purchase is tied to your Google account and can be restored after reinstalling the app.</string>
+
+    <!-- Màn Nhiệt độ điện thoại -->
+    <string name="temp_detect">DETECT</string>
+    <string name="temp_state_normal">Temperature is normal</string>
+    <string name="temp_state_warm">Battery is getting warm</string>
+    <string name="temp_state_hot">Battery is too hot, let it cool down</string>
+
+    <!-- Màn Cài đặt -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_version">Version %1$s</string>
+    <string name="settings_notification_access">Notification access</string>
+    <string name="settings_app_info">App info</string>
+    <string name="settings_clipboard_confirm">Clear the clipboard content?</string>
+    <string name="settings_clipboard_cleared">Clipboard cleared</string>
+    <string name="settings_clipboard_failed">Could not clear the clipboard</string>
+    <string name="language_system">System default</string>
+
+    <!-- Không đọc được /proc/stat -->
+    <string name="cpu_unavailable">This device does not allow reading CPU usage</string>
+
+    <!-- Màn Sử dụng CPU -->
+    <string name="cpu_frequency">CPU frequency</string>
+    <string name="cpu_core_count">CPU cores</string>
+    <string name="cpu_core_label">CPU Core %1$d</string>
+    <string name="cpu_freq_range">%1$s ~ %2$s</string>
+
+    <!-- Màn Dọn dẹp thông báo -->
+    <string name="clean_nothing">Nothing to clean up</string>
+    <string name="clean_card_title">Charging detection</string>
+    <string name="clean_card_desc">Check charging speed and power status</string>
+    <string name="clean_need_permission">Grant notification access so the app can clear notifications</string>
+    <string name="clean_done">Notifications cleared</string>
+
+    <string name="cd_back">Back</string>
+
+    <!-- ===== Lịch sử sạc ===== -->
+    <string name="history_empty">No charging session recorded yet</string>
+    <string name="history_detail_title">Session detail</string>
+    <string name="history_gain_format">+%1$d%% (%2$d→%3$d)</string>
+    <string name="history_start_time">Started</string>
+    <string name="history_end_time">Ended</string>
+    <string name="history_ongoing">In progress</string>
+    <string name="history_duration">Duration</string>
+    <string name="history_gain">Charged</string>
+    <string name="history_plug_type">Power source</string>
+    <string name="history_max_temp">Peak temperature</string>
+    <string name="history_charged_mah">Energy charged</string>
+
+    <!-- ===== Báo động sạc ===== -->
+    <string name="alarm_threshold_setting">Charge level alert</string>
+    <string name="alarm_threshold_desc">Alerts when the battery reaches the level you set. Staying below 80%% keeps the battery healthy longer.</string>
+    <string name="alarm_full_setting">Full charge alert</string>
+    <string name="alarm_full_desc">Alerts when the battery is fully charged.</string>
+    <string name="alarm_overheat_setting">Overheat alert</string>
+    <string name="alarm_overheat_desc">Alerts when the battery gets too hot, even while not charging.</string>
+    <string name="alarm_permission_warning">Notifications are turned off, so alerts cannot be shown. Enable them in system settings.</string>
+    <string name="alarm_threshold_title">Charge level reached</string>
+    <string name="alarm_threshold_message">Battery is at %1$d%%. Unplug to protect battery life.</string>
+    <string name="alarm_full_title">Battery full</string>
+    <string name="alarm_full_message">Battery is at %1$d%%. You can unplug now.</string>
+    <string name="alarm_overheat_title">Battery too hot</string>
+    <string name="alarm_overheat_message">Battery is overheating at %1$d%%. Unplug and let it cool down.</string>
+    <string name="notif_channel_alarm">Charging alerts</string>
+    <string name="notif_channel_alarm_desc">Alerts for charge level, full charge and overheating</string>
+
+    <!-- ===== Màn Thông tin thiết bị ===== -->
+    <string name="detail_tab_device">DEVICE</string>
+    <string name="detail_tab_system">SYSTEM</string>
+    <string name="detail_tab_cpu">CPU</string>
+    <string name="detail_tab_display">DISPLAY</string>
+    <string name="detail_tab_network">NETWORK</string>
+    <string name="detail_tab_sensor">SENSOR</string>
+    <string name="detail_empty">No information available</string>
+    <string name="detail_yes">Yes</string>
+    <string name="detail_no">No</string>
+
+    <!-- Tab DEVICE -->
+    <string name="detail_device_name">Device Name</string>
+    <string name="detail_bluetooth_le">Bluetooth LE</string>
+    <string name="detail_nfc_present">NFC Present</string>
+    <string name="detail_nfc_enabled">NFC Enabled</string>
+    <string name="detail_ring_mode">Ring Mode</string>
+    <string name="detail_ring_silent">Silent</string>
+    <string name="detail_ring_vibrate">Vibrate</string>
+    <string name="detail_ring_normal">Normal</string>
+    <string name="detail_system_time">System Time</string>
+    <string name="detail_brightness_level">Brightness Level</string>
+    <string name="detail_orientation">Orientation</string>
+    <string name="detail_portrait">Portrait</string>
+    <string name="detail_landscape">Landscape</string>
+    <string name="detail_sdcard">Sdcard Exist</string>
+    <string name="detail_emulator">Emulator</string>
+
+    <!-- Tab SYSTEM bổ sung -->
+    <string name="detail_host">Host</string>
+    <string name="detail_user">User</string>
+    <string name="detail_build_tags">Build Tags</string>
+    <string name="detail_language">Language</string>
+    <string name="detail_code_name">Code Name</string>
+    <string name="detail_released_time">Released Time</string>
+    <string name="detail_device_type">Device Type</string>
+    <string name="detail_root_access">Root Access</string>
+
+    <!-- Tab CPU bổ sung -->
+    <string name="detail_processor_name">Processor Name</string>
+    <string name="detail_cpu_hardware">CPU Hardware</string>
+    <string name="detail_processor">Processor</string>
+    <string name="detail_running_cpus">Running CPUs</string>
+    <string name="detail_cpu_temperature">Cpu Temperature</string>
+
+    <!-- Tab DISPLAY bổ sung -->
+    <string name="detail_physical_size">Physical Size</string>
+
+    <!-- Tab NETWORK bổ sung -->
+    <string name="detail_network_available">Network Available</string>
+    <string name="detail_wifi_enabled">Wifi Enabled</string>
+    <string name="detail_wifi_bssid">Wifi BSSID</string>
+    <string name="detail_wifi_link_speed">Wifi Link Speed</string>
+    <string name="detail_wifi_ssid">Wifi SSID</string>
+    <string name="detail_wifi_mac">Wifi Mac Address</string>
+    <string name="detail_ipv6_address">IPv6 Address</string>
+    <string name="detail_sim_carrier">Sim Carrier</string>
+
+    <string name="detail_model">Model</string>
+    <string name="detail_brand">Brand</string>
+    <string name="detail_manufacturer">Manufacturer</string>
+    <string name="detail_device">Device</string>
+    <string name="detail_product">Product</string>
+    <string name="detail_board">Board</string>
+    <string name="detail_hardware">Hardware</string>
+    <string name="detail_bootloader">Bootloader</string>
+    <string name="detail_abi">Supported ABIs</string>
+
+    <!-- Tab SYSTEM -->
+    <string name="detail_android_version">Android version</string>
+    <string name="detail_api_level">API level</string>
+    <string name="detail_security_patch">Security patch</string>
+    <string name="detail_fingerprint">Fingerprint</string>
+    <string name="detail_kernel">Kernel</string>
+
+    <!-- Tab CPU -->
+    <string name="detail_cores">Cores</string>
+    <string name="detail_core_idle">Idle</string>
+
+    <!-- Tab DISPLAY -->
+    <string name="detail_resolution">Resolution</string>
+    <string name="detail_density">Density</string>
+    <string name="detail_refresh_rate">Refresh rate</string>
+    <string name="detail_brightness_mode">Brightness mode</string>
+    <string name="detail_brightness_auto">Automatic</string>
+    <string name="detail_brightness_manual">Manual</string>
+
+    <!-- Tab NETWORK -->
+    <string name="detail_network_type">Connection</string>
+    <string name="detail_ip_address">IPv4 address</string>
+    <string name="detail_sim_country">SIM country</string>
+    <string name="detail_network_none">None</string>
+
+    <!-- Ngôn ngữ -->
+    <string name="language_title">Language</string>
+    <string name="language_en">English</string>
+    <string name="language_vi">Tiếng Việt</string>
+
+    <!-- Notification -->
+    <string name="notif_channel_monitor">Charging monitor</string>
+    <string name="notif_channel_monitor_desc">Keeps tracking the current charging session</string>
+    <string name="notif_charging_title">Charging · %1$d%%</string>
+    <string name="notif_charging_content">%1$d mA · %2$s</string>
+
+    <!-- Content description -->
+    <string name="cd_battery_icon">Battery icon</string>
+    <string name="cd_remove_ads">Remove ads</string>
+    <string name="cd_menu">Menu</string>
+</resources>
