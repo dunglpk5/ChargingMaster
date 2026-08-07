@@ -33,6 +33,13 @@ public interface BatterySampleDao {
             + "WHERE day_key >= :fromDayKey AND day_key <= :toDayKey ORDER BY day_key ASC")
     List<Integer> getDaysHavingData(int fromDayKey, int toDayKey);
 
+    /**
+     * Thời điểm đo cuối cùng của một phiên, hoặc 0 nếu phiên không có điểm đo nào.
+     * Dùng để chốt thời điểm kết thúc cho phiên bị bỏ treo.
+     */
+    @Query("SELECT COALESCE(MAX(timestamp), 0) FROM battery_sample WHERE session_id = :sessionId")
+    long getLastTimestampOfSession(long sessionId);
+
     @Query("SELECT COUNT(*) FROM battery_sample")
     int count();
 

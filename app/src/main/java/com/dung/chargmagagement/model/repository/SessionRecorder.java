@@ -108,6 +108,8 @@ public final class SessionRecorder implements BatteryMonitor.Listener {
         if (restored) return;
         restored = true;
 
+        closeOrphanSessions();
+
         activeSession = repository.findOngoingSessionSync();
         activeScreenSession = repository.findOngoingScreenSessionSync();
 
@@ -116,6 +118,35 @@ public final class SessionRecorder implements BatteryMonitor.Listener {
             currentSampleCount = activeSession.sampleCount;
             currentSumMa = (long) activeSession.avgCurrentMa * Math.max(1, currentSampleCount);
             Logger.d(TAG, "Nối lại phiên sạc #" + activeSession.id);
+        }
+    }
+
+    /**
+     * Chốt các phiên sạc bị bỏ treo từ những lần chạy trước.
+     *
+     * <p>Chỉ giữ lại phiên mới nhất để nối tiếp; những phiên cũ hơn mà vẫn còn
+     * {@code end_time = 0} là do tiến trình chết trước khi kịp đóng. Chúng không
+     * bao giờ được đóng nữa nên sẽ không lọt vào màn Lịch sử sạc – tức là người
+     * dùng mất trắng dữ liệu đó. Chốt bằng thời điểm đo cuối cùng thuộc phiên,
+     * đây là mốc gần đúng nhất mà ta còn biết được.
+     */
+    @WorkerThread
+    private void closeOrphanSessions() {
+        final java.util.List<ChargingSessionEntity> ongoing =
+                repository.findAllOngoingSessionsSync();
+        if (ongoing.size() <= 1) return;
+
+        // Bỏ qua phần tử đầu (mới nhất) vì restoreIfNeeded sẽ nối tiếp phiên đó
+        for (int i = 1; i < ongoing.size(); i++) {
+            final ChargingSessionEntity stale = ongoing.get(i);
+            final long lastSample = repository.findLastSampleTimeSync(stale.id);
+
+            stale.endTime = lastSample > stale.startTime ? lastSample : stale.startTime;
+            stale.chargedMah = UsageCalculator.calculateChargedMah(
+                    stale.avgCurrentMa, stale.getDurationMs());
+            repository.updateSessionSync(stale);
+
+            Logger.d(TAG, "Chốt phiên sạc bị bỏ treo #" + stale.id);
         }
     }
 
@@ -264,11 +295,32 @@ public final class SessionRecorder implements BatteryMonitor.Listener {
     /**
      * Chốt các phiên đang mở khi biết chắc sẽ không còn nhận dữ liệu nữa
      * (service dừng). Tránh để lại bản ghi treo với {@code end_time = 0}.
+     *
+     * <p><b>Phải chốt cả phiên sạc, không chỉ khoảng màn hình.</b> Khi người dùng
+     * rút sạc, {@code ChargingStateReceiver} dừng service gần như tức thì – thường
+     * là trước cả lần lấy mẫu kế tiếp, nên {@code closeChargingSession} không bao
+     * giờ được gọi. Phiên nằm lại với {@code end_time = 0}, mà truy vấn lịch sử
+     * lại lọc {@code end_time > 0}, nên màn Lịch sử sạc trống rỗng vĩnh viễn.
      */
     public void finalizeOpenSessions() {
         executors.disk().execute(() -> {
             try {
                 final long now = System.currentTimeMillis();
+
+                if (activeSession != null && activeSession.endTime == 0) {
+                    activeSession.endTime = now;
+                    activeSession.chargedMah = UsageCalculator.calculateChargedMah(
+                            activeSession.avgCurrentMa, activeSession.getDurationMs());
+                    repository.updateSessionSync(activeSession);
+
+                    Logger.d(TAG, "Chốt phiên sạc #" + activeSession.id
+                            + ": +" + activeSession.getGainedPercent() + "%");
+
+                    activeSession = null;
+                    currentSumMa = 0;
+                    currentSampleCount = 0;
+                }
+
                 if (activeScreenSession != null && activeScreenSession.endTime == 0) {
                     activeScreenSession.endTime = now;
                     repository.updateScreenSessionSync(activeScreenSession);

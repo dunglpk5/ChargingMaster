@@ -8,6 +8,10 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
+    <!-- Tắt/bật lại đồng bộ tự động khi vào chế độ sạc tối ưu (quyền mức normal) -->
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+
     <!-- Foreground service theo dõi phiên sạc liên tục -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
@@ -15,6 +19,9 @@
 
     <!-- Android 13+: bắt buộc xin runtime mới hiện được notification -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Mở màn báo động đè lên màn khoá khi cảnh báo sạc được kích hoạt -->
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 
     <!-- Đọc mức pin / nhiệt độ không cần quyền; chỉ khai báo feature tuỳ chọn -->
     <uses-feature
@@ -101,6 +108,28 @@
             android:exported="false"
             android:parentActivityName=".controller.home.HomeActivity"
             android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
+        <activity
+            android:name=".controller.power.XChargeActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
+        <!--
+          Màn báo động: launchMode singleTask để cảnh báo mới cập nhật vào màn
+          đang mở thay vì chồng thêm một màn nữa. excludeFromRecents vì đây là
+          màn tạm, không nên nằm lại trong danh sách ứng dụng gần đây.
+        -->
+        <activity
+            android:name=".controller.alarm.AlarmRingActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:showOnLockScreen="true"
+            android:taskAffinity=""
+            android:theme="@style/Theme.ChargManagement.Alarm"
             tools:ignore="LockedOrientationActivity" />
 
         <activity

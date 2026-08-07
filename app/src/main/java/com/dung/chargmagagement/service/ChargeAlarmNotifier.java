@@ -11,6 +11,7 @@ import androidx.core.app.NotificationManagerCompat;
 import com.dung.chargmagagement.ChargApplication;
 import com.dung.chargmagagement.R;
 import com.dung.chargmagagement.common.Logger;
+import com.dung.chargmagagement.controller.alarm.AlarmRingActivity;
 import com.dung.chargmagagement.model.alarm.ChargeAlarmChecker;
 
 /**
@@ -46,10 +47,12 @@ public final class ChargeAlarmNotifier {
             return;
         }
 
-        PendingIntent contentIntent = PendingIntent.getActivity(
-                appContext, 0,
-                appContext.getPackageManager().getLaunchIntentForPackage(
-                        appContext.getPackageName()),
+        // Bắt đầu kêu chuông ngay, không chờ người dùng chạm vào thông báo
+        AlarmPlayer.start(appContext);
+
+        PendingIntent alarmIntent = PendingIntent.getActivity(
+                appContext, type.ordinal(),
+                AlarmRingActivity.createIntent(appContext, type, percent),
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder =
@@ -57,10 +60,13 @@ public final class ChargeAlarmNotifier {
                         .setSmallIcon(R.drawable.ic_battery)
                         .setContentTitle(appContext.getString(type.getTitleRes()))
                         .setContentText(appContext.getString(type.getMessageRes(), percent))
-                        .setContentIntent(contentIntent)
+                        .setContentIntent(alarmIntent)
+                        // fullScreenIntent: hệ thống tự mở màn báo động ngay cả khi
+                        // máy đang khoá, thay vì chỉ hiện một dòng thông báo lặng lẽ
+                        .setFullScreenIntent(alarmIntent, true)
                         .setAutoCancel(true)
-                        .setDefaults(NotificationCompat.DEFAULT_ALL)
-                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+                        .setOngoing(true)
+                        .setPriority(NotificationCompat.PRIORITY_MAX)
                         .setCategory(NotificationCompat.CATEGORY_ALARM);
 
         try {
@@ -71,8 +77,10 @@ public final class ChargeAlarmNotifier {
         }
     }
 
-    /** Xoá cảnh báo đang hiện (khi người dùng rút sạc). */
+    /** Xoá cảnh báo đang hiện và tắt chuông (khi người dùng rút sạc hoặc bấm tắt). */
     public void cancel() {
+        AlarmPlayer.stop();
+
         NotificationManager manager =
                 (NotificationManager) appContext.getSystemService(Context.NOTIFICATION_SERVICE);
         if (manager != null) manager.cancel(NOTIFICATION_ID);

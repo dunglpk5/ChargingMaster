@@ -30,6 +30,16 @@ public interface ChargingSessionDao {
     @Nullable
     ChargingSessionEntity findOngoing();
 
+    /**
+     * Mọi phiên chưa có thời điểm kết thúc, mới nhất trước.
+     *
+     * <p>Bình thường chỉ có tối đa một bản ghi như vậy. Nhiều hơn nghĩa là có
+     * phiên bị bỏ treo (tiến trình chết giữa chừng), cần chốt lại để chúng hiện
+     * ra ở màn Lịch sử sạc thay vì biến mất vĩnh viễn.
+     */
+    @Query("SELECT * FROM charging_session WHERE end_time = 0 ORDER BY start_time DESC")
+    List<ChargingSessionEntity> findAllOngoing();
+
     @Query("SELECT * FROM charging_session WHERE id = :id")
     @Nullable
     ChargingSessionEntity findById(long id);

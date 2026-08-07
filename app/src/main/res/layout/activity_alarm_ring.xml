@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Màn báo động: hiện toàn màn hình khi cảnh báo được kích hoạt.
+  Màu nền đổi theo loại cảnh báo (cam cho ngưỡng pin, đỏ cho quá nhiệt).
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootAlarm"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/state_warning"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/space_lg"
+    android:paddingEnd="@dimen/space_lg">
+
+    <ImageView
+        android:id="@+id/imgIcon"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_marginTop="80dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_battery"
+        app:tint="@color/text_on_primary"
+        xmlns:app="http://schemas.android.com/apk/res-auto" />
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_lg"
+        android:gravity="center"
+        android:textColor="@color/text_on_primary"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        tools:text="Pin đã đạt mức cài đặt" />
+
+    <TextView
+        android:id="@+id/tvMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_md"
+        android:gravity="center"
+        android:lineSpacingExtra="4dp"
+        android:textColor="@color/text_on_primary"
+        android:textSize="20sp"
+        tools:text="Pin đang ở 80%. Rút sạc để giữ pin bền hơn." />
+
+    <TextView
+        android:id="@+id/tvBatteryInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_lg"
+        android:gravity="center"
+        android:textColor="@color/text_on_primary_60"
+        android:textSize="@dimen/text_body"
+        tools:text="37.0℃  ·  1520 mA" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/btnDismiss"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/space_xl"
+        android:background="@drawable/bg_detect_button"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:paddingTop="18dp"
+        android:paddingBottom="18dp"
+        android:text="@string/alarm_dismiss"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/text_title"
+        android:textStyle="bold" />
+
+</LinearLayout>

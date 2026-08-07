@@ -1,13 +1,17 @@
 package com.dung.chargmagagement.controller.alarm;
 
 import android.Manifest;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -16,9 +20,11 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import com.dung.chargmagagement.R;
+import com.dung.chargmagagement.common.Logger;
 import com.dung.chargmagagement.controller.base.BaseActivity;
 import com.dung.chargmagagement.databinding.ActivityChargeAlarmBinding;
 import com.dung.chargmagagement.model.alarm.AlarmSettings;
+import com.dung.chargmagagement.service.ChargingMonitorService;
 
 import java.util.Locale;
 
@@ -59,6 +65,16 @@ public class ChargeAlarmActivity extends BaseActivity<ActivityChargeAlarmBinding
         settings = AlarmSettings.load(prefs);
         bindSettings();
         setupListeners();
+
+        binding.tvFullScreenWarning.setOnClickListener(v -> openFullScreenIntentSettings());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Người dùng có thể vừa cấp quyền ở Cài đặt rồi quay lại
+        updatePermissionWarning();
+        updateFullScreenWarning();
     }
 
     /** Đổ thiết lập đang lưu ra giao diện. */
@@ -148,6 +164,65 @@ public class ChargeAlarmActivity extends BaseActivity<ActivityChargeAlarmBinding
             requestNotificationPermissionIfNeeded();
         }
         updatePermissionWarning();
+        updateFullScreenWarning();
+
+        // Bật cảnh báo trong lúc máy đang cắm sạc thì phải khởi động service ngay,
+        // không thể chờ lần cắm sạc kế tiếp mới bắt đầu theo dõi.
+        if (settings.hasAnyEnabled()) {
+            ChargingMonitorService.startIfPlugged(this);
+        }
+    }
+
+    // ==================== Quyền mở màn báo động toàn màn hình ====================
+
+    /**
+     * Từ Android 14, quyền {@code USE_FULL_SCREEN_INTENT} chỉ được cấp sẵn cho ứng
+     * dụng thuộc nhóm gọi điện hoặc báo thức. Không có quyền này thì cảnh báo vẫn
+     * kêu chuông và hiện thông báo, nhưng <b>không tự bật màn hình lên</b> – mất
+     * tác dụng đúng lúc cần nhất là khi người dùng đang ngủ.
+     */
+    private boolean canUseFullScreenIntent() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) return true;
+
+        NotificationManager manager = getSystemService(NotificationManager.class);
+        return manager == null || manager.canUseFullScreenIntent();
+    }
+
+    private void updateFullScreenWarning() {
+        final boolean needWarning = settings.hasAnyEnabled() && !canUseFullScreenIntent();
+        binding.tvFullScreenWarning.setVisibility(needWarning ? View.VISIBLE : View.GONE);
+    }
+
+    /** Mở trang cấp quyền toàn màn hình của chính ứng dụng. */
+    private void openFullScreenIntentSettings() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) return;
+
+        Intent intent = new Intent(Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT);
+        intent.setData(Uri.fromParts("package", getPackageName(), null));
+
+        if (intent.resolveActivity(getPackageManager()) == null) {
+            // Một số ROM không có trang này; đưa người dùng về trang thông tin app
+            openAppSettingsFallback();
+            return;
+        }
+
+        try {
+            startActivity(intent);
+        } catch (Exception e) {
+            Logger.e("ChargeAlarm", "Không mở được trang cấp quyền toàn màn hình", e);
+            openAppSettingsFallback();
+        }
+    }
+
+    private void openAppSettingsFallback() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        intent.setData(Uri.fromParts("package", getPackageName(), null));
+
+        try {
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(this, R.string.check_settings_unavailable, Toast.LENGTH_SHORT).show();
+        }
     }
 
     /** Thanh trượt chỉ dùng được khi cảnh báo tương ứng đang bật. */

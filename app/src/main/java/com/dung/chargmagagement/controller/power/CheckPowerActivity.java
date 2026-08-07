@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,16 +18,15 @@ import com.dung.chargmagagement.controller.adapter.DrainFeatureAdapter;
 import com.dung.chargmagagement.controller.base.BaseActivity;
 import com.dung.chargmagagement.controller.tools.PhoneTemperatureActivity;
 import com.dung.chargmagagement.databinding.ActivityCheckPowerBinding;
+import com.dung.chargmagagement.databinding.DialogPowerSourceBinding;
 import com.dung.chargmagagement.model.battery.BatteryInfo;
 import com.dung.chargmagagement.model.battery.BatteryMonitor;
 import com.dung.chargmagagement.model.power.ChargeSpeed;
 import com.dung.chargmagagement.model.power.DrainStatus;
-import com.dung.chargmagagement.model.ads.AdManager;
 import com.dung.chargmagagement.model.power.PowerOptimizer;
-import com.dung.chargmagagement.model.vip.VipManager;
-import com.google.android.gms.ads.rewarded.RewardedAd;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Màn Phát hiện sạc.
@@ -72,14 +72,17 @@ public class CheckPowerActivity extends BaseActivity<ActivityCheckPowerBinding>
         binding.toolbarInclude.tvToolbarTitle.setText(R.string.check_title);
         binding.toolbarInclude.btnBack.setOnClickListener(v -> finish());
 
-        binding.btnCheckSource.setOnClickListener(v -> scanFeatures());
-        binding.btnXCharge.setOnClickListener(v -> showXChargeDialog());
+        binding.btnCheckSource.setOnClickListener(v -> showPowerSourceDialog());
+        binding.btnXCharge.setOnClickListener(v -> openXCharge());
 
         featureAdapter = new DrainFeatureAdapter();
         featureAdapter.setOnFeatureClickListener(this);
         binding.rvFeatures.setLayoutManager(new LinearLayoutManager(this));
         binding.rvFeatures.setAdapter(featureAdapter);
-        binding.rvFeatures.setHasFixedSize(true);
+        // Tuyệt đối không gọi setHasFixedSize(true) ở đây: RecyclerView này cao
+        // wrap_content trong NestedScrollView và dữ liệu về sau khi đã đo xong bố
+        // cục. Cờ đó khiến RecyclerView bỏ qua requestLayout lúc có dữ liệu mới,
+        // nên danh sách sẽ giữ nguyên chiều cao 0 và không hiện gì cả.
 
         // Vào màn là bắt đầu phiên đo mới cho số liệu khớp khoảng đang quan sát
         monitor.resetSession();
@@ -206,55 +209,76 @@ public class CheckPowerActivity extends BaseActivity<ActivityCheckPowerBinding>
      * tự giảm độ sáng hệ thống cần quyền {@code WRITE_SETTINGS} nên tạm để lại,
      * xem ghi chú ở phần bàn giao.
      */
-    private void showXChargeDialog() {
-        final boolean vip = VipManager.get(this).isVip();
+    // ==================== Hộp thoại kiểm tra nguồn điện ====================
 
-        new AlertDialog.Builder(this)
-                .setIcon(R.drawable.ic_xcharge)
-                .setTitle(R.string.xcharge_title)
-                .setMessage(R.string.xcharge_message)
-                .setNegativeButton(R.string.action_cancel, null)
-                // Người VIP dùng thẳng, người thường xem quảng cáo để dùng thử
-                .setPositiveButton(vip ? R.string.xcharge_enable : R.string.xcharge_watch_ad,
-                        (dialog, which) -> requestXCharge())
-                .show();
-    }
+    /**
+     * Hiện kết quả kiểm tra nguồn điện.
+     *
+     * <p>So sánh <b>công suất định mức ước tính</b> (suy từ dòng nạp cao nhất đo
+     * được trong phiên – tức khả năng tối đa của bộ sạc) với <b>công suất thực tế</b>
+     * đang vào pin ngay lúc này. Hai con số chênh nhau nhiều nghĩa là máy đang tiêu
+     * thụ mất một phần điện thay vì nạp hết vào pin.
+     */
+    private void showPowerSourceDialog() {
+        final BatteryInfo info = monitor.getLastInfo();
+        if (info == null) return;
 
-    /** VIP thì bật ngay; còn lại phải xem hết một quảng cáo có thưởng. */
-    private void requestXCharge() {
-        if (VipManager.get(this).isVip()) {
-            enableXCharge();
-            return;
+        DialogPowerSourceBinding dialogBinding =
+                DialogPowerSourceBinding.inflate(getLayoutInflater());
+
+        final float voltage = info.getVoltage();
+        final int actualMa = Math.abs(monitor.getStats().getSmoothedMa() == BatteryInfo.UNKNOWN_INT
+                ? 0 : monitor.getStats().getSmoothedMa());
+        final int maxMa = monitor.getStats().getMaxMa() == BatteryInfo.UNKNOWN_INT
+                ? actualMa : Math.abs(monitor.getStats().getMaxMa());
+
+        final float actualWatt = voltage * actualMa / 1000f;
+        // Định mức không bao giờ nhỏ hơn thực tế
+        final float ratedWatt = voltage * Math.max(maxMa, actualMa) / 1000f;
+
+        dialogBinding.tvVerdict.setText(getVerdictRes(actualMa, info));
+        dialogBinding.tvRatedPower.setText(
+                String.format(Locale.getDefault(), "%.1f W", ratedWatt));
+        dialogBinding.tvActualPower.setText(
+                String.format(Locale.getDefault(), "%.1f W", actualWatt));
+
+        // Chênh lệch càng lớn thì gai sóng càng sâu
+        dialogBinding.waveform.setAmplitude(ratedWatt > 0
+                ? Math.min(1f, 0.35f + (ratedWatt - actualWatt) / ratedWatt)
+                : 0.5f);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(dialogBinding.getRoot())
+                .create();
+
+        // Bỏ nền mặc định để bo góc của layout hiện đúng
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
 
-        Toast.makeText(this, R.string.xcharge_loading_ad, Toast.LENGTH_SHORT).show();
-
-        AdManager.loadRewarded(this, new AdManager.RewardedCallback() {
-            @Override
-            public void onAdReady(@NonNull RewardedAd ad) {
-                if (isFinishing() || isDestroyed()) return;
-                ad.show(CheckPowerActivity.this, reward -> enableXCharge());
-            }
-
-            @Override
-            public void onAdFailed() {
-                // Không tải được quảng cáo thì vẫn cho dùng thử: lỗi mạng là
-                // chuyện của app, không nên bắt người dùng chịu
-                enableXCharge();
-            }
-
-            @Override
-            public void onRewardEarned() {
-                enableXCharge();
-            }
-        });
+        dialogBinding.btnOk.setOnClickListener(v -> dialog.dismiss());
+        dialog.show();
     }
 
-    private void enableXCharge() {
-        if (isFinishing() || isDestroyed()) return;
+    /** Câu đánh giá tốc độ sạc hiện tại. */
+    @StringRes
+    private int getVerdictRes(int currentMa, @NonNull BatteryInfo info) {
+        if (!info.getPlugType().isPlugged()) return R.string.source_verdict_unplugged;
 
+        switch (ChargeSpeed.fromCurrent(currentMa)) {
+            case FAST:
+            case VERY_FAST:
+                return R.string.source_verdict_high;
+            case NORMAL:
+                return R.string.source_verdict_normal;
+            default:
+                return R.string.source_verdict_low;
+        }
+    }
+
+    private void openXCharge() {
+        // Bắt đầu phiên đo mới để màn sạc tối ưu hiển thị số liệu từ lúc mở
         monitor.resetSession();
-        scanFeatures();
-        Toast.makeText(this, R.string.xcharge_enabled, Toast.LENGTH_SHORT).show();
+        XChargeActivity.start(this);
     }
 }

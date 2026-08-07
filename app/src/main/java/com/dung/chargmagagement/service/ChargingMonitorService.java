@@ -51,7 +51,32 @@ public class ChargingMonitorService extends Service implements BatteryMonitor.Li
     /** Khởi động service (gọi khi phát hiện cắm sạc). */
     public static void start(@NonNull Context context) {
         Intent intent = new Intent(context, ChargingMonitorService.class);
-        ContextCompat.startForegroundService(context, intent);
+        try {
+            ContextCompat.startForegroundService(context, intent);
+        } catch (Exception e) {
+            // Android 12+ ném ForegroundServiceStartNotAllowedException nếu app
+            // đang ở nền và không thuộc diện miễn trừ. Không có gì để làm ngoài
+            // ghi log: lần sau app mở lên sẽ thử lại.
+            Logger.e(TAG, "Không khởi động được service theo dõi sạc", e);
+        }
+    }
+
+    /**
+     * Khởi động service nếu máy <b>đang cắm sạc sẵn</b>.
+     *
+     * <p>Cần thiết vì {@link ChargingStateReceiver} chỉ nghe được khoảnh khắc
+     * cắm/rút. Người dùng cắm sạc trước rồi mới mở app bật báo động thì broadcast
+     * đã trôi qua từ lâu, service không bao giờ chạy và cảnh báo không bao giờ kêu.
+     * Gọi hàm này từ màn hình đang hiển thị để bù lại khoảng trống đó.
+     */
+    public static void startIfPlugged(@NonNull Context context) {
+        Intent status = context.registerReceiver(null,
+                new android.content.IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        if (status == null) return;
+
+        if (status.getIntExtra(android.os.BatteryManager.EXTRA_PLUGGED, 0) != 0) {
+            start(context);
+        }
     }
 
     /** Dừng service (gọi khi rút sạc). */
@@ -109,9 +134,12 @@ public class ChargingMonitorService extends Service implements BatteryMonitor.Li
         AlarmSettings settings = AlarmSettings.load(PrefManager.get(this));
         if (!settings.hasAnyEnabled()) return;
 
+        // Dùng "đang cắm nguồn" chứ không phải "đang nạp": khi pin gần đầy nhiều
+        // máy báo trạng thái FULL hoặc tạm ngưng nạp, lúc đó isCharging() trả về
+        // false và cảnh báo pin đầy sẽ không bao giờ phát.
         ChargeAlarmChecker.AlarmType type = alarmChecker.check(
                 info.getPercent(),
-                info.isCharging(),
+                info.getPlugType().isPlugged(),
                 info.getTemperatureCelsius(),
                 settings);
 

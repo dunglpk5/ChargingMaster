@@ -120,12 +120,37 @@
     <string name="check_ok">OK</string>
 
     <!-- Hộp thoại X-Sạc -->
-    <string name="xcharge_title">Deep charging (trial only)</string>
-    <string name="xcharge_message">Switch to deep charging mode, in which the following actions are enabled automatically.\n1. The app lowers system brightness.\n2. Battery temperature and current are monitored in real time, with a reminder if anything looks wrong.\n3. The charging page opens to show live charging information.</string>
-    <string name="xcharge_enable">ENABLE</string>
-    <string name="xcharge_enabled">Deep charging enabled</string>
-    <string name="xcharge_watch_ad">WATCH AD FOR A TRIAL</string>
-    <string name="xcharge_loading_ad">Loading ad…</string>
+
+    <!-- Hộp thoại kiểm tra nguồn điện -->
+    <string name="source_rated_power">Estimated rated power:</string>
+    <string name="source_actual_power">Estimated actual power:</string>
+    <string name="source_verdict_low">Charging speed is currently low</string>
+    <string name="source_verdict_normal">Charging speed is normal</string>
+    <string name="source_verdict_high">Charging speed is high</string>
+    <string name="source_verdict_unplugged">No charger connected</string>
+    <string name="action_ok_short">OK</string>
+
+    <!-- Màn sạc tối ưu (X-Sạc) -->
+    <string name="xcharge_optimizing">Optimizations in effect</string>
+    <string name="xcharge_line_done">✓  %1$s</string>
+    <string name="xcharge_line_manual">!  %1$s — turn off manually</string>
+    <string name="xcharge_done_screen">Screen dimmed for this page</string>
+    <string name="xcharge_done_sync">Auto sync turned off</string>
+    <string name="xcharge_done_brightness">System brightness lowered</string>
+    <string name="xcharge_grant_brightness">Allow the app to lower system brightness</string>
+    <string name="xcharge_manual_off">Turn off the remaining items</string>
+    <string name="xcharge_elapsed">Elapsed</string>
+    <string name="xcharge_remaining">About %1$s until full</string>
+    <string name="xcharge_calculating">Calculating remaining time…</string>
+    <string name="xcharge_not_charging">Not charging</string>
+    <string name="xcharge_plug_in">Plug in a charger to start</string>
+    <string name="xcharge_warn_hot">Battery is unusually hot. Unplug and let it cool down.</string>
+    <string name="xcharge_warn_slow">Charging current is unusually low. Check your charger and cable.</string>
+    <string name="xcharge_actions">In this mode the app keeps the screen on, watches battery temperature and current in real time, and warns you if anything looks wrong.</string>
+
+    <!-- Màn báo động -->
+    <string name="alarm_dismiss">STOP ALARM</string>
+    <string name="alarm_fullscreen_warning">Tap here to allow full-screen alerts, so the alarm can turn the screen on while the phone is locked.</string>
 
     <!-- Màn VIP -->
     <string name="vip_subtitle">Upgrade to remove all ads</string>

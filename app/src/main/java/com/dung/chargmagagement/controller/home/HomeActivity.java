@@ -11,6 +11,7 @@ import com.dung.chargmagagement.controller.base.BaseActivity;
 import com.dung.chargmagagement.databinding.ActivityHomeBinding;
 import com.dung.chargmagagement.model.battery.BatteryMonitor;
 import com.dung.chargmagagement.model.repository.SessionRecorder;
+import com.dung.chargmagagement.service.ChargingMonitorService;
 
 /**
  * Màn hình chính: ViewPager2 gồm 3 tab (Trang chủ / Công cụ / Sử dụng pin)
@@ -47,6 +48,10 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding> {
         // Trong lúc app mở, vẫn ghi lịch sử kể cả khi không sạc (service chỉ chạy
         // lúc cắm sạc) để có dữ liệu màn hình bật/tắt cho tab "Sử dụng pin"
         monitor.addListener(recorder);
+
+        // Bù trường hợp máy đã cắm sạc từ trước khi app được mở: lúc đó broadcast
+        // ACTION_POWER_CONNECTED đã trôi qua nên service chưa hề chạy.
+        ChargingMonitorService.startIfPlugged(this);
     }
 
     @Override

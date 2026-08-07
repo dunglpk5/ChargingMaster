@@ -88,6 +88,18 @@ public final class BatteryRepository {
     }
 
     @WorkerThread
+    @NonNull
+    public List<ChargingSessionEntity> findAllOngoingSessionsSync() {
+        return sessionDao.findAllOngoing();
+    }
+
+    /** Thời điểm đo cuối của một phiên (0 nếu chưa có điểm đo nào). */
+    @WorkerThread
+    public long findLastSampleTimeSync(long sessionId) {
+        return sampleDao.getLastTimestampOfSession(sessionId);
+    }
+
+    @WorkerThread
     public void insertSampleSync(@NonNull BatterySampleEntity sample) {
         sampleDao.insert(sample);
     }

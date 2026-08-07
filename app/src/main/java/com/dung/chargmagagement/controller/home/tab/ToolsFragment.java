@@ -18,6 +18,7 @@ import com.dung.chargmagagement.controller.alarm.ChargeAlarmActivity;
 import com.dung.chargmagagement.controller.detail.PhoneDetailActivity;
 import com.dung.chargmagagement.controller.history.ChargeHistoryActivity;
 import com.dung.chargmagagement.controller.power.CheckPowerActivity;
+import com.dung.chargmagagement.controller.power.XChargeActivity;
 import com.dung.chargmagagement.controller.settings.SettingsActivity;
 import com.dung.chargmagagement.controller.tools.CpuUsageActivity;
 import com.dung.chargmagagement.controller.tools.NotificationCleanActivity;
@@ -224,8 +225,7 @@ public class ToolsFragment extends BaseFragment<FragmentToolsBinding>
                 break;
 
             case X_CHARGE:
-                // X-Sạc nằm trong màn Phát hiện sạc
-                CheckPowerActivity.start(requireContext());
+                XChargeActivity.start(requireContext());
                 break;
 
             default:

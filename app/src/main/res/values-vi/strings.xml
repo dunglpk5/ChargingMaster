@@ -109,12 +109,37 @@
     <string name="check_ok">Ổn</string>
 
     <!-- Hộp thoại X-Sạc -->
-    <string name="xcharge_title">Sạc chuyên sâu (chỉ dành cho dùng thử)</string>
-    <string name="xcharge_message">Chuyển sang chế độ sạc chuyên sâu, trong đó các hành động sau sẽ được tự động bật.\n1. Phần mềm sẽ tự động giảm độ sáng hệ thống.\n2. Bắt đầu giám sát nhiệt độ và dòng điện của pin theo thời gian thực, và sẽ được nhắc nhở nếu có bất thường.\n3. Trang sạc sẽ mở để hiển thị thông tin sạc thời gian thực.</string>
-    <string name="xcharge_enable">BẬT</string>
-    <string name="xcharge_enabled">Đã bật chế độ sạc chuyên sâu</string>
-    <string name="xcharge_watch_ad">XEM QUẢNG CÁO ĐỂ NHẬN DÙNG THỬ</string>
-    <string name="xcharge_loading_ad">Đang tải quảng cáo…</string>
+
+    <!-- Hộp thoại kiểm tra nguồn điện -->
+    <string name="source_rated_power">Công suất định mức ước tính:</string>
+    <string name="source_actual_power">Công suất thực tế ước tính:</string>
+    <string name="source_verdict_low">Tốc độ sạc hiện tại là thấp</string>
+    <string name="source_verdict_normal">Tốc độ sạc hiện tại là bình thường</string>
+    <string name="source_verdict_high">Tốc độ sạc hiện tại là cao</string>
+    <string name="source_verdict_unplugged">Chưa cắm nguồn sạc</string>
+    <string name="action_ok_short">OK</string>
+
+    <!-- Màn sạc tối ưu (X-Sạc) -->
+    <string name="xcharge_optimizing">Đang tối ưu</string>
+    <string name="xcharge_line_done">✓  %1$s</string>
+    <string name="xcharge_line_manual">!  %1$s — cần tắt thủ công</string>
+    <string name="xcharge_done_screen">Đã giảm độ sáng cho trang này</string>
+    <string name="xcharge_done_sync">Đã tắt đồng bộ tự động</string>
+    <string name="xcharge_done_brightness">Đã hạ độ sáng hệ thống</string>
+    <string name="xcharge_grant_brightness">Cho phép ứng dụng hạ độ sáng hệ thống</string>
+    <string name="xcharge_manual_off">Tắt các mục còn lại</string>
+    <string name="xcharge_elapsed">Đã sạc</string>
+    <string name="xcharge_remaining">Còn khoảng %1$s là đầy</string>
+    <string name="xcharge_calculating">Đang tính thời gian còn lại…</string>
+    <string name="xcharge_not_charging">Đang không sạc</string>
+    <string name="xcharge_plug_in">Cắm sạc để bắt đầu theo dõi</string>
+    <string name="xcharge_warn_hot">Pin đang nóng bất thường. Hãy rút sạc và để máy nguội bớt.</string>
+    <string name="xcharge_warn_slow">Dòng sạc thấp bất thường. Hãy kiểm tra lại củ sạc và dây cáp.</string>
+    <string name="xcharge_actions">Ở chế độ này, ứng dụng giữ màn hình sáng, giám sát nhiệt độ và dòng điện của pin theo thời gian thực, và nhắc bạn khi có bất thường.</string>
+
+    <!-- Màn báo động -->
+    <string name="alarm_dismiss">TẮT CHUÔNG</string>
+    <string name="alarm_fullscreen_warning">Chạm vào đây để cho phép cảnh báo toàn màn hình, giúp báo động bật được màn hình khi máy đang khoá.</string>
 
     <!-- Màn VIP -->
     <string name="vip_subtitle">Nâng cấp để gỡ toàn bộ quảng cáo</string>
