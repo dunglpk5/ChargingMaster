@@ -1,6 +1,7 @@
 package com.dung.chargmagagement.common;
 
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -71,6 +72,24 @@ public final class DateUtils {
     /** Mốc thời gian của N ngày trước tính từ bây giờ. */
     public static long daysAgo(int days) {
         return System.currentTimeMillis() - days * DAY_MS;
+    }
+
+    /**
+     * Ngày dạng ngắn theo thói quen của ngôn ngữ đang dùng, ví dụ "06/08/2026".
+     *
+     * <p>Tạo {@code SimpleDateFormat} mỗi lần gọi thay vì giữ sẵn một đối tượng
+     * dùng chung: lớp đó không an toàn khi nhiều thread cùng dùng, mà các hàm ở
+     * đây được gọi từ cả thread giao diện lẫn thread nền.
+     */
+    public static String formatDate(long millis) {
+        return new java.text.SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                .format(new java.util.Date(millis));
+    }
+
+    /** Giờ trong ngày, ví dụ "10:09". */
+    public static String formatTime(long millis) {
+        return new java.text.SimpleDateFormat("HH:mm", Locale.getDefault())
+                .format(new java.util.Date(millis));
     }
 
     /**

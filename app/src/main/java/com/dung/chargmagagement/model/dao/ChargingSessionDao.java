@@ -62,6 +62,15 @@ public interface ChargingSessionDao {
             + "WHERE end_time > 0 AND end_percent > start_percent AND start_time >= :from")
     int sumChargedPercentSince(long from);
 
+    /** Tổng điện tích đã nạp kể từ mốc thời gian (mAh), cho dòng tóm tắt sức khoẻ pin. */
+    @Query("SELECT COALESCE(SUM(charged_mah), 0) FROM charging_session "
+            + "WHERE end_time > 0 AND start_time >= :from")
+    float sumChargedMahSince(long from);
+
+    /** Thời điểm phiên sạc đầu tiên từng ghi được; 0 nếu chưa có phiên nào. */
+    @Query("SELECT COALESCE(MIN(start_time), 0) FROM charging_session WHERE end_time > 0")
+    long findFirstSessionTime();
+
     /**
      * Các phiên đủ dài để ước tính dung lượng pin đáng tin cậy.
      * Ngưỡng %: phiên nạp dưới ~20% cho sai số rất lớn.

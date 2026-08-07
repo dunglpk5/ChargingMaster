@@ -1,5 +1,6 @@
 package com.dung.chargmagagement.model.dao;
 
+import androidx.annotation.Nullable;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -39,6 +40,14 @@ public interface BatterySampleDao {
      */
     @Query("SELECT COALESCE(MAX(timestamp), 0) FROM battery_sample WHERE session_id = :sessionId")
     long getLastTimestampOfSession(long sessionId);
+
+    /**
+     * Điểm đo mới nhất trong toàn bộ bảng – tức lần cuối cùng tiến trình còn sống.
+     * Dùng để dựng lại quãng thời gian máy chạy mà app không quan sát được.
+     */
+    @Query("SELECT * FROM battery_sample ORDER BY timestamp DESC LIMIT 1")
+    @Nullable
+    BatterySampleEntity findLatest();
 
     @Query("SELECT COUNT(*) FROM battery_sample")
     int count();

@@ -58,6 +58,10 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding> {
     protected void onPause() {
         super.onPause();
         monitor.removeListener(recorder);
+
+        // Ngừng nhận dữ liệu thì phải chốt khoảng đang mở ngay. Để lại bản ghi
+        // end_time = 0 là nó sẽ bị mọi truy vấn thống kê loại ra vĩnh viễn.
+        recorder.finalizeOpenSessions();
     }
 
     private void setupPager() {

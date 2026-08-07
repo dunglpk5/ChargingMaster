@@ -57,6 +57,19 @@
     <string name="usage_screen_on">Màn hình bật</string>
     <string name="usage_screen_off">Màn hình tắt</string>
     <string name="usage_last_7_days">trong 7 ngày qua</string>
+    <string name="usage_rate_detail">%1$.1f %% trong %2$.1f giờ</string>
+    <string name="usage_health_basis">Dựa trên %1$d phiên với %2$d %% sạc cho tổng cộng %3$d mAh.</string>
+    <string name="usage_charge_since">từ %1$s</string>
+    <string name="usage_charge_daily">Sạc trung bình hàng ngày</string>
+    <string name="usage_charging_now">Đang sạc hiện tại</string>
+    <string name="usage_charging_since">Đang sạc từ</string>
+
+    <string name="usage_apps">Sử dụng pin ứng dụng</string>
+    <string name="usage_apps_desc">Android không cho ứng dụng đọc lượng điện từng app đã tiêu thụ — con số đó chỉ có trong phần Cài đặt của hệ thống. Phần dưới hiển thị tỉ lệ thời gian chạy tiền cảnh của mỗi app, bám khá sát mức hao pin nhưng không tính được app ngốn pin ở nền.</string>
+    <string name="usage_apps_permission_title">Cần quyền truy cập sử dụng</string>
+    <string name="usage_apps_permission_desc">Xếp hạng ứng dụng theo mức sử dụng cần quyền Truy cập thông tin sử dụng. Quyền này hiện chưa được cấp.</string>
+    <string name="usage_apps_grant">CẤP QUYỀN</string>
+    <string name="usage_apps_empty">Chưa đủ dữ liệu sử dụng.</string>
     <string name="usage_full_estimate">Ước tính thời gian pin đầy</string>
     <string name="usage_charged">Pin đã sạc</string>
     <string name="usage_measuring">đang đo…</string>
@@ -155,6 +168,9 @@
     <string name="temp_state_normal">Nhiệt độ bình thường</string>
     <string name="temp_state_warm">Pin đang ấm lên</string>
     <string name="temp_state_hot">Pin quá nóng, hãy để máy nguội bớt</string>
+    <string name="temp_advice_normal">Nhiệt độ điện thoại đang ở mức bình thường. Hiện chưa có gì đáng lo.</string>
+    <string name="temp_advice_warm">Điện thoại đang ấm hơn bình thường, có thể do tải CPU cao hoặc dòng sạc cao. Để giảm nhiệt, vui lòng thử các cách sau:\n1. Rút sạc và tạm dừng sạc.\n2. Đóng các ứng dụng đang chạy có tải cao.\n3. Để điện thoại ở môi trường thông thoáng trong một thời gian.</string>
+    <string name="temp_advice_hot">Nhiệt độ hiện tại của điện thoại đang quá nóng, có thể do tải CPU cao hoặc dòng sạc cao. Để giảm nhiệt, vui lòng thử các cách sau:\n1. Rút sạc và tạm dừng sạc.\n2. Đóng các ứng dụng đang chạy có tải cao.\n3. Để điện thoại ở môi trường thông thoáng trong một thời gian.</string>
 
     <!-- Màn Cài đặt -->
     <string name="settings_title">Cài đặt</string>
@@ -167,6 +183,7 @@
     <string name="language_system">Theo hệ thống</string>
 
     <string name="cpu_unavailable">Máy này không cho phép đọc mức sử dụng CPU</string>
+    <string name="cpu_estimated_note">Máy này chặn số đo CPU chính xác, nên mức tải bên dưới được ước tính từ xung nhịp và thường cao hơn con số thật.</string>
 
     <string name="cpu_frequency">Tần số CPU</string>
     <string name="cpu_core_count">Số lõi CPU</string>

@@ -12,6 +12,14 @@
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
+    <!--
+      Xếp hạng ứng dụng theo thời gian dùng ở mục "Sử dụng pin ứng dụng".
+      Quyền đặc biệt: khai báo ở đây không đủ, người dùng phải tự bật trong Cài đặt.
+    -->
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
+
     <!-- Foreground service theo dõi phiên sạc liên tục -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />

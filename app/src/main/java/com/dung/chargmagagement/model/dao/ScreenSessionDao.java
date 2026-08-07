@@ -26,6 +26,10 @@ public interface ScreenSessionDao {
     @Nullable
     ScreenSessionEntity findOngoing();
 
+    /** Mọi khoảng chưa được chốt, mới nhất trước – xem {@code findAllOngoing} ở DAO phiên sạc. */
+    @Query("SELECT * FROM screen_session WHERE end_time = 0 ORDER BY start_time DESC")
+    List<ScreenSessionEntity> findAllOngoing();
+
     /**
      * Các khoảng đã kết thúc, đang dùng pin (không sạc), có tiêu hao thật sự.
      * Lọc luôn khoảng quá ngắn (dưới 1 phút) vì làm nhiễu tỉ lệ %/h.

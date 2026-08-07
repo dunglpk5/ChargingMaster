@@ -85,6 +85,20 @@ public final class CpuInfoReader {
         return max;
     }
 
+    /** Xung nhịp thấp nhất của riêng một nhân (kHz); 0 nếu không đọc được. */
+    @WorkerThread
+    public static long getCoreMinFrequencyKhz(int core) {
+        Long value = FileUtils.readLong(CPU_DIR + core + "/cpufreq/cpuinfo_min_freq");
+        return value == null ? 0L : value;
+    }
+
+    /** Xung nhịp cao nhất của riêng một nhân (kHz); 0 nếu không đọc được. */
+    @WorkerThread
+    public static long getCoreMaxFrequencyKhz(int core) {
+        Long value = FileUtils.readLong(CPU_DIR + core + "/cpufreq/cpuinfo_max_freq");
+        return value == null ? 0L : value;
+    }
+
     /** Xung nhịp hiện tại của một nhân (kHz); 0 nếu nhân đang ngủ. */
     @WorkerThread
     public static long getCurrentFrequencyKhz(int core) {

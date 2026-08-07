@@ -120,6 +120,19 @@ public final class BatteryRepository {
         return screenDao.findOngoing();
     }
 
+    @WorkerThread
+    @NonNull
+    public List<ScreenSessionEntity> findAllOngoingScreenSessionsSync() {
+        return screenDao.findAllOngoing();
+    }
+
+    /** Điểm đo mới nhất, hoặc null nếu chưa từng ghi được điểm nào. */
+    @WorkerThread
+    @Nullable
+    public BatterySampleEntity findLatestSampleSync() {
+        return sampleDao.findLatest();
+    }
+
     // ==================== Đọc dữ liệu cho UI ====================
 
     /** Lịch sử sạc (mới nhất trước) cho màn "Lịch sử sạc". */
@@ -170,7 +183,16 @@ public final class BatteryRepository {
                 UsageCalculator.MIN_GAINED_PERCENT_FOR_CAPACITY,
                 UsageCalculator.CAPACITY_SAMPLE_SIZE);
 
+        // Phiên sạc đang chạy dở, để hiện hai thẻ "đang sạc hiện tại / đang sạc từ"
+        ChargingSessionEntity active = sessionDao.findOngoing();
+
         return BatteryUsageStats.builder()
+                .statsWindowDays(STATS_WINDOW_DAYS)
+                .totalChargedMah(sessionDao.sumChargedMahSince(from))
+                .firstSessionTime(sessionDao.findFirstSessionTime())
+                .activeSession(
+                        active == null ? 0L : active.startTime,
+                        active == null ? 0 : active.getGainedPercent())
                 .screenOn(screenOn)
                 .screenOff(screenOff)
                 .combined(UsageCalculator.combine(screenOn, screenOff))

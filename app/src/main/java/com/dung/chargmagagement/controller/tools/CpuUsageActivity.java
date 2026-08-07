@@ -14,6 +14,7 @@ import com.dung.chargmagagement.controller.adapter.CpuCoreAdapter;
 import com.dung.chargmagagement.controller.base.BaseActivity;
 import com.dung.chargmagagement.databinding.ActivityCpuUsageBinding;
 import com.dung.chargmagagement.model.device.CpuInfoReader;
+import com.dung.chargmagagement.model.device.CpuLoadEstimator;
 import com.dung.chargmagagement.model.device.CpuUsageReader;
 import com.dung.chargmagagement.model.device.CpuUsageSnapshot;
 
@@ -44,6 +45,10 @@ public class CpuUsageActivity extends BaseActivity<ActivityCpuUsageBinding> {
     /** Lần đọc trước, dùng làm mốc để tính chênh lệch. */
     private List<CpuUsageSnapshot> previousSnapshots;
 
+    /** Dải xung nhịp [min, max] của từng nhân, cho cách ước tính dự phòng. */
+    @Nullable
+    private long[][] coreFreqRange;
+
     public static void start(@NonNull Context context) {
         context.startActivity(new Intent(context, CpuUsageActivity.class));
     }
@@ -67,6 +72,19 @@ public class CpuUsageActivity extends BaseActivity<ActivityCpuUsageBinding> {
         binding.rvCores.setAdapter(adapter);
 
         loadFrequencyRange();
+        loadCoreFreqRanges(coreCount);
+    }
+
+    /** Dải xung của từng nhân chỉ cần đọc một lần, giá trị không đổi khi máy chạy. */
+    private void loadCoreFreqRanges(int coreCount) {
+        executors.execute(() -> {
+            long[][] ranges = new long[coreCount][2];
+            for (int i = 0; i < coreCount; i++) {
+                ranges[i][0] = CpuInfoReader.getCoreMinFrequencyKhz(i);
+                ranges[i][1] = CpuInfoReader.getCoreMaxFrequencyKhz(i);
+            }
+            return ranges;
+        }, ranges -> coreFreqRange = ranges);
     }
 
     /** Dải tần số đọc từ sysfs nên phải chạy nền. */
@@ -104,17 +122,21 @@ public class CpuUsageActivity extends BaseActivity<ActivityCpuUsageBinding> {
         }
     }
 
-    /** Một lần lấy mẫu, chạy trên thread sampler. */
+    /**
+     * Một lần lấy mẫu, chạy trên thread sampler.
+     *
+     * <p>Ưu tiên {@code /proc/stat} vì đó là số đo thật. ROM nào chặn file đó thì
+     * chuyển sang ước tính theo xung nhịp – vẫn hơn là bỏ trống cả màn hình.
+     */
     private void sample() {
         final List<CpuUsageSnapshot> current = CpuUsageReader.readSnapshots();
+        final int[] estimated = current.isEmpty() ? readEstimatedLoad() : null;
 
         executors.runOnMain(() -> {
             if (binding == null) return;
 
-            if (current.isEmpty()) {
-                // ROM chặn đọc /proc/stat: báo rõ thay vì hiện 0%, vì 0% trông y
-                // hệt như CPU đang hoàn toàn rảnh
-                binding.tvUnavailable.setVisibility(View.VISIBLE);
+            if (estimated != null) {
+                bindEstimated(estimated);
                 return;
             }
 
@@ -122,6 +144,36 @@ public class CpuUsageActivity extends BaseActivity<ActivityCpuUsageBinding> {
             pushSamples(current);
             previousSnapshots = current;
         });
+    }
+
+    /** Ước tính tải từng nhân theo xung nhịp; null nếu chưa có dải xung. */
+    @Nullable
+    private int[] readEstimatedLoad() {
+        final long[][] ranges = coreFreqRange;
+        if (ranges == null) return null;
+
+        int[] result = new int[ranges.length];
+        for (int i = 0; i < ranges.length; i++) {
+            result[i] = CpuLoadEstimator.estimatePercent(
+                    CpuInfoReader.getCurrentFrequencyKhz(i), ranges[i][0], ranges[i][1]);
+        }
+        return result;
+    }
+
+    private void bindEstimated(@NonNull int[] loads) {
+        boolean anyUsable = false;
+        for (int core = 0; core < loads.length; core++) {
+            if (loads[core] == CpuLoadEstimator.UNKNOWN) continue;
+            adapter.addSample(core, loads[core]);
+            anyUsable = true;
+        }
+
+        // Cả hai cách đều thất bại: nói thẳng là không đọc được, tuyệt đối không
+        // vẽ 0% vì 0% trông y hệt như CPU đang hoàn toàn rảnh
+        binding.tvUnavailable.setText(anyUsable
+                ? R.string.cpu_estimated_note
+                : R.string.cpu_unavailable);
+        binding.tvUnavailable.setVisibility(View.VISIBLE);
     }
 
     /** Phần tử 0 là toàn bộ CPU, các phần tử sau mới là từng nhân. */

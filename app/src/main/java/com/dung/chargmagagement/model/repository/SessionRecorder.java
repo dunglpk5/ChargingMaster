@@ -42,6 +42,12 @@ public final class SessionRecorder implements BatteryMonitor.Listener {
     /** Khoảng cách tối thiểu giữa hai điểm đo được lưu (ms). */
     private static final long SAMPLE_MIN_INTERVAL_MS = 60_000L;
 
+    /** Quãng không quan sát ngắn hơn mức này thì bỏ qua, không đáng kể. */
+    private static final long MIN_GAP_MS = 60_000L;
+
+    /** Quãng dài hơn mức này không đáng tin: máy có thể đã tắt nguồn. */
+    private static final long MAX_GAP_MS = 24 * 60 * 60 * 1000L;
+
     private static volatile SessionRecorder instance;
 
     private final BatteryRepository repository;
@@ -56,6 +62,15 @@ public final class SessionRecorder implements BatteryMonitor.Listener {
     private long currentSumMa;
     private int currentSampleCount;
     private boolean restored;
+
+    /**
+     * Mẫu gần nhất lớp này thật sự xử lý. Dùng để phát hiện quãng thời gian máy
+     * vẫn chạy mà không ai gửi dữ liệu tới (app đóng, không cắm sạc).
+     * Giá trị 0 nghĩa là chưa biết, sẽ được nạp từ database ở lần chạy đầu.
+     */
+    private long lastHandledTime;
+    private int lastHandledPercent = BatteryInfo.UNKNOWN_INT;
+    private boolean lastHandledCharging;
 
     private SessionRecorder(@NonNull Context context) {
         this.repository = BatteryRepository.get(context);
@@ -87,6 +102,7 @@ public final class SessionRecorder implements BatteryMonitor.Listener {
     private void handleSample(@NonNull BatteryInfo info, int smoothedMa) {
         try {
             restoreIfNeeded();
+            recordUnobservedGap(info);
 
             final boolean screenOn = powerManager != null && powerManager.isInteractive();
             final boolean plugged = info.getPlugType().isPlugged();
@@ -94,6 +110,10 @@ public final class SessionRecorder implements BatteryMonitor.Listener {
             updateChargingSession(info, smoothedMa, plugged);
             updateScreenSession(info, screenOn, plugged);
             saveSampleIfNeeded(info, smoothedMa, screenOn);
+
+            lastHandledTime = info.getTimestamp();
+            lastHandledPercent = info.getPercent();
+            lastHandledCharging = info.isCharging();
         } catch (Exception e) {
             Logger.e(TAG, "Ghi dữ liệu phiên thất bại", e);
         }
@@ -109,6 +129,7 @@ public final class SessionRecorder implements BatteryMonitor.Listener {
         restored = true;
 
         closeOrphanSessions();
+        closeOrphanScreenSessions();
 
         activeSession = repository.findOngoingSessionSync();
         activeScreenSession = repository.findOngoingScreenSessionSync();
@@ -148,6 +169,83 @@ public final class SessionRecorder implements BatteryMonitor.Listener {
 
             Logger.d(TAG, "Chốt phiên sạc bị bỏ treo #" + stale.id);
         }
+    }
+
+    /** Chốt các khoảng màn hình bị bỏ treo, giữ lại khoảng mới nhất để nối tiếp. */
+    @WorkerThread
+    private void closeOrphanScreenSessions() {
+        final java.util.List<ScreenSessionEntity> ongoing =
+                repository.findAllOngoingScreenSessionsSync();
+        if (ongoing.size() <= 1) return;
+
+        final BatterySampleEntity latest = repository.findLatestSampleSync();
+        final long fallbackEnd = latest != null ? latest.timestamp : System.currentTimeMillis();
+
+        for (int i = 1; i < ongoing.size(); i++) {
+            final ScreenSessionEntity stale = ongoing.get(i);
+            stale.endTime = Math.max(fallbackEnd, stale.startTime);
+            repository.updateScreenSessionSync(stale);
+        }
+        Logger.d(TAG, "Chốt " + (ongoing.size() - 1) + " khoảng màn hình bị bỏ treo");
+    }
+
+    /**
+     * Dựng lại quãng thời gian máy vẫn chạy mà app không quan sát được.
+     *
+     * <p><b>Vì sao cần:</b> app chỉ ghi dữ liệu khi đang mở hoặc đang cắm sạc – đó
+     * là lựa chọn có chủ đích để không hao pin. Nhưng phần lớn thời gian tiêu pin
+     * thật sự lại nằm ngoài hai khoảng đó: máy nằm trong túi, màn hình tắt, app
+     * không chạy. Nếu chỉ đếm những gì quan sát trực tiếp thì mục "màn hình tắt"
+     * vĩnh viễn trống, và con số "sử dụng kết hợp" cũng sai theo.
+     *
+     * <p>Ta biết mức pin ở điểm đo cuối cùng và mức pin ngay bây giờ, nên suy ra
+     * được lượng tiêu hao của cả quãng giữa. Quãng đó gần như chắc chắn là màn hình
+     * tắt: nếu người dùng mở máy dùng thì app đã có cơ hội ghi rồi.
+     *
+     * <p>Chỉ nhận quãng từ 1 phút tới 24 giờ. Dài hơn nữa thì rất có thể máy đã tắt
+     * nguồn một lúc, tính vào sẽ ra tốc độ tiêu hao thấp giả tạo.
+     *
+     * <p><b>Chạy ở mỗi lần lấy mẫu, không chỉ lúc khởi động.</b> Android giữ tiến
+     * trình trong bộ nhớ rất lâu sau khi người dùng thoát app, nên nếu chỉ kiểm tra
+     * một lần cho mỗi vòng đời tiến trình thì hầu như chẳng bao giờ ghi được quãng
+     * nào: lần mở app thứ hai trở đi, tiến trình vẫn là tiến trình cũ.
+     */
+    @WorkerThread
+    private void recordUnobservedGap(@NonNull BatteryInfo info) {
+        if (lastHandledTime == 0 && !seedLastHandledFromDatabase()) return;
+
+        final long gapMs = info.getTimestamp() - lastHandledTime;
+        if (gapMs < MIN_GAP_MS || gapMs > MAX_GAP_MS) return;
+
+        // Có sạc ở hai đầu quãng thì không thể coi đây là quãng dùng pin
+        if (lastHandledCharging || info.getPlugType().isPlugged()) return;
+
+        final int drop = lastHandledPercent - info.getPercent();
+        if (drop <= 0) return; // pin không tụt: không có gì để thống kê
+
+        ScreenSessionEntity gap = new ScreenSessionEntity();
+        gap.startTime = lastHandledTime;
+        gap.endTime = info.getTimestamp();
+        gap.startPercent = lastHandledPercent;
+        gap.endPercent = info.getPercent();
+        gap.screenOn = false;
+        gap.charging = false;
+        repository.insertScreenSessionSync(gap);
+
+        Logger.d(TAG, "Ghi nhận quãng không quan sát: "
+                + DateUtils.toHours(gapMs) + "h, tụt " + drop + "%");
+    }
+
+    /** Nạp mốc quan sát cuối từ điểm đo mới nhất; false nếu chưa có điểm nào. */
+    @WorkerThread
+    private boolean seedLastHandledFromDatabase() {
+        final BatterySampleEntity last = repository.findLatestSampleSync();
+        if (last == null) return false;
+
+        lastHandledTime = last.timestamp;
+        lastHandledPercent = last.percent;
+        lastHandledCharging = last.charging;
+        return true;
     }
 
     // ==================== Phiên sạc ====================

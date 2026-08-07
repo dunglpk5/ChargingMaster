@@ -18,8 +18,22 @@ public final class BatteryUsageStats {
 
     private final int chargeSessionCount;
     private final int totalChargedPercent;
+    private final float totalChargedMah;
+    private final int statsWindowDays;
+
+    /** Thời điểm phiên sạc đầu tiên từng ghi được (0 = chưa có). */
+    private final long firstSessionTime;
+
+    /** Phiên sạc đang chạy: thời điểm bắt đầu và số % đã nạp được (0 = không sạc). */
+    private final long activeSessionStartTime;
+    private final int activeSessionGainedPercent;
 
     private BatteryUsageStats(Builder builder) {
+        this.totalChargedMah = builder.totalChargedMah;
+        this.statsWindowDays = builder.statsWindowDays;
+        this.firstSessionTime = builder.firstSessionTime;
+        this.activeSessionStartTime = builder.activeSessionStartTime;
+        this.activeSessionGainedPercent = builder.activeSessionGainedPercent;
         this.combined = builder.combined;
         this.screenOn = builder.screenOn;
         this.screenOff = builder.screenOff;
@@ -84,6 +98,33 @@ public final class BatteryUsageStats {
         return (float) totalChargedPercent / chargeSessionCount;
     }
 
+    public float getTotalChargedMah() {
+        return totalChargedMah;
+    }
+
+    public long getFirstSessionTime() {
+        return firstSessionTime;
+    }
+
+    /** Số % pin nạp trung bình mỗi ngày trong cửa sổ thống kê. */
+    public float getAverageChargedPercentPerDay() {
+        if (statsWindowDays <= 0) return 0f;
+        return (float) totalChargedPercent / statsWindowDays;
+    }
+
+    /** Đang có phiên sạc chạy dở hay không. */
+    public boolean isChargingNow() {
+        return activeSessionStartTime > 0;
+    }
+
+    public long getActiveSessionStartTime() {
+        return activeSessionStartTime;
+    }
+
+    public int getActiveSessionGainedPercent() {
+        return activeSessionGainedPercent;
+    }
+
     public static Builder builder() {
         return new Builder();
     }
@@ -97,6 +138,32 @@ public final class BatteryUsageStats {
         private int designCapacityMah = BatteryInfo.UNKNOWN_INT;
         private int chargeSessionCount;
         private int totalChargedPercent;
+        private float totalChargedMah;
+        private int statsWindowDays;
+        private long firstSessionTime;
+        private long activeSessionStartTime;
+        private int activeSessionGainedPercent;
+
+        public Builder totalChargedMah(float value) {
+            this.totalChargedMah = value;
+            return this;
+        }
+
+        public Builder statsWindowDays(int value) {
+            this.statsWindowDays = value;
+            return this;
+        }
+
+        public Builder firstSessionTime(long value) {
+            this.firstSessionTime = value;
+            return this;
+        }
+
+        public Builder activeSession(long startTime, int gainedPercent) {
+            this.activeSessionStartTime = startTime;
+            this.activeSessionGainedPercent = gainedPercent;
+            return this;
+        }
 
         public Builder combined(UsageRate value) {
             this.combined = value;

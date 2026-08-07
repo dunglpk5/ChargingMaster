@@ -243,6 +243,16 @@
 
                 </LinearLayout>
 
+                <!-- Cơ sở dữ liệu của ước tính: bao nhiêu phiên, bao nhiêu % và mAh -->
+                <TextView
+                    android:id="@+id/tvHealthBasis"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_md"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_caption"
+                    tools:text="Dựa trên 23 phiên với 203 % sạc cho tổng cộng 10579 mAh" />
+
                 <!-- Mức pin đã hao hụt so với thiết kế; "-" khi chưa ước tính được -->
                 <TextView
                     android:id="@+id/tvHealthNote"
@@ -399,6 +409,128 @@
                     layout="@layout/view_stat_card" />
 
             </LinearLayout>
+
+            <!-- Hai thẻ dưới chỉ có nghĩa khi đang cắm sạc, nên ẩn đi lúc không sạc -->
+            <LinearLayout
+                android:id="@+id/rowActiveCharge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <include
+                    android:id="@+id/cardChargingNow"
+                    layout="@layout/view_stat_card" />
+
+                <Space
+                    android:layout_width="@dimen/space_sm"
+                    android:layout_height="1dp" />
+
+                <include
+                    android:id="@+id/cardChargingSince"
+                    layout="@layout/view_stat_card" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- ==================== 7. SỬ DỤNG PIN ỨNG DỤNG ==================== -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_sm"
+            android:background="@color/bg_surface"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/space_md"
+            android:paddingBottom="@dimen/space_md">
+
+            <TextView
+                style="@style/Text.SectionTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_md"
+                android:layout_marginEnd="@dimen/space_md"
+                android:text="@string/usage_apps" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_md"
+                android:layout_marginTop="@dimen/space_sm"
+                android:layout_marginEnd="@dimen/space_md"
+                android:lineSpacingExtra="2dp"
+                android:text="@string/usage_apps_desc"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_caption" />
+
+            <!-- Khối xin quyền, ẩn đi khi đã được cấp -->
+            <LinearLayout
+                android:id="@+id/permissionCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_md"
+                android:layout_marginTop="@dimen/space_md"
+                android:layout_marginEnd="@dimen/space_md"
+                android:background="@drawable/bg_detect_outline"
+                android:orientation="vertical"
+                android:padding="@dimen/space_md">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/usage_apps_permission_title"
+                    android:textColor="@color/teal_primary"
+                    android:textSize="@dimen/text_body"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_sm"
+                    android:text="@string/usage_apps_permission_desc"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_caption" />
+
+                <TextView
+                    android:id="@+id/btnGrantUsageAccess"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="@dimen/space_sm"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="@dimen/space_sm"
+                    android:text="@string/usage_apps_grant"
+                    android:textColor="@color/teal_primary"
+                    android:textSize="@dimen/text_caption"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvApps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm"
+                android:nestedScrollingEnabled="false"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_app_usage" />
+
+            <TextView
+                android:id="@+id/tvAppsEmpty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_md"
+                android:gravity="center"
+                android:text="@string/usage_apps_empty"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_caption"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
         </LinearLayout>
 

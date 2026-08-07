@@ -64,6 +64,19 @@
     <string name="usage_screen_on">Screen on</string>
     <string name="usage_screen_off">Screen off</string>
     <string name="usage_last_7_days">in the last 7 days</string>
+    <string name="usage_rate_detail">%1$.1f %% in %2$.1f h</string>
+    <string name="usage_health_basis">Based on %1$d sessions totalling %2$d %% charged, or %3$d mAh.</string>
+    <string name="usage_charge_since">since %1$s</string>
+    <string name="usage_charge_daily">Average charged per day</string>
+    <string name="usage_charging_now">Charging session so far</string>
+    <string name="usage_charging_since">Charging since</string>
+
+    <string name="usage_apps">App battery usage</string>
+    <string name="usage_apps_desc">Android does not let apps read how much power each app consumed — only the system Settings has that figure. What is shown below is each app\'s share of foreground time, which tracks battery drain closely but does not count apps draining power in the background.</string>
+    <string name="usage_apps_permission_title">Usage access needed</string>
+    <string name="usage_apps_permission_desc">Ranking apps by usage requires the Usage access permission, which has not been granted yet.</string>
+    <string name="usage_apps_grant">GRANT ACCESS</string>
+    <string name="usage_apps_empty">Not enough usage data yet.</string>
     <string name="usage_full_estimate">Estimated time on a full battery</string>
     <string name="usage_charged">Battery charged</string>
     <string name="usage_measuring">measuring…</string>
@@ -167,6 +180,9 @@
     <string name="temp_state_normal">Temperature is normal</string>
     <string name="temp_state_warm">Battery is getting warm</string>
     <string name="temp_state_hot">Battery is too hot, let it cool down</string>
+    <string name="temp_advice_normal">Your phone temperature is normal. Nothing to worry about right now.</string>
+    <string name="temp_advice_warm">Your phone is warmer than usual, likely from CPU load or charging current. To cool it down, try the following:\n1. Unplug the charger and pause charging.\n2. Close heavy apps running in the background.\n3. Leave the phone in a well-ventilated place for a while.</string>
+    <string name="temp_advice_hot">Your phone is currently too hot, possibly from high CPU load or high charging current. To cool it down, please try the following:\n1. Unplug the charger and pause charging.\n2. Close heavy apps running in the background.\n3. Leave the phone in a well-ventilated place for a while.</string>
 
     <!-- Màn Cài đặt -->
     <string name="settings_title">Settings</string>
@@ -180,6 +196,7 @@
 
     <!-- Không đọc được /proc/stat -->
     <string name="cpu_unavailable">This device does not allow reading CPU usage</string>
+    <string name="cpu_estimated_note">This device blocks exact CPU readings, so the load below is estimated from clock speed and tends to read higher than the real figure.</string>
 
     <!-- Màn Sử dụng CPU -->
     <string name="cpu_frequency">CPU frequency</string>

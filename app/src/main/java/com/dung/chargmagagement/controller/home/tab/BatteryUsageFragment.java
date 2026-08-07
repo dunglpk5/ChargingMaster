@@ -15,11 +15,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.dung.chargmagagement.R;
 import com.dung.chargmagagement.common.DateUtils;
 import com.dung.chargmagagement.common.FormatUtils;
+import com.dung.chargmagagement.controller.adapter.AppUsageAdapter;
 import com.dung.chargmagagement.controller.adapter.CalendarAdapter;
+import com.dung.chargmagagement.model.device.AppUsageProvider;
 import com.dung.chargmagagement.controller.base.BaseFragment;
 import com.dung.chargmagagement.databinding.FragmentBatteryUsageBinding;
 import com.dung.chargmagagement.databinding.ViewStatCardBinding;
@@ -50,8 +53,13 @@ public class BatteryUsageFragment extends BaseFragment<FragmentBatteryUsageBindi
     private static final int MIN_CAPACITY_MAH = 500;
     private static final int MAX_CAPACITY_MAH = 30_000;
 
+    /** Cửa sổ thống kê cho danh sách ứng dụng, khớp với các mục còn lại. */
+    private static final int APP_USAGE_WINDOW_DAYS = 7;
+
     private BatteryRepository repository;
     private CalendarAdapter calendarAdapter;
+    private AppUsageProvider appUsageProvider;
+    private AppUsageAdapter appAdapter;
 
     /** Tháng đang hiển thị trên lịch. */
     private long displayedMonth = System.currentTimeMillis();
@@ -73,6 +81,7 @@ public class BatteryUsageFragment extends BaseFragment<FragmentBatteryUsageBindi
         setupWeekHeader();
         setupCalendar();
         setupStaticCardTitles();
+        setupApps();
 
         binding.btnSetDesignCapacity.setOnClickListener(v -> showDesignCapacityDialog());
     }
@@ -83,6 +92,7 @@ public class BatteryUsageFragment extends BaseFragment<FragmentBatteryUsageBindi
         renderCalendar();
         loadChart();
         loadStats();
+        loadApps();
     }
 
     // ==================== Lịch tháng ====================
@@ -192,7 +202,9 @@ public class BatteryUsageFragment extends BaseFragment<FragmentBatteryUsageBindi
         binding.cardScreenOff.tvCardTitle.setText(R.string.usage_screen_off);
 
         binding.cardChargeCount.tvCardTitle.setText(R.string.usage_charge_count);
-        binding.cardChargeAverage.tvCardTitle.setText(R.string.usage_charge_average);
+        binding.cardChargeAverage.tvCardTitle.setText(R.string.usage_charge_daily);
+        binding.cardChargingNow.tvCardTitle.setText(R.string.usage_charging_now);
+        binding.cardChargingSince.tvCardTitle.setText(R.string.usage_charging_since);
     }
 
     private void loadStats() {
@@ -212,6 +224,10 @@ public class BatteryUsageFragment extends BaseFragment<FragmentBatteryUsageBindi
             binding.progressHealth.setProgress(health);
             binding.tvEstimatedCapacity.setText(
                     String.format(Locale.getDefault(), "%d mAh", stats.getEstimatedCapacityMah()));
+            binding.tvHealthBasis.setText(getString(R.string.usage_health_basis,
+                    stats.getChargeSessionCount(),
+                    stats.getTotalChargedPercent(),
+                    Math.round(stats.getTotalChargedMah())));
 
             // Số mAh đã mất so với dung lượng thiết kế
             final int lost = stats.getDesignCapacityMah() - stats.getEstimatedCapacityMah();
@@ -224,6 +240,10 @@ public class BatteryUsageFragment extends BaseFragment<FragmentBatteryUsageBindi
             binding.progressHealth.setProgress(0);
             binding.tvEstimatedCapacity.setText(R.string.value_placeholder);
             binding.tvHealthNote.setText(R.string.value_placeholder);
+            binding.tvHealthBasis.setText(getString(R.string.usage_health_basis,
+                    stats.getChargeSessionCount(),
+                    stats.getTotalChargedPercent(),
+                    Math.round(stats.getTotalChargedMah())));
         }
 
         binding.tvDesignCapacity.setText(
@@ -253,7 +273,7 @@ public class BatteryUsageFragment extends BaseFragment<FragmentBatteryUsageBindi
     private void bindRateCard(@NonNull ViewStatCardBinding card, @NonNull UsageRate rate) {
         card.tvCardValue.setText(
                 String.format(Locale.getDefault(), "%.1f %%/h", rate.getPercentPerHour()));
-        card.tvCardDetail.setText(String.format(Locale.getDefault(), "%.1f %% in %.1f h",
+        card.tvCardDetail.setText(getString(R.string.usage_rate_detail,
                 (float) rate.getTotalPercentDrop(), rate.getTotalHours()));
     }
 
@@ -272,14 +292,86 @@ public class BatteryUsageFragment extends BaseFragment<FragmentBatteryUsageBindi
     }
 
     private void bindChargeSummary(@NonNull BatteryUsageStats stats) {
-        binding.cardChargeCount.tvCardValue.setText(
-                String.valueOf(stats.getChargeSessionCount()));
-        binding.cardChargeCount.tvCardDetail.setText(R.string.usage_last_7_days);
+        binding.cardChargeCount.tvCardValue.setText(getResources().getQuantityString(
+                R.plurals.usage_sessions, stats.getChargeSessionCount(),
+                stats.getChargeSessionCount()));
+        binding.cardChargeCount.tvCardDetail.setText(stats.getFirstSessionTime() > 0
+                ? getString(R.string.usage_charge_since,
+                    DateUtils.formatDate(stats.getFirstSessionTime()))
+                : getString(R.string.usage_last_7_days));
 
         binding.cardChargeAverage.tvCardValue.setText(String.format(Locale.getDefault(),
-                "%.1f %%", stats.getAverageChargedPercentPerSession()));
-        binding.cardChargeAverage.tvCardDetail.setText(
-                String.format(Locale.getDefault(), "%d %%", stats.getTotalChargedPercent()));
+                "%.0f %%", stats.getAverageChargedPercentPerDay()));
+        binding.cardChargeAverage.tvCardDetail.setText(R.string.usage_last_7_days);
+
+        bindActiveCharge(stats);
+    }
+
+    /** Hai thẻ về phiên sạc đang chạy; ẩn hẳn khi máy không cắm sạc. */
+    private void bindActiveCharge(@NonNull BatteryUsageStats stats) {
+        if (!stats.isChargingNow()) {
+            binding.rowActiveCharge.setVisibility(View.GONE);
+            return;
+        }
+
+        binding.rowActiveCharge.setVisibility(View.VISIBLE);
+        binding.cardChargingNow.tvCardValue.setText(String.format(Locale.getDefault(),
+                "%d %%", stats.getActiveSessionGainedPercent()));
+        binding.cardChargingNow.tvCardDetail.setText(R.string.usage_charging_now);
+
+        binding.cardChargingSince.tvCardValue.setText(
+                DateUtils.formatTime(stats.getActiveSessionStartTime()));
+        binding.cardChargingSince.tvCardDetail.setText(
+                DateUtils.formatDate(stats.getActiveSessionStartTime()));
+    }
+
+    // ==================== Sử dụng pin ứng dụng ====================
+
+    private void setupApps() {
+        appUsageProvider = new AppUsageProvider(requireContext());
+        appAdapter = new AppUsageAdapter();
+
+        binding.rvApps.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.rvApps.setAdapter(appAdapter);
+
+        binding.btnGrantUsageAccess.setOnClickListener(v -> openUsageAccessSettings());
+    }
+
+    /**
+     * Nạp danh sách ứng dụng dùng nhiều nhất.
+     *
+     * <p>Gọi lại ở {@code onResume} vì người dùng có thể vừa sang Cài đặt cấp quyền
+     * rồi bấm quay lại – lúc đó khối xin quyền phải biến mất ngay.
+     */
+    private void loadApps() {
+        final boolean granted = appUsageProvider.hasPermission();
+        binding.permissionCard.setVisibility(granted ? View.GONE : View.VISIBLE);
+
+        if (!granted) {
+            binding.rvApps.setVisibility(View.GONE);
+            binding.tvAppsEmpty.setVisibility(View.GONE);
+            return;
+        }
+
+        final long from = DateUtils.daysAgo(APP_USAGE_WINDOW_DAYS);
+        executors.execute(() -> appUsageProvider.loadTopApps(from), result -> {
+            if (binding == null) return;
+
+            final boolean empty = result == null || result.isEmpty();
+            binding.tvAppsEmpty.setVisibility(empty ? View.VISIBLE : View.GONE);
+            binding.rvApps.setVisibility(empty ? View.GONE : View.VISIBLE);
+            if (!empty) appAdapter.submitList(result);
+        });
+    }
+
+    private void openUsageAccessSettings() {
+        try {
+            startActivity(AppUsageProvider.buildPermissionIntent());
+        } catch (Exception e) {
+            // Một số ROM rút gọn không có trang này
+            Toast.makeText(requireContext(), R.string.check_settings_unavailable,
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     // ==================== Đặt dung lượng thiết kế ====================
