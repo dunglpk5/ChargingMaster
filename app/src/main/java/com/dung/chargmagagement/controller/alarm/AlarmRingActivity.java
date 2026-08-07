@@ -25,10 +25,9 @@ import java.util.Locale;
 /**
  * Màn báo động, hiện toàn màn hình khi một cảnh báo sạc được kích hoạt.
  *
- * <p>Màn này phải hiện được <b>cả khi máy đang khoá và màn hình đang tắt</b> – đó
- * là tình huống phổ biến nhất: người dùng cắm sạc rồi để đó đi ngủ. Vì vậy dùng
- * {@code setShowWhenLocked} và {@code setTurnScreenOn} (từ Android 8.1), kết hợp
- * với thông báo có {@code fullScreenIntent} để hệ thống cho phép bật lên.
+ * <p>Mở bằng cách chạm vào thông báo cảnh báo. Vẫn giữ {@code setShowWhenLocked}
+ * và {@code setTurnScreenOn} để nếu người dùng chạm thông báo ngay trên màn khoá
+ * thì màn này hiện lên được luôn, không bắt mở khoá trước.
  *
  * <p>Chuông tự tắt khi người dùng rời màn hình, kể cả bằng nút Back – không để
  * tình huống thoát ra mà tiếng vẫn kêu.

@@ -97,4 +97,33 @@ public final class CurrentCalibration {
         }
         return milliAmp;
     }
+
+    /**
+     * Quy đổi về mA, lấy <b>chiều</b> từ trạng thái sạc do hệ thống báo thay vì từ
+     * dấu của giá trị thô.
+     *
+     * <p><b>Vì sao cần cách này:</b> việc học dấu ở {@link #detectSign} giả định máy
+     * dùng dấu nhất quán cho cả hai chiều. Không ít máy trả về <b>trị tuyệt đối</b>
+     * – luôn dương dù đang sạc hay đang xả. Với những máy đó, nếu lần học rơi vào
+     * lúc đang xả thì hệ thống kết luận nhầm là "báo ngược", và từ đó về sau mọi
+     * lần sạc đều ra số âm, giao diện chỉ còn hiện dấu gạch.
+     *
+     * <p>Trạng thái sạc lấy từ {@code ACTION_BATTERY_CHANGED} thì luôn đúng, nên
+     * dùng nó quyết định chiều và chỉ lấy độ lớn từ giá trị thô là chắc chắn hơn
+     * hẳn. Cách này cũng tự đúng với máy đang cắm sạc mà vẫn tụt pin: hệ thống báo
+     * trạng thái xả, ta trả về số âm.
+     *
+     * @param rawValue giá trị thô đọc từ hệ thống
+     * @param divider  hệ số đơn vị đã học
+     * @param charging hệ thống đang báo nạp vào hay không
+     * @return dòng điện mA (dương = nạp), hoặc {@link BatteryInfo#UNKNOWN_INT}
+     */
+    public static int normalizeWithKnownState(int rawValue, int divider, boolean charging) {
+        if (divider == DIVIDER_UNKNOWN) return BatteryInfo.UNKNOWN_INT;
+
+        final int magnitude = Math.abs(Math.round((float) rawValue / divider));
+        if (magnitude > MAX_PLAUSIBLE_MA) return BatteryInfo.UNKNOWN_INT;
+
+        return charging ? magnitude : -magnitude;
+    }
 }

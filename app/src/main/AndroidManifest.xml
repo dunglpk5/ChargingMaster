@@ -20,9 +20,6 @@
     <!-- Android 13+: bắt buộc xin runtime mới hiện được notification -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
-    <!-- Mở màn báo động đè lên màn khoá khi cảnh báo sạc được kích hoạt -->
-    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
-
     <!-- Đọc mức pin / nhiệt độ không cần quyền; chỉ khai báo feature tuỳ chọn -->
     <uses-feature
         android:name="android.hardware.sensor.accelerometer"

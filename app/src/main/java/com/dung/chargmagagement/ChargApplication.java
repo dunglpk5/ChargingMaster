@@ -21,8 +21,18 @@ public class ChargApplication extends Application {
     /** Id kênh thông báo cho foreground service theo dõi phiên sạc. */
     public static final String CHANNEL_MONITOR = "charging_monitor";
 
-    /** Kênh cho báo động sạc – phải kêu được nên để mức quan trọng cao. */
-    public static final String CHANNEL_ALARM = "charging_alarm";
+    /**
+     * Kênh cho báo động sạc – mức quan trọng cao để thông báo nổi lên màn hình.
+     *
+     * <p>Hậu tố "_v2" vì thuộc tính của một kênh <b>không sửa được sau khi đã tạo</b>:
+     * kênh cũ mang âm thanh và rung mặc định của hệ thống, cộng thêm tiếng chuông
+     * do {@code AlarmPlayer} phát là thành hai tiếng chồng nhau. Đổi id là cách duy
+     * nhất để máy đã cài bản cũ cũng nhận được cấu hình mới.
+     */
+    public static final String CHANNEL_ALARM = "charging_alarm_v2";
+
+    /** Kênh báo động của bản cũ, chỉ giữ tên để xoá đi. */
+    private static final String CHANNEL_ALARM_LEGACY = "charging_alarm";
 
     /** Ngày gần nhất đã dọn dữ liệu cũ (dạng yyyyMMdd). */
     private static final String KEY_LAST_CLEANUP_DAY = "last_cleanup_day";
@@ -78,14 +88,18 @@ public class ChargApplication extends Application {
         monitor.setShowBadge(false);
         manager.createNotificationChannel(monitor);
 
+        manager.deleteNotificationChannel(CHANNEL_ALARM_LEGACY);
+
         NotificationChannel alarm = new NotificationChannel(
                 CHANNEL_ALARM,
                 getString(R.string.notif_channel_alarm),
-                // IMPORTANCE_HIGH: cảnh báo phải hiện lên và phát âm thanh,
+                // IMPORTANCE_HIGH: cảnh báo phải nổi lên giữa màn hình (heads-up),
                 // vì mục đích là gọi người dùng tới rút sạc
                 NotificationManager.IMPORTANCE_HIGH);
         alarm.setDescription(getString(R.string.notif_channel_alarm_desc));
-        alarm.enableVibration(true);
+        // Chuông và rung do AlarmPlayer lo, kênh phải im để không kêu hai lần
+        alarm.setSound(null, null);
+        alarm.enableVibration(false);
         manager.createNotificationChannel(alarm);
     }
 

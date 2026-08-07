@@ -61,12 +61,15 @@ public final class ChargeAlarmNotifier {
                         .setContentTitle(appContext.getString(type.getTitleRes()))
                         .setContentText(appContext.getString(type.getMessageRes(), percent))
                         .setContentIntent(alarmIntent)
-                        // fullScreenIntent: hệ thống tự mở màn báo động ngay cả khi
-                        // máy đang khoá, thay vì chỉ hiện một dòng thông báo lặng lẽ
-                        .setFullScreenIntent(alarmIntent, true)
+                        // Không dùng setFullScreenIntent nữa: khi có quyền, hệ thống
+                        // mở thẳng màn báo động và *thay thế* thẻ thông báo, nên
+                        // người dùng chỉ nghe chuông mà không hề thấy thông báo nào.
+                        // Thẻ thông báo nổi (heads-up) dễ chịu hơn và vẫn nằm lại ở
+                        // thanh thông báo để xem lại sau.
                         .setAutoCancel(true)
-                        .setOngoing(true)
+                        // Không setOngoing: người dùng phải vuốt bỏ được thông báo
                         .setPriority(NotificationCompat.PRIORITY_MAX)
+                        .setDefaults(0)
                         .setCategory(NotificationCompat.CATEGORY_ALARM);
 
         try {

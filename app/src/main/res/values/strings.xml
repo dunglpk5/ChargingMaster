@@ -92,6 +92,7 @@
 
     <!-- Xếp loại tốc độ sạc -->
     <string name="speed_unknown">MEASURING</string>
+    <string name="speed_not_charging">NOT CHARGING</string>
     <string name="speed_slow">SLOW</string>
     <string name="speed_normal">NORMAL</string>
     <string name="speed_fast">FAST</string>
@@ -150,7 +151,6 @@
 
     <!-- Màn báo động -->
     <string name="alarm_dismiss">STOP ALARM</string>
-    <string name="alarm_fullscreen_warning">Tap here to allow full-screen alerts, so the alarm can turn the screen on while the phone is locked.</string>
 
     <!-- Màn VIP -->
     <string name="vip_subtitle">Upgrade to remove all ads</string>

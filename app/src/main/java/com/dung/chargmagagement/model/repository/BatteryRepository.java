@@ -223,8 +223,15 @@ public final class BatteryRepository {
                 UsageCalculator.CAPACITY_SAMPLE_SIZE);
         int estimated = UsageCalculator.estimateCapacity(sessions);
         // Chưa đủ dữ liệu đo thì tạm dùng dung lượng thiết kế
-        return estimated != BatteryInfo.UNKNOWN_INT
-                ? estimated
-                : capacityProvider.getDesignCapacityMah();
+        if (estimated != BatteryInfo.UNKNOWN_INT) return estimated;
+
+        int design = capacityProvider.getDesignCapacityMah();
+        if (design != BatteryInfo.UNKNOWN_INT) return design;
+
+        // Cả ba cách đều thất bại (Android 14+ chặn PowerProfile, charge counter
+        // không có). Dùng dung lượng phổ thông làm mốc cuối: thời gian sạc còn lại
+        // sai vài chục phút vẫn hữu ích hơn là bỏ trống một dấu gạch. Người dùng
+        // sửa được bằng cách tự nhập dung lượng ở màn "Sử dụng pin".
+        return UsageCalculator.FALLBACK_CAPACITY_MAH;
     }
 }

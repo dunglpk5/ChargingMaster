@@ -66,33 +66,29 @@ public final class CurrentReader {
         final int raw = readRaw();
         if (raw == BatteryInfo.UNKNOWN_INT) return BatteryInfo.UNKNOWN_INT;
 
-        calibrateIfNeeded(raw, charging);
+        calibrateIfNeeded(raw);
 
         final int divider = prefs.getInt(PrefManager.KEY_CURRENT_UNIT_DIVIDER,
                 CurrentCalibration.DIVIDER_UNKNOWN);
-        final int sign = prefs.getInt(PrefManager.KEY_CURRENT_SIGN,
-                CurrentCalibration.SIGN_UNKNOWN);
 
-        return CurrentCalibration.normalize(raw, divider, sign);
+        // Chiều lấy từ trạng thái sạc của hệ thống, không lấy từ dấu của giá trị
+        // thô: xem giải thích ở CurrentCalibration#normalizeWithKnownState.
+        return CurrentCalibration.normalizeWithKnownState(raw, divider, charging);
     }
 
-    /** Học hệ số đơn vị và quy ước dấu, mỗi thứ chỉ học một lần rồi lưu lại. */
-    private void calibrateIfNeeded(int raw, boolean charging) {
+    /**
+     * Học hệ số đơn vị, chỉ một lần rồi lưu lại.
+     *
+     * <p>Không còn học quy ước dấu: chiều nạp/xả nay lấy thẳng từ trạng thái sạc
+     * của hệ thống, vốn đáng tin hơn hẳn dấu do driver pin báo về.
+     */
+    private void calibrateIfNeeded(int raw) {
         if (prefs.getInt(PrefManager.KEY_CURRENT_UNIT_DIVIDER,
                 CurrentCalibration.DIVIDER_UNKNOWN) == CurrentCalibration.DIVIDER_UNKNOWN) {
             int divider = CurrentCalibration.detectDivider(raw);
             if (divider != CurrentCalibration.DIVIDER_UNKNOWN) {
                 prefs.putInt(PrefManager.KEY_CURRENT_UNIT_DIVIDER, divider);
                 Logger.d(TAG, "Đã học đơn vị dòng điện: divider=" + divider);
-            }
-        }
-
-        if (prefs.getInt(PrefManager.KEY_CURRENT_SIGN,
-                CurrentCalibration.SIGN_UNKNOWN) == CurrentCalibration.SIGN_UNKNOWN) {
-            int sign = CurrentCalibration.detectSign(raw, charging);
-            if (sign != CurrentCalibration.SIGN_UNKNOWN) {
-                prefs.putInt(PrefManager.KEY_CURRENT_SIGN, sign);
-                Logger.d(TAG, "Đã học quy ước dấu: sign=" + sign);
             }
         }
     }

@@ -96,6 +96,12 @@ public final class UsageCalculator {
     }
 
     /**
+     * Dung lượng giả định khi không cách nào xác định được dung lượng thật.
+     * 4000 mAh là mức phổ biến nhất của điện thoại hiện nay.
+     */
+    public static final int FALLBACK_CAPACITY_MAH = 4000;
+
+    /**
      * Ước tính thời gian sạc đầy còn lại (ms).
      *
      * @param currentPercent    mức pin hiện tại

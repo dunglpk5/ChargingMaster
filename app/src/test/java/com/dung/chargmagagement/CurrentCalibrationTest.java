@@ -105,4 +105,37 @@ public class CurrentCalibrationTest {
         assertEquals(BatteryInfo.UNKNOWN_INT, CurrentCalibration.normalize(
                 99_000, CurrentCalibration.DIVIDER_MILLI, CurrentCalibration.SIGN_NORMAL));
     }
+
+    // ==================== Lấy chiều từ trạng thái sạc ====================
+
+    @Test
+    public void normalizeWithKnownState_dangSac_luonRaSoDuong() {
+        // Máy báo âm lúc sạc (quy ước ngược) vẫn phải ra dương
+        assertEquals(1_500, CurrentCalibration.normalizeWithKnownState(
+                -1_500_000, CurrentCalibration.DIVIDER_MICRO, true));
+        // Máy báo dương lúc sạc
+        assertEquals(1_500, CurrentCalibration.normalizeWithKnownState(
+                1_500_000, CurrentCalibration.DIVIDER_MICRO, true));
+    }
+
+    @Test
+    public void normalizeWithKnownState_dangXa_luonRaSoAm() {
+        // Đây là ca gây lỗi "-" trên máy chỉ báo trị tuyệt đối: raw luôn dương
+        assertEquals(-350, CurrentCalibration.normalizeWithKnownState(
+                350_000, CurrentCalibration.DIVIDER_MICRO, false));
+        assertEquals(-350, CurrentCalibration.normalizeWithKnownState(
+                -350_000, CurrentCalibration.DIVIDER_MICRO, false));
+    }
+
+    @Test
+    public void normalizeWithKnownState_chuaBietDonVi_traVeKhongXacDinh() {
+        assertEquals(BatteryInfo.UNKNOWN_INT, CurrentCalibration.normalizeWithKnownState(
+                1_500_000, CurrentCalibration.DIVIDER_UNKNOWN, true));
+    }
+
+    @Test
+    public void normalizeWithKnownState_giaTriVoLy_biLoai() {
+        assertEquals(BatteryInfo.UNKNOWN_INT, CurrentCalibration.normalizeWithKnownState(
+                99_000, CurrentCalibration.DIVIDER_MILLI, true));
+    }
 }

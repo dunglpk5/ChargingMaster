@@ -1,11 +1,13 @@
 package com.dung.chargmagagement.controller.widget;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +26,12 @@ import com.dung.chargmagagement.R;
  * <p>Các nét đứt được vẽ thủ công bằng vòng lặp thay vì dùng {@code DashPathEffect}:
  * hiệu ứng nét đứt tính theo chiều dài đường nên độ dài mỗi vạch bị méo ở hai đầu
  * cung, còn vẽ theo góc thì các vạch cách đều nhau tuyệt đối.
+ *
+ * <p><b>Hoạt động như một thanh tiến trình:</b> các vạch nằm trước chấm đánh dấu
+ * được tô màu đậm, phần còn lại để mờ – nhìn là biết ngay đang ở đâu trên thang đo.
+ * Mỗi lần đổi giá trị, chấm và phần tô chạy mượt tới vị trí mới thay vì nhảy cóc:
+ * dòng sạc dao động vài trăm mA giữa các lần đo là bình thường, để nhảy thẳng thì
+ * đồng hồ giật liên tục và rất khó đọc.
  */
 public class ArcGaugeView extends View {
 
@@ -37,15 +45,28 @@ public class ArcGaugeView extends View {
     /** Tỉ lệ độ dài vạch trên tổng khoảng cách giữa hai vạch. */
     private static final float TICK_FILL_RATIO = 0.55f;
 
+    /** Thời gian chạy từ giá trị cũ sang giá trị mới (ms). */
+    private static final long ANIM_DURATION_MS = 450L;
+
+    /** Độ mờ của phần vạch chưa đạt tới. */
+    private static final int INACTIVE_ALPHA = 90;
+
     private final Paint tickPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint activeTickPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint dotPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final RectF arcBounds = new RectF();
 
     private float strokeWidth;
     private float dotRadius;
 
-    /** Vị trí chấm đánh dấu, 0..1. */
+    /** Vị trí chấm đánh dấu đang được vẽ, 0..1. */
     private float progress;
+
+    /** Vị trí đích mà chấm đang chạy tới. */
+    private float targetProgress;
+
+    @Nullable
+    private ValueAnimator animator;
 
     public ArcGaugeView(@NonNull Context context) {
         this(context, null);
@@ -65,32 +86,71 @@ public class ArcGaugeView extends View {
         strokeWidth = 5f * density;
         dotRadius = 4f * density;
 
+        final int baseColor = ContextCompat.getColor(context, R.color.text_on_primary);
+
         tickPaint.setStyle(Paint.Style.STROKE);
         tickPaint.setStrokeWidth(strokeWidth);
         tickPaint.setStrokeCap(Paint.Cap.ROUND);
-        tickPaint.setColor(ContextCompat.getColor(context, R.color.text_on_primary));
+        tickPaint.setColor(baseColor);
+        tickPaint.setAlpha(INACTIVE_ALPHA);
+
+        activeTickPaint.setStyle(Paint.Style.STROKE);
+        activeTickPaint.setStrokeWidth(strokeWidth);
+        activeTickPaint.setStrokeCap(Paint.Cap.ROUND);
+        activeTickPaint.setColor(baseColor);
 
         dotPaint.setStyle(Paint.Style.FILL);
         dotPaint.setColor(ContextCompat.getColor(context, R.color.state_warning));
     }
 
     /**
-     * Đặt vị trí chấm đánh dấu.
+     * Đặt vị trí chấm đánh dấu, chạy mượt từ vị trí hiện tại tới đó.
      *
      * @param value giá trị 0..1; ngoài khoảng sẽ bị kẹp lại
      */
     public void setProgress(float value) {
         final float clamped = Math.max(0f, Math.min(1f, value));
-        if (Math.abs(clamped - progress) < 0.001f) return; // tránh vẽ lại vô ích
+        if (Math.abs(clamped - targetProgress) < 0.001f) return; // đã đang chạy tới đó
 
-        progress = clamped;
-        invalidate();
+        targetProgress = clamped;
+        animateTo(clamped);
     }
 
-    /** Đổi màu chấm đánh dấu theo mức độ tốc độ sạc. */
+    private void animateTo(float value) {
+        if (animator != null) animator.cancel();
+
+        // Chưa gắn vào cửa sổ thì animation không chạy được, nhảy thẳng cho xong
+        if (!isAttachedToWindow()) {
+            progress = value;
+            invalidate();
+            return;
+        }
+
+        animator = ValueAnimator.ofFloat(progress, value);
+        animator.setDuration(ANIM_DURATION_MS);
+        animator.setInterpolator(new DecelerateInterpolator());
+        animator.addUpdateListener(a -> {
+            progress = (float) a.getAnimatedValue();
+            invalidate();
+        });
+        animator.start();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        // Animation còn chạy sau khi view bị gỡ là rò rỉ tài nguyên vô ích
+        if (animator != null) {
+            animator.cancel();
+            animator = null;
+        }
+        super.onDetachedFromWindow();
+    }
+
+    /** Đổi màu chấm đánh dấu và phần vạch đã đạt tới, theo mức tốc độ sạc. */
     public void setDotColor(int color) {
         if (dotPaint.getColor() == color) return;
         dotPaint.setColor(color);
+        activeTickPaint.setColor(color);
         invalidate();
     }
 
@@ -110,14 +170,19 @@ public class ArcGaugeView extends View {
         drawDot(canvas, radius, padding);
     }
 
-    /** Vẽ các vạch nét đứt cách đều nhau theo góc. */
+    /**
+     * Vẽ các vạch nét đứt cách đều nhau theo góc; vạch nằm trước chấm đánh dấu
+     * được tô đậm để cả cung đọc được như một thanh tiến trình.
+     */
     private void drawTicks(@NonNull Canvas canvas) {
         final float anglePerTick = SWEEP_ANGLE / TICK_COUNT;
         final float tickSweep = anglePerTick * TICK_FILL_RATIO;
+        final int activeCount = Math.round(TICK_COUNT * progress);
 
         for (int i = 0; i < TICK_COUNT; i++) {
             final float startAngle = START_ANGLE + i * anglePerTick;
-            canvas.drawArc(arcBounds, startAngle, tickSweep, false, tickPaint);
+            canvas.drawArc(arcBounds, startAngle, tickSweep, false,
+                    i < activeCount ? activeTickPaint : tickPaint);
         }
     }
 

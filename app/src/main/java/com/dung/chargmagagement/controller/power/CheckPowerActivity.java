@@ -124,19 +124,26 @@ public class CheckPowerActivity extends BaseActivity<ActivityCheckPowerBinding>
         }
     }
 
+    /**
+     * Đồng hồ cung bám theo <b>dòng vào</b> đã ghi nhận, không bám theo giá trị
+     * thô đang trôi qua: giá trị thô lúc chưa cắm sạc là số âm, đưa thẳng vào
+     * bảng xếp loại thì lúc nào cũng ra "đang đo" và kim luôn nằm ở mốc 0.
+     *
+     * <p>Chưa cắm sạc thì nói thẳng là chưa sạc. Nhãn "đang đo" chỉ dành cho
+     * quãng vài giây vừa cắm dây mà chưa có số liệu – đúng nghĩa của nó.
+     */
     private void bindGauge(@NonNull BatteryInfo info, int smoothedMa) {
         final boolean plugged = info.getPlugType().isPlugged();
-        final ChargeSpeed speed = plugged
-                ? ChargeSpeed.fromCurrent(smoothedMa)
-                : ChargeSpeed.UNKNOWN;
+        final int inMa = plugged ? lastChargingMa : BatteryInfo.UNKNOWN_INT;
+        final ChargeSpeed speed = ChargeSpeed.fromCurrent(inMa);
 
-        binding.tvSpeed.setText(speed.getLabelRes());
+        binding.tvSpeed.setText(plugged
+                ? speed.getLabelRes()
+                : R.string.speed_not_charging);
 
         final int dotColor = ContextCompat.getColor(this, speed.getColorRes());
         binding.arcGauge.setDotColor(dotColor);
-        binding.arcGauge.setProgress(plugged && smoothedMa > 0
-                ? smoothedMa / (float) GAUGE_MAX_MA
-                : 0f);
+        binding.arcGauge.setProgress(inMa > 0 ? inMa / (float) GAUGE_MAX_MA : 0f);
     }
 
     private void bindCurrentTexts() {

@@ -81,6 +81,7 @@
     <string name="check_settings_unavailable">Máy này không có trang cài đặt tương ứng</string>
 
     <string name="speed_unknown">ĐANG ĐO</string>
+    <string name="speed_not_charging">CHƯA SẠC</string>
     <string name="speed_slow">SẠC CHẬM</string>
     <string name="speed_normal">BÌNH THƯỜNG</string>
     <string name="speed_fast">SẠC NHANH</string>
@@ -139,7 +140,6 @@
 
     <!-- Màn báo động -->
     <string name="alarm_dismiss">TẮT CHUÔNG</string>
-    <string name="alarm_fullscreen_warning">Chạm vào đây để cho phép cảnh báo toàn màn hình, giúp báo động bật được màn hình khi máy đang khoá.</string>
 
     <!-- Màn VIP -->
     <string name="vip_subtitle">Nâng cấp để gỡ toàn bộ quảng cáo</string>
