@@ -132,7 +132,8 @@ public final class SessionRecorder implements BatteryMonitor.Listener {
         closeOrphanScreenSessions();
 
         activeSession = repository.findOngoingSessionSync();
-        activeScreenSession = repository.findOngoingScreenSessionSync();
+        // Cố tình KHÔNG nối lại khoảng màn hình cũ: xem closeOrphanScreenSessions
+        activeScreenSession = null;
 
         if (activeSession != null) {
             // Số liệu trung bình tích luỹ trong RAM đã mất; khôi phục từ bản ghi
@@ -171,22 +172,31 @@ public final class SessionRecorder implements BatteryMonitor.Listener {
         }
     }
 
-    /** Chốt các khoảng màn hình bị bỏ treo, giữ lại khoảng mới nhất để nối tiếp. */
+    /**
+     * Chốt <b>toàn bộ</b> khoảng màn hình còn bỏ dở, không nối lại khoảng nào.
+     *
+     * <p>Khác với phiên sạc – vốn kéo dài hàng giờ và đáng nối tiếp – khoảng màn
+     * hình chỉ sống vài phút. Nối lại một khoảng từ lần chạy trước gây hại thật sự:
+     * nó mang theo mốc bắt đầu và mức pin của nhiều giờ trước, lại thường dính cờ
+     * "đang sạc" từ lúc đó. Mọi mẫu mới đổ vào khoảng đã nhiễm bẩn ấy, và cả khối
+     * dữ liệu bị truy vấn thống kê loại sạch vì cờ sạc.
+     *
+     * <p>Bắt đầu lại từ đầu chỉ mất tối đa một khoảng ngắn, đổi lại số liệu sạch.
+     */
     @WorkerThread
     private void closeOrphanScreenSessions() {
         final java.util.List<ScreenSessionEntity> ongoing =
                 repository.findAllOngoingScreenSessionsSync();
-        if (ongoing.size() <= 1) return;
+        if (ongoing.isEmpty()) return;
 
         final BatterySampleEntity latest = repository.findLatestSampleSync();
         final long fallbackEnd = latest != null ? latest.timestamp : System.currentTimeMillis();
 
-        for (int i = 1; i < ongoing.size(); i++) {
-            final ScreenSessionEntity stale = ongoing.get(i);
+        for (ScreenSessionEntity stale : ongoing) {
             stale.endTime = Math.max(fallbackEnd, stale.startTime);
             repository.updateScreenSessionSync(stale);
         }
-        Logger.d(TAG, "Chốt " + (ongoing.size() - 1) + " khoảng màn hình bị bỏ treo");
+        Logger.d(TAG, "Chốt " + ongoing.size() + " khoảng màn hình bị bỏ treo");
     }
 
     /**
@@ -336,8 +346,12 @@ public final class SessionRecorder implements BatteryMonitor.Listener {
             return;
         }
 
-        if (current.screenOn != screenOn) {
-            // Trạng thái màn hình đổi: chốt khoảng cũ, mở khoảng mới
+        // Cắt khoảng khi trạng thái màn hình đổi, và cả khi cắm/rút sạc.
+        //
+        // Cắt theo nguồn điện là điều bắt buộc: khoảng nào dính sạc dù chỉ một phút
+        // cũng bị loại khỏi thống kê tiêu hao. Không cắt thì một lần cắm sạc giữa
+        // chừng sẽ giết luôn cả khoảng dùng pin dài phía trước nó.
+        if (current.screenOn != screenOn || current.charging != plugged) {
             current.endTime = info.getTimestamp();
             current.endPercent = info.getPercent();
             repository.updateScreenSessionSync(current);
@@ -346,8 +360,6 @@ public final class SessionRecorder implements BatteryMonitor.Listener {
         }
 
         current.endPercent = info.getPercent();
-        // Khoảng có cắm sạc dù chỉ một lúc cũng bị loại khỏi thống kê tiêu hao
-        current.charging = current.charging || plugged;
         repository.updateScreenSessionSync(current);
     }
 

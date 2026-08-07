@@ -197,11 +197,32 @@ public final class BatteryRepository {
                 .screenOff(screenOff)
                 .combined(UsageCalculator.combine(screenOn, screenOff))
                 .dischargeSessionCount(onSessions.size() + offSessions.size())
-                .estimatedCapacityMah(UsageCalculator.estimateCapacity(forCapacity))
+                .estimatedCapacityMah(resolveEstimatedCapacity(forCapacity))
                 .designCapacityMah(capacityProvider.getDesignCapacityMah())
                 .chargeSessionCount(sessionDao.countFinishedSince(from))
                 .totalChargedPercent(sessionDao.sumChargedPercentSince(from))
                 .build();
+    }
+
+    /**
+     * Dung lượng thực tế của pin, ưu tiên cách đo đáng tin hơn.
+     *
+     * <p>Cách chính xác nhất là đo qua các phiên sạc dài, nhưng phải chờ người dùng
+     * sạc được một phiên nạp từ 20% trở lên – có thể mất vài ngày. Trong lúc chờ,
+     * dùng bộ đếm điện tích của hệ thống: kém chính xác hơn nhưng có ngay lập tức,
+     * và vẫn hơn hẳn việc để trống mục "Tình trạng pin" hàng ngày liền.
+     *
+     * <p>Chỉ dùng cách thứ hai khi dung lượng thiết kế là con số danh nghĩa thật.
+     * Nếu dung lượng thiết kế cũng phải suy từ chính bộ đếm đó thì hai số bằng nhau,
+     * chia ra luôn được 100% – con số vô nghĩa mà người dùng lại tin là thật.
+     */
+    @WorkerThread
+    private int resolveEstimatedCapacity(@NonNull List<ChargingSessionEntity> forCapacity) {
+        final int fromSessions = UsageCalculator.estimateCapacity(forCapacity);
+        if (fromSessions != BatteryInfo.UNKNOWN_INT) return fromSessions;
+
+        if (!capacityProvider.hasNominalDesignCapacity()) return BatteryInfo.UNKNOWN_INT;
+        return capacityProvider.getCurrentFullCapacityMah();
     }
 
     // ==================== Dung lượng thiết kế ====================

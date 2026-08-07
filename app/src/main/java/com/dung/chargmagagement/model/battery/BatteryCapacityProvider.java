@@ -58,6 +58,40 @@ public final class BatteryCapacityProvider {
         return BatteryInfo.UNKNOWN_INT;
     }
 
+    /**
+     * Dung lượng <b>thật sự còn lại khi pin đầy</b> (mAh), đo ngay tại thời điểm gọi.
+     *
+     * <p>Khác hẳn {@link #getDesignCapacityMah()}: hàm kia trả về con số danh nghĩa
+     * nhà sản xuất ghi trên giấy, còn hàm này là năng lực thực tế của viên pin lúc
+     * này. Chia hai số cho nhau ra được độ chai pin.
+     *
+     * <p>Suy từ {@code BATTERY_PROPERTY_CHARGE_COUNTER} (điện tích còn lại, µAh) và
+     * mức pin hiện tại. Chính xác nhất khi pin đang ở mức cao; mức pin thấp thì sai
+     * số làm tròn phần trăm bị khuếch đại.
+     *
+     * <p><b>Không lưu lại kết quả:</b> con số này thay đổi theo tuổi pin, nhớ lại là
+     * hỏng ý nghĩa của phép đo.
+     *
+     * @return dung lượng (mAh) hoặc {@link BatteryInfo#UNKNOWN_INT}
+     */
+    public int getCurrentFullCapacityMah() {
+        return estimateFromChargeCounter();
+    }
+
+    /**
+     * Dung lượng thiết kế có phải là con số danh nghĩa đáng tin không.
+     *
+     * <p>Quan trọng với phép tính độ chai pin: nếu dung lượng thiết kế cũng phải
+     * suy từ bộ đếm điện tích thì nó và dung lượng thực tế là <b>cùng một con số</b>,
+     * chia nhau luôn ra 100% – một kết quả vô nghĩa nhưng trông rất thuyết phục.
+     */
+    public boolean hasNominalDesignCapacity() {
+        if (prefs.getInt(PrefManager.KEY_DESIGN_CAPACITY, BatteryInfo.UNKNOWN_INT) > 0) {
+            return true;
+        }
+        return readFromPowerProfile() > 0;
+    }
+
     /** Người dùng tự đặt lại dung lượng thiết kế từ màn "Sử dụng pin". */
     public void setUserDesignCapacity(int mah) {
         prefs.putInt(PrefManager.KEY_DESIGN_CAPACITY, mah);
