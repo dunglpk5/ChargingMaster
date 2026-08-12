@@ -9,9 +9,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.dung.chargmagagement.R;
 import com.dung.chargmagagement.controller.base.BaseActivity;
 import com.dung.chargmagagement.databinding.ActivityHomeBinding;
-import com.dung.chargmagagement.model.battery.BatteryMonitor;
-import com.dung.chargmagagement.model.repository.SessionRecorder;
-import com.dung.chargmagagement.service.ChargingMonitorService;
+import com.dung.chargmagagement.service.BatteryLogService;
 
 /**
  * Màn hình chính: ViewPager2 gồm 3 tab (Trang chủ / Công cụ / Sử dụng pin)
@@ -24,8 +22,6 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding> {
     public static final int TAB_USAGE = 2;
 
     private HomePagerAdapter pagerAdapter;
-    private BatteryMonitor monitor;
-    private SessionRecorder recorder;
 
     @NonNull
     @Override
@@ -35,9 +31,6 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding> {
 
     @Override
     protected void onViewReady(@Nullable Bundle savedInstanceState) {
-        monitor = BatteryMonitor.get(this);
-        recorder = SessionRecorder.get(this);
-
         setupPager();
         setupBottomNav();
     }
@@ -45,23 +38,14 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding> {
     @Override
     protected void onResume() {
         super.onResume();
-        // Trong lúc app mở, vẫn ghi lịch sử kể cả khi không sạc (service chỉ chạy
-        // lúc cắm sạc) để có dữ liệu màn hình bật/tắt cho tab "Sử dụng pin"
-        monitor.addListener(recorder);
 
-        // Bù trường hợp máy đã cắm sạc từ trước khi app được mở: lúc đó broadcast
-        // ACTION_POWER_CONNECTED đã trôi qua nên service chưa hề chạy.
-        ChargingMonitorService.startIfPlugged(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        monitor.removeListener(recorder);
-
-        // Ngừng nhận dữ liệu thì phải chốt khoảng đang mở ngay. Để lại bản ghi
-        // end_time = 0 là nó sẽ bị mọi truy vấn thống kê loại ra vĩnh viễn.
-        recorder.finalizeOpenSessions();
+        // Đảm bảo service ghi pin đang chạy. Gọi từ đây vì Activity chắc chắn đang
+        // ở tiền cảnh – Android 12+ cấm khởi động foreground service từ nền.
+        //
+        // Cố tình KHÔNG đăng ký recorder làm listener của BatteryMonitor: service
+        // là nơi ghi dữ liệu duy nhất. Có hai nguồn cùng ghi thì mỗi lần mở app sẽ
+        // sinh ra bản ghi trùng và mọi con số thống kê đều bị đếm hai lần.
+        BatteryLogService.start(this);
     }
 
     private void setupPager() {

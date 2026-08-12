@@ -2,8 +2,10 @@ package com.dung.chargmagagement.controller.home.tab;
 
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -16,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.dung.chargmagagement.R;
 import com.dung.chargmagagement.common.DateUtils;
@@ -55,6 +58,12 @@ public class BatteryUsageFragment extends BaseFragment<FragmentBatteryUsageBindi
 
     /** Cửa sổ thống kê cho danh sách ứng dụng, khớp với các mục còn lại. */
     private static final int APP_USAGE_WINDOW_DAYS = 7;
+
+    /**
+     * Tốc độ vuốt tối thiểu để tính là lật tháng (pixel/giây).
+     * Thấp hơn nữa thì lịch nhảy tháng mỗi khi người dùng cuộn trang hơi chéo.
+     */
+    private static final float MIN_SWIPE_VELOCITY = 600f;
 
     private BatteryRepository repository;
     private CalendarAdapter calendarAdapter;
@@ -120,8 +129,89 @@ public class BatteryUsageFragment extends BaseFragment<FragmentBatteryUsageBindi
 
         binding.rvCalendar.setLayoutManager(
                 new GridLayoutManager(requireContext(), MonthGridBuilder.COLUMN_COUNT));
-        binding.rvCalendar.setHasFixedSize(true);
         binding.rvCalendar.setAdapter(calendarAdapter);
+        // Tuyệt đối không gọi setHasFixedSize(true) ở đây. Lưới này cao wrap_content
+        // trong NestedScrollView, còn dữ liệu thì tới sau khi bố cục đã đo xong:
+        // markDaysHavingData() truy vấn database rồi mới submitList lần hai. Cờ đó
+        // khiến RecyclerView bỏ qua requestLayout khi có dữ liệu mới, nên lưới giữ
+        // nguyên chiều cao 0 và cả tháng biến mất, chỉ còn trơ hàng tiêu đề thứ.
+
+        setupMonthSwipe();
+    }
+
+    /**
+     * Vuốt ngang trên lưới lịch để đổi tháng.
+     *
+     * <p>Vuốt sang phải lùi về tháng trước. Vuốt sang trái chỉ có tác dụng khi đang
+     * đứng ở một tháng trong quá khứ – ở tháng hiện tại thì không đi tiếp được, vì
+     * tháng sau chưa tới và sẽ chỉ là một lưới trống.
+     *
+     * <p>Gắn {@code OnItemTouchListener} lên RecyclerView thay vì
+     * {@code setOnTouchListener}: lưới lịch tự xử lý chạm để bắt sự kiện bấm vào ô
+     * ngày, nên listener thường sẽ không bao giờ nhận được chuỗi cử chỉ đầy đủ.
+     * Cách này cho ta xem trước sự kiện trước khi RecyclerView tiêu thụ nó.
+     */
+    private void setupMonthSwipe() {
+        final GestureDetector detector = new GestureDetector(requireContext(),
+                new GestureDetector.SimpleOnGestureListener() {
+                    @Override
+                    public boolean onFling(@Nullable MotionEvent down, @NonNull MotionEvent move,
+                                           float velocityX, float velocityY) {
+                        // Bỏ qua cử chỉ nghiêng về phương dọc: đó là người dùng đang
+                        // cuộn trang chứ không phải lật lịch
+                        if (Math.abs(velocityX) < Math.abs(velocityY)) return false;
+                        if (Math.abs(velocityX) < MIN_SWIPE_VELOCITY) return false;
+
+                        if (velocityX > 0) {
+                            shiftMonth(-1);
+                        } else if (!isShowingCurrentMonth()) {
+                            shiftMonth(1);
+                        }
+                        return true;
+                    }
+                });
+
+        binding.rvCalendar.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+                // Trả về false luôn: ta chỉ quan sát chuỗi sự kiện để nhận ra cú
+                // vuốt, còn cú chạm chọn ngày vẫn phải tới được ô ngày như thường
+                detector.onTouchEvent(e);
+                return false;
+            }
+        });
+
+        // Bắt cả cú vuốt ở vùng tên tháng và hàng tiêu đề thứ, không chỉ trên lưới
+        // ngày – người dùng vuốt ở đâu trong khối lịch cũng phải lật được tháng
+        binding.calendarSection.setOnTouchListener((v, event) -> detector.onTouchEvent(event));
+    }
+
+    /**
+     * Lùi/tiến một tháng trên lịch.
+     *
+     * <p>Chỉ đổi tháng đang xem, <b>không đổi ngày đang chọn</b>: người dùng lật lịch
+     * để tìm ngày, biểu đồ chỉ nên đổi khi họ thật sự bấm vào một ngày cụ thể.
+     */
+    private void shiftMonth(int delta) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(displayedMonth);
+        // Về ngày 1 trước khi cộng tháng: đang ở ngày 31 mà cộng sang tháng 30 ngày
+        // thì Calendar tự nhảy sang tháng kế tiếp, lật một cái mất luôn hai tháng
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.add(Calendar.MONTH, delta);
+
+        displayedMonth = calendar.getTimeInMillis();
+        renderCalendar();
+    }
+
+    /** Lịch đang hiển thị đúng tháng hiện tại hay không. */
+    private boolean isShowingCurrentMonth() {
+        Calendar shown = Calendar.getInstance();
+        shown.setTimeInMillis(displayedMonth);
+
+        Calendar now = Calendar.getInstance();
+        return shown.get(Calendar.YEAR) == now.get(Calendar.YEAR)
+                && shown.get(Calendar.MONTH) == now.get(Calendar.MONTH);
     }
 
     /** Dựng lưới ngày rồi hỏi database xem ngày nào có dữ liệu để chấm dấu. */
@@ -187,8 +277,13 @@ public class BatteryUsageFragment extends BaseFragment<FragmentBatteryUsageBindi
                 }
             }
 
-            binding.chartBattery.setPoints(points);
-            binding.tvChartEmpty.setVisibility(points.isEmpty() ? View.VISIBLE : View.GONE);
+            // Ngày chưa có ghi nhận nào thì ẩn hẳn biểu đồ thay vì vẽ một khung
+            // trống: khung trống trông y hệt như biểu đồ bị lỗi
+            final boolean empty = points.isEmpty();
+            binding.chartContainer.setVisibility(empty ? View.GONE : View.VISIBLE);
+            binding.tvChartEmpty.setVisibility(empty ? View.VISIBLE : View.GONE);
+
+            if (!empty) binding.chartBattery.setPoints(points);
         });
     }
 

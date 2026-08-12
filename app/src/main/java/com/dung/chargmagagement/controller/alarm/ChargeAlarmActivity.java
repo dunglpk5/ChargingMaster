@@ -19,7 +19,7 @@ import com.dung.chargmagagement.R;
 import com.dung.chargmagagement.controller.base.BaseActivity;
 import com.dung.chargmagagement.databinding.ActivityChargeAlarmBinding;
 import com.dung.chargmagagement.model.alarm.AlarmSettings;
-import com.dung.chargmagagement.service.ChargingMonitorService;
+import com.dung.chargmagagement.service.BatteryLogService;
 
 import java.util.Locale;
 
@@ -160,7 +160,7 @@ public class ChargeAlarmActivity extends BaseActivity<ActivityChargeAlarmBinding
         // Bật cảnh báo trong lúc máy đang cắm sạc thì phải khởi động service ngay,
         // không thể chờ lần cắm sạc kế tiếp mới bắt đầu theo dõi.
         if (settings.hasAnyEnabled()) {
-            ChargingMonitorService.startIfPlugged(this);
+            BatteryLogService.start(this);
         }
     }
 

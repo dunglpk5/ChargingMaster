@@ -29,7 +29,12 @@ public final class ToolItem {
         CLEAN_CLIPBOARD,
         PHONE_TEMPERATURE,
         CHARGE_DETECT,
-        CPU_USAGE
+        CPU_USAGE,
+
+        // Nhóm Công cụ
+        MANAGE_APPS,
+        SHORTCUT,
+        CLEAR_CACHE
     }
 
     @NonNull

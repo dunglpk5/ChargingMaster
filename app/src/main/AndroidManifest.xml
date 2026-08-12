@@ -178,14 +178,18 @@
             </intent-filter>
         </service>
 
-        <!-- Theo dõi phiên sạc khi app không hiển thị; chỉ chạy lúc đang cắm sạc -->
+        <!--
+          Dịch vụ nền duy nhất: ghi lại mức pin để dựng biểu đồ theo ngày, chạy cả
+          khi người dùng đã thoát app. Không lấy mẫu định kỳ – chỉ nghe broadcast
+          ACTION_BATTERY_CHANGED do hệ thống phát.
+        -->
         <service
-            android:name=".service.ChargingMonitorService"
+            android:name=".service.BatteryLogService"
             android:exported="false"
             android:foregroundServiceType="specialUse">
             <property
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="Đo dòng sạc và ghi lịch sử phiên sạc theo thời gian thực" />
+                android:value="Ghi lại mức pin liên tục để dựng biểu đồ lịch sử pin theo ngày" />
         </service>
 
         <receiver

@@ -139,6 +139,103 @@
             android:minHeight="60dp"
             android:visibility="gone" />
 
+        <!-- ==================== NHÓM CÔNG CỤ ==================== -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_sm"
+            android:background="@color/bg_surface"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/space_sm">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/space_md"
+                android:paddingTop="@dimen/space_md"
+                android:paddingEnd="@dimen/space_md"
+                android:text="@string/tools_group_general"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_body" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvGeneralTools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                app:spanCount="3"
+                tools:itemCount="3"
+                tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                tools:listitem="@layout/item_tool" />
+
+        </LinearLayout>
+
+        <!-- ==================== NHÓM KHÁC ==================== -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_sm"
+            android:background="@color/bg_surface"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/space_md"
+                android:paddingTop="@dimen/space_md"
+                android:paddingBottom="@dimen/space_sm"
+                android:text="@string/tools_group_other"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_body" />
+
+            <include
+                android:id="@+id/rowSettings"
+                layout="@layout/item_menu_row" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/space_md"
+                android:background="@color/divider" />
+
+            <include
+                android:id="@+id/rowFeedback"
+                layout="@layout/item_menu_row" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/space_md"
+                android:background="@color/divider" />
+
+            <include
+                android:id="@+id/rowPrivacyPolicy"
+                layout="@layout/item_menu_row" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/space_md"
+                android:background="@color/divider" />
+
+            <include
+                android:id="@+id/rowAboutUs"
+                layout="@layout/item_menu_row" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvAppVersion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/space_lg"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_caption"
+            tools:text="Phiên bản 1.0.0" />
+
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

@@ -1,0 +1,7 @@
+<!-- Vòng tròn viền teal quanh icon của mỗi dòng trong nhóm "Khác" -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <stroke
+        android:width="1.5dp"
+        android:color="@color/teal_primary" />
+</shape>

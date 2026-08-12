@@ -7,12 +7,13 @@ import android.content.Intent;
 import com.dung.chargmagagement.common.Logger;
 
 /**
- * Receiver khai báo trong Manifest: bật/tắt {@link ChargingMonitorService} theo
- * trạng thái nguồn, kể cả khi app đã bị đóng.
+ * Receiver khai báo trong Manifest, lo việc <b>dựng lại</b> {@link BatteryLogService}
+ * ở những thời điểm app không tự làm được.
  *
- * <p>{@code ACTION_POWER_CONNECTED} và {@code ACTION_POWER_DISCONNECTED} vẫn được
- * gửi tới manifest receiver trên Android 8+ (nằm trong danh sách miễn trừ giới hạn
- * broadcast ngầm), nên cách này hoạt động ổn định.
+ * <p>Service ghi pin phải chạy liên tục nên receiver này chỉ khởi động chứ không bao
+ * giờ dừng nó. Ba mốc dưới đây đều nằm trong danh sách được phép khởi động foreground
+ * service từ nền, nên đây là cách đáng tin để service sống lại sau khi khởi động máy
+ * hoặc sau khi bị hệ thống thu hồi.
  */
 public class ChargingStateReceiver extends BroadcastReceiver {
 
@@ -25,32 +26,14 @@ public class ChargingStateReceiver extends BroadcastReceiver {
 
         switch (action) {
             case Intent.ACTION_POWER_CONNECTED:
-                Logger.d(TAG, "Cắm sạc -> bật service theo dõi");
-                ChargingMonitorService.start(context);
-                break;
-
             case Intent.ACTION_POWER_DISCONNECTED:
-                Logger.d(TAG, "Rút sạc -> tắt service theo dõi");
-                ChargingMonitorService.stop(context);
-                break;
-
             case Intent.ACTION_BOOT_COMPLETED:
-                // Sau khi khởi động lại máy, nếu đang cắm sạc thì tiếp tục theo dõi
-                if (isPluggedNow(context)) {
-                    ChargingMonitorService.start(context);
-                }
+                Logger.d(TAG, "Nhận " + action + " -> đảm bảo service ghi pin đang chạy");
+                BatteryLogService.start(context);
                 break;
 
             default:
                 break;
         }
-    }
-
-    /** Kiểm tra nhanh trạng thái cắm nguồn qua sticky intent. */
-    private boolean isPluggedNow(Context context) {
-        Intent status = context.registerReceiver(null,
-                new android.content.IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-        if (status == null) return false;
-        return status.getIntExtra(android.os.BatteryManager.EXTRA_PLUGGED, 0) != 0;
     }
 }

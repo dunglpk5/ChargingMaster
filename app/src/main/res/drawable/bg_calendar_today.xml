@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Hôm nay: vòng tròn viền xanh lá như bản thiết kế -->
+<!--
+  Hôm nay nhưng chưa có dữ liệu: vòng tròn viền trắng mờ.
+  Khác hẳn vòng xanh của ngày đã có ghi nhận, để hai dấu hiệu không lẫn vào nhau.
+-->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval">
-    <stroke android:width="1.5dp" android:color="@color/green_accent" />
+    <stroke android:width="1.5dp" android:color="@color/text_on_primary_60" />
     <solid android:color="@color/transparent" />
 </shape>

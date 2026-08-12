@@ -84,9 +84,15 @@ public class CalendarAdapter extends ListAdapter<CalendarDay, CalendarAdapter.Da
             binding.tvDay.setTextColor(
                     ContextCompat.getColor(binding.getRoot().getContext(), colorRes));
 
-            // Vòng tròn viền cho hôm nay, nền đầy cho ngày đang chọn
+            // Thứ tự ưu tiên của dấu hiệu, quan trọng vì một ngày có thể vừa được
+            // chọn, vừa có dữ liệu, vừa là hôm nay:
+            //   1. Đang chọn      -> nền tròn trắng đầy
+            //   2. Có ghi nhận pin -> khoanh tròn viền xanh lá
+            //   3. Hôm nay        -> viền trắng mờ, chỉ để định vị
             if (day.isSelected()) {
                 binding.tvDay.setBackgroundResource(R.drawable.bg_calendar_selected);
+            } else if (day.hasData()) {
+                binding.tvDay.setBackgroundResource(R.drawable.bg_calendar_has_data);
             } else if (day.isToday()) {
                 binding.tvDay.setBackgroundResource(R.drawable.bg_calendar_today);
             } else {
