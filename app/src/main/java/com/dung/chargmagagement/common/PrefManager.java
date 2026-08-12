@@ -19,6 +19,17 @@ public final class PrefManager {
     public static final String KEY_CURRENT_UNIT_DIVIDER = "current_unit_divider"; // hệ số quy đổi µA -> mA
     public static final String KEY_CURRENT_SIGN = "current_sign";       // 1 hoặc -1, hiệu chỉnh theo hãng
 
+    /**
+     * Dòng đo được gần nhất của từng chiều (mA).
+     *
+     * <p>Phần cứng chỉ báo <b>dòng thực của pin</b> – tức hiệu số giữa dòng nạp vào
+     * và mức máy đang tiêu thụ. Lúc đang sạc, không có cách nào tách riêng phần tiêu
+     * thụ ra khỏi con số đó. Vì vậy giá trị của mỗi chiều được nhớ lại từ lần đo gần
+     * nhất, để màn Phát hiện sạc luôn có số cho cả hai ô thay vì bỏ trống một bên.
+     */
+    public static final String KEY_LAST_CHARGING_MA = "last_charging_ma";
+    public static final String KEY_LAST_IDLE_MA = "last_idle_ma";
+
     private static volatile PrefManager instance;
     private final SharedPreferences prefs;
 

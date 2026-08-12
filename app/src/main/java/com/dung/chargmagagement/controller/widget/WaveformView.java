@@ -1,11 +1,13 @@
 package com.dung.chargmagagement.controller.widget;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,11 +25,14 @@ import com.dung.chargmagagement.R;
  */
 public class WaveformView extends View {
 
-    /** Vị trí gai theo tỉ lệ bề ngang. */
+    /** Vị trí gai lúc đứng yên, theo tỉ lệ bề ngang. */
     private static final float SPIKE_CENTER_RATIO = 0.5f;
 
     /** Bề rộng của gai theo tỉ lệ bề ngang. */
     private static final float SPIKE_WIDTH_RATIO = 0.08f;
+
+    /** Thời gian gai chạy hết một lượt từ trái sang phải (ms). */
+    private static final long SWEEP_DURATION_MS = 1_800L;
 
     private final Paint linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint dotPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -37,6 +42,14 @@ public class WaveformView extends View {
 
     /** Biên độ gai, 0..1 so với nửa chiều cao. */
     private float amplitude = 0.8f;
+
+    /** Vị trí gai hiện tại theo tỉ lệ bề ngang. */
+    private float spikeRatio = SPIKE_CENTER_RATIO;
+
+    private boolean animating;
+
+    @Nullable
+    private ValueAnimator sweepAnimator;
 
     public WaveformView(@NonNull Context context) {
         this(context, null);
@@ -77,6 +90,60 @@ public class WaveformView extends View {
         invalidate();
     }
 
+    /**
+     * Bật/tắt hiệu ứng gai chạy ngang, mô phỏng đầu dò của máy đo đang quét.
+     *
+     * <p>Hộp thoại kiểm tra nguồn điện hiện ra rồi đứng im hoàn toàn thì người dùng
+     * không biết app đang làm việc hay đã treo. Gai chạy đều là dấu hiệu rẻ nhất
+     * cho biết màn hình còn sống.
+     */
+    public void setAnimating(boolean value) {
+        if (animating == value) return;
+
+        animating = value;
+        if (value) {
+            startSweep();
+        } else {
+            stopSweep();
+            spikeRatio = SPIKE_CENTER_RATIO;
+            invalidate();
+        }
+    }
+
+    private void startSweep() {
+        stopSweep();
+        if (!isAttachedToWindow()) return; // sẽ chạy lại ở onAttachedToWindow
+
+        sweepAnimator = ValueAnimator.ofFloat(0f, 1f);
+        sweepAnimator.setDuration(SWEEP_DURATION_MS);
+        sweepAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        sweepAnimator.setInterpolator(new LinearInterpolator());
+        sweepAnimator.addUpdateListener(a -> {
+            spikeRatio = (float) a.getAnimatedValue();
+            invalidate();
+        });
+        sweepAnimator.start();
+    }
+
+    private void stopSweep() {
+        if (sweepAnimator != null) {
+            sweepAnimator.cancel();
+            sweepAnimator = null;
+        }
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (animating) startSweep();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        stopSweep();
+        super.onDetachedFromWindow();
+    }
+
     @Override
     protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
@@ -88,8 +155,10 @@ public class WaveformView extends View {
         final float centerY = height / 2f;
         final float peak = (height / 2f - dotRadius) * amplitude;
 
-        final float spikeCenter = width * SPIKE_CENTER_RATIO;
         final float spikeHalf = width * SPIKE_WIDTH_RATIO / 2f;
+        // Giữ gai nằm trọn trong khung: chạy sát mép thì nửa gai bị cắt cụt
+        final float spikeCenter = spikeHalf
+                + spikeRatio * (width - dotRadius - spikeHalf * 2f);
 
         path.reset();
         path.moveTo(0f, centerY);

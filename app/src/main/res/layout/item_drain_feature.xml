@@ -27,30 +27,45 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/shield_orange" />
 
-    <!-- Icon riêng của từng hạng mục, đặt chồng lên giữa khiên -->
+    <!--
+      Icon riêng của từng hạng mục, đặt chồng lên khiên.
+
+      Khiên thon dần rồi nhọn ở đáy, nên vùng chứa được icon hẹp hơn nhiều so với
+      khung 44dp của nó. Căn giữa theo khung khiến icon rơi xuống đúng chỗ khiên
+      bắt đầu bo vào, và bốn góc icon thò ra ngoài mép.
+
+      Vì vậy icon nhỏ lại còn 16dp và được kéo lên trên bằng vertical_bias 0.42 –
+      đặt tâm icon vào giữa phần thân rộng của khiên thay vì giữa hình chữ nhật.
+    -->
     <ImageView
         android:id="@+id/imgIcon"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
         android:importantForAccessibility="no"
         app:layout_constraintBottom_toBottomOf="@id/imgShield"
         app:layout_constraintEnd_toEndOf="@id/imgShield"
         app:layout_constraintStart_toStartOf="@id/imgShield"
         app:layout_constraintTop_toTopOf="@id/imgShield"
+        app:layout_constraintVertical_bias="0.42"
         app:tint="@color/bg_surface"
         tools:src="@drawable/ic_feature_wifi" />
 
-    <!-- Chấm than báo hạng mục đang cần xử lý -->
+    <!--
+      Chấm than báo hạng mục đang cần xử lý.
+
+      Ràng buộc cũ đặt nó ở NGOÀI khiên: End_toStartOf + Top_toBottomOf đẩy chấm
+      xuống dưới và sang trái khỏi khiên, tức vượt qua paddingStart của thẻ, nên
+      hệ thống cắt mất một nửa ở mép trái. Nay neo vào góc dưới-trái của chính
+      khiên để chấm luôn nằm trọn trong vùng vẽ được.
+    -->
     <ImageView
         android:id="@+id/imgBadge"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
         android:importantForAccessibility="no"
         android:src="@drawable/ic_badge_warning"
         app:layout_constraintBottom_toBottomOf="@id/imgShield"
-        app:layout_constraintEnd_toStartOf="@id/imgShield"
-        app:layout_constraintStart_toStartOf="@id/imgShield"
-        app:layout_constraintTop_toBottomOf="@id/imgShield" />
+        app:layout_constraintStart_toStartOf="@id/imgShield" />
 
     <TextView
         android:id="@+id/tvLabel"

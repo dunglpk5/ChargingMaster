@@ -8,6 +8,7 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -51,9 +52,22 @@ public class ArcGaugeView extends View {
     /** Độ mờ của phần vạch chưa đạt tới. */
     private static final int INACTIVE_ALPHA = 90;
 
+    /**
+     * Chu kỳ nhịp đập của chấm đánh dấu (ms): dòng nạp càng lớn thì đập càng nhanh.
+     * Chậm nhất ứng với dòng bằng 0, nhanh nhất ứng với dòng đạt mức tối đa thang đo.
+     */
+    private static final long PULSE_PERIOD_SLOW_MS = 1_600L;
+    private static final long PULSE_PERIOD_FAST_MS = 420L;
+
+    /** Vòng sáng nở ra tối đa gấp bấy nhiêu lần bán kính chấm. */
+    private static final float PULSE_MAX_SCALE = 2.6f;
+
+    private static final int PULSE_START_ALPHA = 170;
+
     private final Paint tickPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint activeTickPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint dotPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint pulsePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final RectF arcBounds = new RectF();
 
     private float strokeWidth;
@@ -67,6 +81,15 @@ public class ArcGaugeView extends View {
 
     @Nullable
     private ValueAnimator animator;
+
+    /** Pha nhịp đập 0..1; 0 là vừa bắt đầu nở, 1 là đã tan hết. */
+    private float pulsePhase;
+
+    /** Mức dòng nạp 0..1 quyết định tốc độ nhịp; âm nghĩa là không đập. */
+    private float pulseLevel = -1f;
+
+    @Nullable
+    private ValueAnimator pulseAnimator;
 
     public ArcGaugeView(@NonNull Context context) {
         this(context, null);
@@ -101,6 +124,55 @@ public class ArcGaugeView extends View {
 
         dotPaint.setStyle(Paint.Style.FILL);
         dotPaint.setColor(ContextCompat.getColor(context, R.color.state_warning));
+
+        pulsePaint.setStyle(Paint.Style.STROKE);
+        pulsePaint.setStrokeWidth(2f * density);
+        pulsePaint.setColor(dotPaint.getColor());
+    }
+
+    /**
+     * Bật nhịp đập quanh chấm đánh dấu, tốc độ tỉ lệ với dòng nạp.
+     *
+     * <p>Đây không phải trang trí: đồng hồ đứng yên khi dòng sạc ổn định trông y hệt
+     * lúc màn hình bị treo. Nhịp đập cho biết máy vẫn đang đo, và vì nhịp gắn với
+     * độ lớn dòng nạp nên nhìn tốc độ đập là ước lượng được tốc độ sạc mà không cần
+     * đọc con số.
+     *
+     * @param level dòng nạp quy về thang 0..1; truyền số âm để tắt hẳn nhịp đập
+     */
+    public void setPulseLevel(float level) {
+        final float clamped = level < 0f ? -1f : Math.min(1f, level);
+        if (Math.abs(clamped - pulseLevel) < 0.02f) return;
+
+        pulseLevel = clamped;
+        restartPulse();
+    }
+
+    private void restartPulse() {
+        if (pulseAnimator != null) {
+            pulseAnimator.cancel();
+            pulseAnimator = null;
+        }
+
+        if (pulseLevel < 0f || !isAttachedToWindow()) {
+            pulsePhase = 0f;
+            invalidate();
+            return;
+        }
+
+        // Nội suy tuyến tính giữa chu kỳ chậm nhất và nhanh nhất
+        final long period = (long) (PULSE_PERIOD_SLOW_MS
+                - pulseLevel * (PULSE_PERIOD_SLOW_MS - PULSE_PERIOD_FAST_MS));
+
+        pulseAnimator = ValueAnimator.ofFloat(0f, 1f);
+        pulseAnimator.setDuration(period);
+        pulseAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        pulseAnimator.setInterpolator(new LinearInterpolator());
+        pulseAnimator.addUpdateListener(a -> {
+            pulsePhase = (float) a.getAnimatedValue();
+            invalidate();
+        });
+        pulseAnimator.start();
     }
 
     /**
@@ -137,11 +209,22 @@ public class ArcGaugeView extends View {
     }
 
     @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        // Nhịp đập được đặt trước khi view gắn vào cửa sổ thì lúc này mới chạy được
+        restartPulse();
+    }
+
+    @Override
     protected void onDetachedFromWindow() {
         // Animation còn chạy sau khi view bị gỡ là rò rỉ tài nguyên vô ích
         if (animator != null) {
             animator.cancel();
             animator = null;
+        }
+        if (pulseAnimator != null) {
+            pulseAnimator.cancel();
+            pulseAnimator = null;
         }
         super.onDetachedFromWindow();
     }
@@ -186,7 +269,7 @@ public class ArcGaugeView extends View {
         }
     }
 
-    /** Chấm tròn nằm trên cung, tại vị trí ứng với progress. */
+    /** Chấm tròn nằm trên cung, tại vị trí ứng với progress, kèm vòng sáng nhịp đập. */
     private void drawDot(@NonNull Canvas canvas, float radius, float padding) {
         final double angleRad = Math.toRadians(START_ANGLE + SWEEP_ANGLE * progress);
         final float centerX = padding + radius;
@@ -194,6 +277,14 @@ public class ArcGaugeView extends View {
 
         final float x = centerX + radius * (float) Math.cos(angleRad);
         final float y = centerY + radius * (float) Math.sin(angleRad);
+
+        // Vòng sáng nở ra rồi mờ dần, vẽ trước để chấm nằm đè lên trên
+        if (pulseLevel >= 0f) {
+            final float pulseRadius = dotRadius * (1f + pulsePhase * (PULSE_MAX_SCALE - 1f));
+            pulsePaint.setColor(dotPaint.getColor());
+            pulsePaint.setAlpha(Math.round(PULSE_START_ALPHA * (1f - pulsePhase)));
+            canvas.drawCircle(x, y, pulseRadius, pulsePaint);
+        }
 
         canvas.drawCircle(x, y, dotRadius, dotPaint);
     }

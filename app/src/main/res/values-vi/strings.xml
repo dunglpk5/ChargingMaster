@@ -115,8 +115,8 @@
     <string name="feature_temperature_desc">Nhiệt độ điện thoại</string>
 
     <!-- Màn Phát hiện sạc -->
-    <string name="check_current_in">Dòng vào: %1$d mA</string>
-    <string name="check_current_idle">Dòng chờ: %1$d mA</string>
+    <string name="check_current_in">Dòng vào: %1$s</string>
+    <string name="check_current_idle">Dòng chờ: %1$s</string>
     <string name="check_power_source">KIỂM TRA NGUỒN ĐIỆN</string>
     <string name="check_x_charge">X-SẠC</string>
     <string name="check_detect">Phát hiện</string>

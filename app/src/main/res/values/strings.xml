@@ -126,8 +126,8 @@
     <string name="feature_temperature_desc">Phone temperature</string>
 
     <!-- Màn Phát hiện sạc -->
-    <string name="check_current_in">Current in: %1$d mA</string>
-    <string name="check_current_idle">Idle current: %1$d mA</string>
+    <string name="check_current_in">Current in: %1$s</string>
+    <string name="check_current_idle">Idle current: %1$s</string>
     <string name="check_power_source">CHECK POWER SOURCE</string>
     <string name="check_x_charge">X-CHARGE</string>
     <string name="check_detect">Detect</string>

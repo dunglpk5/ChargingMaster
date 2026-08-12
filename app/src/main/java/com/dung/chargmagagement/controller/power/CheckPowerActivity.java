@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.dung.chargmagagement.R;
 import com.dung.chargmagagement.common.Logger;
+import com.dung.chargmagagement.common.PrefManager;
 import com.dung.chargmagagement.controller.adapter.DrainFeatureAdapter;
 import com.dung.chargmagagement.controller.base.BaseActivity;
 import com.dung.chargmagagement.controller.tools.PhoneTemperatureActivity;
@@ -54,6 +55,9 @@ public class CheckPowerActivity extends BaseActivity<ActivityCheckPowerBinding>
     private int lastChargingMa = BatteryInfo.UNKNOWN_INT;
     private int lastIdleMa = BatteryInfo.UNKNOWN_INT;
 
+    /** Dòng nạp cao nhất đo được trong phiên; 0 nghĩa là chưa từng cắm sạc. */
+    private int maxChargingMa;
+
     public static void start(@NonNull Context context) {
         context.startActivity(new Intent(context, CheckPowerActivity.class));
     }
@@ -86,6 +90,13 @@ public class CheckPowerActivity extends BaseActivity<ActivityCheckPowerBinding>
 
         // Vào màn là bắt đầu phiên đo mới cho số liệu khớp khoảng đang quan sát
         monitor.resetSession();
+        maxChargingMa = 0;
+
+        // Nạp lại giá trị đo được lần trước để cả hai ô có số ngay, xem giải thích
+        // ở PrefManager.KEY_LAST_CHARGING_MA
+        lastChargingMa = prefs.getInt(PrefManager.KEY_LAST_CHARGING_MA, BatteryInfo.UNKNOWN_INT);
+        lastIdleMa = prefs.getInt(PrefManager.KEY_LAST_IDLE_MA, BatteryInfo.UNKNOWN_INT);
+        bindCurrentTexts();
     }
 
     @Override
@@ -99,6 +110,16 @@ public class CheckPowerActivity extends BaseActivity<ActivityCheckPowerBinding>
     protected void onPause() {
         super.onPause();
         monitor.removeListener(this);
+
+        // Ghi một lần lúc rời màn, không ghi ở mỗi lần lấy mẫu: ghi
+        // SharedPreferences 2 giây một lần suốt buổi là kiểu hao pin vô nghĩa
+        // trong chính cái app nói về tiết kiệm pin
+        if (lastChargingMa != BatteryInfo.UNKNOWN_INT) {
+            prefs.putInt(PrefManager.KEY_LAST_CHARGING_MA, lastChargingMa);
+        }
+        if (lastIdleMa != BatteryInfo.UNKNOWN_INT) {
+            prefs.putInt(PrefManager.KEY_LAST_IDLE_MA, lastIdleMa);
+        }
     }
 
     // ==================== Đồng hồ cung ====================
@@ -112,16 +133,27 @@ public class CheckPowerActivity extends BaseActivity<ActivityCheckPowerBinding>
         bindCurrentTexts();
     }
 
-    /** Ghi nhớ dòng vào và dòng chờ vào hai ô riêng. */
+    /**
+     * Ghi nhớ dòng vào và dòng chờ vào hai ô riêng.
+     *
+     * <p><b>Phân loại theo dấu của dòng điện, không theo trạng thái cắm sạc.</b>
+     * Giá trị đã được hiệu chỉnh nên dấu luôn đúng: dương là đang nạp vào pin, âm
+     * là đang rút ra khỏi pin. Cắm sạc mà vẫn tụt pin – nguồn quá yếu, hoặc vừa
+     * sạc vừa chơi game – là chuyện có thật; dựa vào trạng thái cắm rồi lấy trị
+     * tuyệt đối sẽ biến mức tiêu thụ thành "dòng vào" và giấu mất đúng cái vấn đề
+     * mà màn hình này sinh ra để phát hiện.
+     */
     private void rememberCurrent(@NonNull BatteryInfo info, int smoothedMa) {
         if (smoothedMa == BatteryInfo.UNKNOWN_INT) return;
 
-        if (info.getPlugType().isPlugged()) {
-            lastChargingMa = Math.abs(smoothedMa);
-        } else {
-            // Lúc xả, dòng mang dấu âm chính là mức tiêu thụ của máy
-            lastIdleMa = -Math.abs(smoothedMa);
+        if (smoothedMa > 0) {
+            lastChargingMa = smoothedMa;
+            // Đỉnh dòng nạp trong phiên, dùng để suy ra khả năng tối đa của bộ sạc
+            maxChargingMa = Math.max(maxChargingMa, smoothedMa);
+        } else if (smoothedMa < 0) {
+            lastIdleMa = smoothedMa;
         }
+        // Đúng bằng 0: pin đã đầy và ngừng nạp, không thuộc ô nào cả
     }
 
     /**
@@ -134,7 +166,10 @@ public class CheckPowerActivity extends BaseActivity<ActivityCheckPowerBinding>
      */
     private void bindGauge(@NonNull BatteryInfo info, int smoothedMa) {
         final boolean plugged = info.getPlugType().isPlugged();
-        final int inMa = plugged ? lastChargingMa : BatteryInfo.UNKNOWN_INT;
+        // Cắm sạc mà dòng đang âm nghĩa là máy vẫn tụt pin: kim phải về 0 thay vì
+        // giữ nguyên giá trị nạp đo được lúc trước
+        final boolean chargingNow = plugged && smoothedMa > 0;
+        final int inMa = chargingNow ? lastChargingMa : BatteryInfo.UNKNOWN_INT;
         final ChargeSpeed speed = ChargeSpeed.fromCurrent(inMa);
 
         binding.tvSpeed.setText(plugged
@@ -142,18 +177,26 @@ public class CheckPowerActivity extends BaseActivity<ActivityCheckPowerBinding>
                 : R.string.speed_not_charging);
 
         final int dotColor = ContextCompat.getColor(this, speed.getColorRes());
+        final float level = inMa > 0 ? inMa / (float) GAUGE_MAX_MA : 0f;
+
         binding.arcGauge.setDotColor(dotColor);
-        binding.arcGauge.setProgress(inMa > 0 ? inMa / (float) GAUGE_MAX_MA : 0f);
+        binding.arcGauge.setProgress(level);
+        // Chỉ đập khi đang cắm sạc; lúc dùng pin thì không có gì để "đang đo"
+        binding.arcGauge.setPulseLevel(plugged ? level : -1f);
     }
 
+    /** Chưa đo được chiều nào thì để dấu gạch, không hiện "0 mA" gây hiểu nhầm. */
     private void bindCurrentTexts() {
-        binding.tvCurrentIn.setText(lastChargingMa == BatteryInfo.UNKNOWN_INT
-                ? getString(R.string.check_current_in, 0)
-                : getString(R.string.check_current_in, lastChargingMa));
+        binding.tvCurrentIn.setText(
+                getString(R.string.check_current_in, formatMa(lastChargingMa)));
+        binding.tvCurrentIdle.setText(
+                getString(R.string.check_current_idle, formatMa(lastIdleMa)));
+    }
 
-        binding.tvCurrentIdle.setText(lastIdleMa == BatteryInfo.UNKNOWN_INT
-                ? getString(R.string.check_current_idle, 0)
-                : getString(R.string.check_current_idle, lastIdleMa));
+    private String formatMa(int milliAmp) {
+        return milliAmp == BatteryInfo.UNKNOWN_INT
+                ? getString(R.string.value_placeholder)
+                : String.format(Locale.US, "%d mA", milliAmp);
     }
 
     @Override
@@ -234,25 +277,31 @@ public class CheckPowerActivity extends BaseActivity<ActivityCheckPowerBinding>
                 DialogPowerSourceBinding.inflate(getLayoutInflater());
 
         final float voltage = info.getVoltage();
-        final int actualMa = Math.abs(monitor.getStats().getSmoothedMa() == BatteryInfo.UNKNOWN_INT
-                ? 0 : monitor.getStats().getSmoothedMa());
-        final int maxMa = monitor.getStats().getMaxMa() == BatteryInfo.UNKNOWN_INT
-                ? actualMa : Math.abs(monitor.getStats().getMaxMa());
+        final boolean plugged = info.getPlugType().isPlugged();
+
+        // Chỉ dòng NẠP mới quy ra được công suất nguồn. Lúc máy đang xả, dòng mang
+        // dấu âm và là mức tiêu thụ của máy – lấy trị tuyệt đối của nó rồi gọi là
+        // "công suất nguồn" thì ra một con số dương hoàn toàn vô nghĩa.
+        final boolean hasChargingData =
+                plugged && lastChargingMa != BatteryInfo.UNKNOWN_INT && lastChargingMa > 0;
+
+        final int actualMa = hasChargingData ? lastChargingMa : 0;
+        final int ratedMa = Math.max(maxChargingMa, actualMa);
 
         final float actualWatt = voltage * actualMa / 1000f;
-        // Định mức không bao giờ nhỏ hơn thực tế
-        final float ratedWatt = voltage * Math.max(maxMa, actualMa) / 1000f;
+        final float ratedWatt = voltage * ratedMa / 1000f;
 
         dialogBinding.tvVerdict.setText(getVerdictRes(actualMa, info));
-        dialogBinding.tvRatedPower.setText(
-                String.format(Locale.getDefault(), "%.1f W", ratedWatt));
-        dialogBinding.tvActualPower.setText(
-                String.format(Locale.getDefault(), "%.1f W", actualWatt));
+        dialogBinding.tvRatedPower.setText(formatWatt(ratedWatt, hasChargingData));
+        dialogBinding.tvActualPower.setText(formatWatt(actualWatt, hasChargingData));
 
         // Chênh lệch càng lớn thì gai sóng càng sâu
-        dialogBinding.waveform.setAmplitude(ratedWatt > 0
+        dialogBinding.waveform.setAmplitude(hasChargingData && ratedWatt > 0
                 ? Math.min(1f, 0.35f + (ratedWatt - actualWatt) / ratedWatt)
                 : 0.5f);
+
+        // Gai chạy ngang cho biết hộp thoại đang đo chứ không phải đứng hình
+        dialogBinding.waveform.setAnimating(true);
 
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setView(dialogBinding.getRoot())
@@ -263,8 +312,19 @@ public class CheckPowerActivity extends BaseActivity<ActivityCheckPowerBinding>
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
 
+        // Dừng hiệu ứng khi hộp thoại đóng: view bị gỡ cũng tự dừng, nhưng dừng
+        // tường minh ở đây thì không phụ thuộc vào thời điểm hệ thống gỡ view
+        dialog.setOnDismissListener(d -> dialogBinding.waveform.setAnimating(false));
+
         dialogBinding.btnOk.setOnClickListener(v -> dialog.dismiss());
         dialog.show();
+    }
+
+    /** Chưa có dữ liệu sạc thì để dấu gạch, không bịa ra "0,0 W". */
+    private String formatWatt(float watt, boolean hasData) {
+        return hasData
+                ? String.format(Locale.getDefault(), "%.1f W", watt)
+                : getString(R.string.value_placeholder);
     }
 
     /** Câu đánh giá tốc độ sạc hiện tại. */
