@@ -7,7 +7,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -65,6 +69,19 @@ public class BatteryUsageFragment extends BaseFragment<FragmentBatteryUsageBindi
      */
     private static final float MIN_SWIPE_VELOCITY = 600f;
 
+    /** Thời gian trượt ra và trượt vào khi đổi tháng (ms). */
+    private static final long SLIDE_OUT_MS = 140L;
+    private static final long SLIDE_IN_MS = 200L;
+
+    /** Trạng thái phân xử cử chỉ ngang với ViewPager2, xem claimHorizontalGesture. */
+    private int touchSlop;
+    private float touchStartX;
+    private float touchStartY;
+    private boolean gestureDirectionKnown;
+
+    /** Đang chạy hiệu ứng đổi tháng; chặn cú vuốt mới chồng lên. */
+    private boolean monthAnimating;
+
     private BatteryRepository repository;
     private CalendarAdapter calendarAdapter;
     private AppUsageProvider appUsageProvider;
@@ -104,6 +121,18 @@ public class BatteryUsageFragment extends BaseFragment<FragmentBatteryUsageBindi
         loadApps();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        // Rời tab giữa chừng thì hiệu ứng bị bỏ dở, để nguyên là lần sau quay lại
+        // lưới lịch vẫn nằm lệch ra ngoài màn hình và mờ tịt
+        binding.rvCalendar.animate().cancel();
+        binding.rvCalendar.setTranslationX(0f);
+        binding.rvCalendar.setAlpha(1f);
+        monthAnimating = false;
+    }
+
     // ==================== Lịch tháng ====================
 
     /** Dựng hàng tiêu đề Th2…CN bằng code để chia đều 7 cột. */
@@ -130,6 +159,10 @@ public class BatteryUsageFragment extends BaseFragment<FragmentBatteryUsageBindi
         binding.rvCalendar.setLayoutManager(
                 new GridLayoutManager(requireContext(), MonthGridBuilder.COLUMN_COUNT));
         binding.rvCalendar.setAdapter(calendarAdapter);
+        // Tắt hiệu ứng mặc định của RecyclerView: nó làm từng ô ngày mờ dần rồi
+        // trồi lên theo phương dọc mỗi lần submitList, trông như lịch rơi từ trên
+        // xuống. Hiệu ứng trượt ngang do animateMonthChange() lo.
+        binding.rvCalendar.setItemAnimator(null);
         // Tuyệt đối không gọi setHasFixedSize(true) ở đây. Lưới này cao wrap_content
         // trong NestedScrollView, còn dữ liệu thì tới sau khi bố cục đã đo xong:
         // markDaysHavingData() truy vấn database rồi mới submitList lần hai. Cờ đó
@@ -140,7 +173,7 @@ public class BatteryUsageFragment extends BaseFragment<FragmentBatteryUsageBindi
     }
 
     /**
-     * Vuốt ngang trên lưới lịch để đổi tháng.
+     * Vuốt ngang trên khối lịch để đổi tháng.
      *
      * <p>Vuốt sang phải lùi về tháng trước. Vuốt sang trái chỉ có tác dụng khi đang
      * đứng ở một tháng trong quá khứ – ở tháng hiện tại thì không đi tiếp được, vì
@@ -152,6 +185,8 @@ public class BatteryUsageFragment extends BaseFragment<FragmentBatteryUsageBindi
      * Cách này cho ta xem trước sự kiện trước khi RecyclerView tiêu thụ nó.
      */
     private void setupMonthSwipe() {
+        touchSlop = ViewConfiguration.get(requireContext()).getScaledTouchSlop();
+
         final GestureDetector detector = new GestureDetector(requireContext(),
                 new GestureDetector.SimpleOnGestureListener() {
                     @Override
@@ -174,6 +209,7 @@ public class BatteryUsageFragment extends BaseFragment<FragmentBatteryUsageBindi
         binding.rvCalendar.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+                claimHorizontalGesture(rv, e);
                 // Trả về false luôn: ta chỉ quan sát chuỗi sự kiện để nhận ra cú
                 // vuốt, còn cú chạm chọn ngày vẫn phải tới được ô ngày như thường
                 detector.onTouchEvent(e);
@@ -183,7 +219,60 @@ public class BatteryUsageFragment extends BaseFragment<FragmentBatteryUsageBindi
 
         // Bắt cả cú vuốt ở vùng tên tháng và hàng tiêu đề thứ, không chỉ trên lưới
         // ngày – người dùng vuốt ở đâu trong khối lịch cũng phải lật được tháng
-        binding.calendarSection.setOnTouchListener((v, event) -> detector.onTouchEvent(event));
+        binding.calendarSection.setOnTouchListener((v, event) -> {
+            claimHorizontalGesture(v, event);
+            detector.onTouchEvent(event);
+            // Không nuốt sự kiện: khối lịch không có gì để bấm, trả false để hệ
+            // thống xử lý tiếp như bình thường
+            return false;
+        });
+    }
+
+    /**
+     * Giành quyền xử lý cử chỉ ngang khỏi ViewPager2 của thanh tab.
+     *
+     * <p><b>Vấn đề:</b> tab này nằm trong ViewPager2, vốn cũng lật trang bằng cử chỉ
+     * ngang. Thành phần cha luôn được hỏi {@code onInterceptTouchEvent} trước con,
+     * nên ngay khi ngón tay đi ngang quá ngưỡng, ViewPager2 cướp luôn chuỗi sự kiện
+     * và lịch không bao giờ thấy cú vuốt – người dùng chỉ thấy màn hình nhảy sang
+     * tab khác.
+     *
+     * <p><b>Cách xử lý:</b> chặn cha ngay từ lúc ngón tay chạm xuống, rồi thả ra nếu
+     * hoá ra người dùng đang vuốt dọc. Không thể chờ tới lúc biết chắc là vuốt ngang
+     * mới chặn, vì lúc đó ViewPager2 đã cướp mất rồi. Phải thả lại đúng lúc, nếu
+     * không thì cả trang mất khả năng cuộn dọc.
+     */
+    private void claimHorizontalGesture(@NonNull View view, @NonNull MotionEvent event) {
+        final ViewParent parent = view.getParent();
+        if (parent == null) return;
+
+        switch (event.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN:
+                touchStartX = event.getX();
+                touchStartY = event.getY();
+                gestureDirectionKnown = false;
+                parent.requestDisallowInterceptTouchEvent(true);
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                if (gestureDirectionKnown) break;
+
+                final float dx = Math.abs(event.getX() - touchStartX);
+                final float dy = Math.abs(event.getY() - touchStartY);
+                if (Math.max(dx, dy) < touchSlop) break;
+
+                gestureDirectionKnown = true;
+                if (dy > dx) {
+                    // Vuốt dọc: trả quyền lại để NestedScrollView cuộn trang
+                    parent.requestDisallowInterceptTouchEvent(false);
+                }
+                break;
+
+            default:
+                // Nhả tay hoặc cử chỉ bị huỷ: luôn trả quyền lại cho thành phần cha
+                parent.requestDisallowInterceptTouchEvent(false);
+                break;
+        }
     }
 
     /**
@@ -193,6 +282,8 @@ public class BatteryUsageFragment extends BaseFragment<FragmentBatteryUsageBindi
      * để tìm ngày, biểu đồ chỉ nên đổi khi họ thật sự bấm vào một ngày cụ thể.
      */
     private void shiftMonth(int delta) {
+        if (monthAnimating) return; // vuốt dồn dập không được chồng lên nhau
+
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(displayedMonth);
         // Về ngày 1 trước khi cộng tháng: đang ở ngày 31 mà cộng sang tháng 30 ngày
@@ -201,7 +292,56 @@ public class BatteryUsageFragment extends BaseFragment<FragmentBatteryUsageBindi
         calendar.add(Calendar.MONTH, delta);
 
         displayedMonth = calendar.getTimeInMillis();
-        renderCalendar();
+        animateMonthChange(delta);
+    }
+
+    /**
+     * Trượt ngang khi đổi tháng, cùng chiều với ngón tay.
+     *
+     * <p>Lùi tháng thì lưới cũ trôi sang phải và tháng mới vào từ bên trái – giống
+     * cảm giác kéo trang lịch giấy sang phải để lộ trang trước đó. Tiến tháng thì
+     * ngược lại.
+     *
+     * <p>Hiệu ứng mặc định của RecyclerView đã bị tắt ở {@code setupCalendar}: nó
+     * làm từng ô ngày mờ dần rồi trồi lên theo phương dọc, trông như lịch rơi từ
+     * trên xuống chứ không liên quan gì tới hướng vuốt.
+     */
+    private void animateMonthChange(int delta) {
+        final View grid = binding.rvCalendar;
+        final float width = grid.getWidth();
+
+        // Chưa đo xong bố cục thì không có gì để trượt, đổi thẳng cho xong
+        if (width <= 0f) {
+            renderCalendar();
+            return;
+        }
+
+        final float exitX = delta < 0 ? width : -width;
+        monthAnimating = true;
+
+        grid.animate()
+                .translationX(exitX)
+                .alpha(0f)
+                .setDuration(SLIDE_OUT_MS)
+                .setInterpolator(new AccelerateInterpolator())
+                .withEndAction(() -> {
+                    if (binding == null) {
+                        monthAnimating = false;
+                        return;
+                    }
+                    renderCalendar();
+
+                    // Vào từ phía đối diện với phía vừa trôi ra
+                    grid.setTranslationX(-exitX);
+                    grid.animate()
+                            .translationX(0f)
+                            .alpha(1f)
+                            .setDuration(SLIDE_IN_MS)
+                            .setInterpolator(new DecelerateInterpolator())
+                            .withEndAction(() -> monthAnimating = false)
+                            .start();
+                })
+                .start();
     }
 
     /** Lịch đang hiển thị đúng tháng hiện tại hay không. */
