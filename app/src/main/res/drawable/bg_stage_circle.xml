@@ -1,0 +1,7 @@
+<!-- Vòng tròn viền mảnh bao quanh biểu tượng giai đoạn sạc -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <stroke
+        android:width="1.5dp"
+        android:color="@color/text_on_primary" />
+</shape>

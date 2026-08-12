@@ -2,28 +2,35 @@ package com.dung.chargmagagement.controller.power;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.core.widget.ImageViewCompat;
 
 import com.dung.chargmagagement.R;
 import com.dung.chargmagagement.common.FormatUtils;
 import com.dung.chargmagagement.common.Logger;
 import com.dung.chargmagagement.controller.base.BaseActivity;
 import com.dung.chargmagagement.databinding.ActivityXChargeBinding;
-import com.dung.chargmagagement.databinding.ViewStatColumnBinding;
+import com.dung.chargmagagement.databinding.ViewChargeStageBinding;
 import com.dung.chargmagagement.model.battery.BatteryInfo;
 import com.dung.chargmagagement.model.battery.BatteryMonitor;
+import com.dung.chargmagagement.model.power.ChargeAdvisor;
 import com.dung.chargmagagement.model.power.ChargeSpeed;
+import com.dung.chargmagagement.model.power.ChargeStage;
+import com.dung.chargmagagement.model.power.ChargeWarning;
 import com.dung.chargmagagement.model.power.DrainStatus;
 import com.dung.chargmagagement.model.power.PowerDrainFeature;
 import com.dung.chargmagagement.model.power.PowerOptimizer;
@@ -31,14 +38,18 @@ import com.dung.chargmagagement.model.power.PowerSaver;
 import com.dung.chargmagagement.model.repository.BatteryRepository;
 import com.dung.chargmagagement.model.stats.UsageCalculator;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 /**
  * Màn sạc tối ưu (X-Sạc).
  *
- * <p>Theo dõi phiên sạc theo thời gian thực với số liệu cỡ lớn để nhìn được từ xa
- * khi máy đang đặt cắm sạc, đồng thời cảnh báo khi phát hiện bất thường về nhiệt
- * độ hoặc dòng điện.
+ * <p>Màn toàn cảnh để nhìn từ xa khi máy đang đặt cắm sạc: mức pin nằm trong một
+ * vòng tròn chất lỏng cỡ lớn, kèm dòng nạp, nhiệt độ và giai đoạn sạc hiện tại.
+ *
+ * <p>Ngoài việc hiển thị, màn này còn <b>tắt bớt thứ tốn điện</b> trong lúc mở và
+ * trả lại nguyên trạng khi thoát – xem {@link PowerSaver}.
  *
  * <p>Màn hình được giữ sáng bằng {@code FLAG_KEEP_SCREEN_ON} thay vì xin quyền
  * WAKE_LOCK: cờ này chỉ có tác dụng khi màn hình đang hiển thị và hệ thống tự thu
@@ -47,14 +58,23 @@ import java.util.Locale;
 public class XChargeActivity extends BaseActivity<ActivityXChargeBinding>
         implements BatteryMonitor.Listener {
 
-    /** Ngưỡng cảnh báo nhiệt độ khi đang sạc (℃). */
-    private static final float WARN_TEMPERATURE = 41f;
-
-    /** Dòng nạp thấp bất thường (mA) – thường do củ sạc hoặc cáp kém. */
-    private static final int WARN_LOW_CURRENT = 400;
-
     /** Độ sáng cửa sổ khi bật chế độ tối ưu (0..1). */
     private static final float WINDOW_DIM_BRIGHTNESS = 0.05f;
+
+    /**
+     * Giữ màn hình sáng bấy nhiêu lâu kể từ lần chạm cuối, rồi thả cho máy tự ngủ.
+     *
+     * <p>Màn hình là thứ ngốn điện nhất khi máy đang bật, nên giữ nó sáng suốt đêm
+     * đi ngược lại mục đích của chính màn này. Nhưng tắt ngay lập tức thì người dùng
+     * không kịp đọc. Một phút là đủ để xem xong số liệu, sau đó máy ngủ và sạc ở
+     * tốc độ cao nhất; chạm vào màn hình là tính lại từ đầu.
+     */
+    private static final long SCREEN_ON_TIMEOUT_MS = 60_000L;
+
+    private final Handler screenHandler = new Handler(Looper.getMainLooper());
+
+    private final Runnable releaseScreenTask = () ->
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
     private BatteryMonitor monitor;
     private BatteryRepository repository;
@@ -64,10 +84,10 @@ public class XChargeActivity extends BaseActivity<ActivityXChargeBinding>
     @Nullable
     private PowerSaver.SavedState savedState;
 
-    /** Mốc thời gian mở màn, dùng để tính thời lượng phiên đang xem. */
-    private long sessionStartMs;
-
     private int usableCapacityMah = BatteryInfo.UNKNOWN_INT;
+
+    /** Tập cảnh báo đang hiển thị, để biết khi nào cần vẽ lại. */
+    private List<ChargeWarning> shownWarnings = Collections.emptyList();
 
     public static void start(@NonNull Context context) {
         context.startActivity(new Intent(context, XChargeActivity.class));
@@ -81,33 +101,29 @@ public class XChargeActivity extends BaseActivity<ActivityXChargeBinding>
 
     @Override
     protected void onViewReady(@Nullable Bundle savedInstanceState) {
-        binding.toolbarInclude.tvToolbarTitle.setText(R.string.tools_x_charge);
-        binding.toolbarInclude.btnBack.setOnClickListener(v -> finish());
-
-        // Giữ màn hình sáng để người dùng theo dõi được suốt quá trình sạc
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
         monitor = BatteryMonitor.get(this);
         repository = BatteryRepository.get(this);
         optimizer = new PowerOptimizer(this);
-        sessionStartMs = SystemClock.elapsedRealtime();
 
-        setupCards();
+        setupStages();
+        binding.btnExit.setOnClickListener(v -> finish());
+        binding.btnGrantBrightness.setOnClickListener(v -> openWriteSettings());
+        binding.chipDrain.setOnClickListener(v -> CheckPowerActivity.start(this));
+
         loadUsableCapacity();
     }
 
-    /** Bốn ô chỉ số dùng chung một layout nên phải gán nhãn bằng code. */
-    private void setupCards() {
-        binding.cardCurrent.tvStatDetail.setText(R.string.home_current);
-        binding.cardVoltage.tvStatDetail.setText(R.string.home_voltage);
-        binding.cardTemperature.tvStatDetail.setText(R.string.home_temperature);
-        binding.cardElapsed.tvStatDetail.setText(R.string.xcharge_elapsed);
+    /** Ba khối giai đoạn dùng chung một layout nên phải gán nội dung bằng code. */
+    private void setupStages() {
+        bindStageLabel(binding.stageFast, ChargeStage.FAST);
+        bindStageLabel(binding.stageCycle, ChargeStage.CYCLE);
+        bindStageLabel(binding.stageTrickle, ChargeStage.TRICKLE);
+    }
 
-        // Layout gốc có icon ở trên, màn này không cần nên ẩn đi
-        binding.cardCurrent.imgStatIcon.setVisibility(View.GONE);
-        binding.cardVoltage.imgStatIcon.setVisibility(View.GONE);
-        binding.cardTemperature.imgStatIcon.setVisibility(View.GONE);
-        binding.cardElapsed.imgStatIcon.setVisibility(View.GONE);
+    private void bindStageLabel(@NonNull ViewChargeStageBinding stage,
+                                @NonNull ChargeStage value) {
+        stage.imgStage.setImageResource(value.getIconRes());
+        stage.tvStage.setText(value.getLabelRes());
     }
 
     private void loadUsableCapacity() {
@@ -142,13 +158,32 @@ public class XChargeActivity extends BaseActivity<ActivityXChargeBinding>
             restoreOptimizations();
             applyOptimizations();
         }
-        renderOptimizeStatus();
+        updateBrightnessButton();
+        loadDrainCount();
+        keepScreenOnTemporarily();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         monitor.removeListener(this);
+
+        // Không để lại tác vụ hẹn giờ trỏ vào cửa sổ của một màn đã rời tiền cảnh
+        screenHandler.removeCallbacks(releaseScreenTask);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        keepScreenOnTemporarily();
+    }
+
+    /** Bật lại đồng hồ đếm ngược giữ màn hình sáng. */
+    private void keepScreenOnTemporarily() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        screenHandler.removeCallbacks(releaseScreenTask);
+        screenHandler.postDelayed(releaseScreenTask, SCREEN_ON_TIMEOUT_MS);
     }
 
     /**
@@ -162,7 +197,6 @@ public class XChargeActivity extends BaseActivity<ActivityXChargeBinding>
 
         dimAppWindow();
         savedState = PowerSaver.apply(this);
-        renderOptimizeStatus();
     }
 
     private void restoreOptimizations() {
@@ -186,60 +220,34 @@ public class XChargeActivity extends BaseActivity<ActivityXChargeBinding>
         getWindow().setAttributes(params);
     }
 
-    /** Liệt kê những gì đã tối ưu và những gì người dùng phải tự tắt. */
-    private void renderOptimizeStatus() {
-        if (binding == null) return;
-
-        binding.optimizeContainer.removeAllViews();
-        addStatusLine(true, getString(R.string.xcharge_done_screen));
-
-        if (savedState != null && savedState.isAutoSyncChanged()) {
-            addStatusLine(true, getString(R.string.xcharge_done_sync));
-        }
-
-        final boolean canWrite = PowerSaver.canWriteSystemSettings(this);
-        if (canWrite) {
-            addStatusLine(true, getString(R.string.xcharge_done_brightness));
-        }
-        binding.btnGrantBrightness.setVisibility(canWrite ? View.GONE : View.VISIBLE);
-        binding.btnGrantBrightness.setOnClickListener(v -> openWriteSettings());
-
-        // Ba mục dưới đây Android không cho ứng dụng tự tắt
-        loadManualItems();
+    private void updateBrightnessButton() {
+        binding.btnGrantBrightness.setVisibility(
+                PowerSaver.canWriteSystemSettings(this) ? View.GONE : View.VISIBLE);
     }
 
-    private void addStatusLine(boolean done, @NonNull String text) {
-        TextView line = new TextView(this);
-        line.setText(getString(done ? R.string.xcharge_line_done : R.string.xcharge_line_manual,
-                text));
-        line.setTextSize(13f);
-        line.setTextColor(ContextCompat.getColor(this,
-                done ? R.color.state_good : R.color.state_warning));
-
-        final int padding = getResources().getDimensionPixelSize(R.dimen.space_xs);
-        line.setPadding(0, padding, 0, padding);
-        binding.optimizeContainer.addView(line);
-    }
-
-    /** Quét xem còn mục nào đang bật mà app không tắt hộ được. */
-    private void loadManualItems() {
+    /**
+     * Đếm số mục còn tiêu điện mà app không tự tắt được.
+     *
+     * <p>Android chặn ứng dụng tắt Wi-Fi, Bluetooth và định vị từ bản 10, nên chỗ
+     * này chỉ đếm rồi dẫn người dùng sang màn Phát hiện sạc để tự tắt từng mục.
+     */
+    private void loadDrainCount() {
         executors.execute(() -> optimizer.scan(monitor.getLastInfo()), result -> {
             if (binding == null || result == null) return;
 
-            int manualCount = 0;
+            int count = 0;
             for (DrainStatus status : result) {
                 if (!status.isActive() || !status.getFeature().hasSettingsPage()) continue;
-                // Đồng bộ đã được app tắt hộ nên không liệt kê lại
+                // Đồng bộ đã được app tắt hộ nên không tính vào phần cần làm tay
                 if (status.getFeature() == PowerDrainFeature.AUTO_SYNC
                         && savedState != null && savedState.isAutoSyncChanged()) {
                     continue;
                 }
-                addStatusLine(false, getString(status.getFeature().getLabelRes()));
-                manualCount++;
+                count++;
             }
 
-            binding.btnManualOff.setVisibility(manualCount > 0 ? View.VISIBLE : View.GONE);
-            binding.btnManualOff.setOnClickListener(v -> CheckPowerActivity.start(this));
+            binding.tvDrainCount.setText(String.valueOf(count));
+            binding.chipDrain.setVisibility(count > 0 ? View.VISIBLE : View.GONE);
         });
     }
 
@@ -263,82 +271,113 @@ public class XChargeActivity extends BaseActivity<ActivityXChargeBinding>
         if (binding == null) return;
 
         bindHeader(info, smoothedMa);
-        bindCards(info, smoothedMa);
-        bindWarning(info, smoothedMa);
+        bindStages(info);
+        bindRemaining(info, smoothedMa);
+        bindWarnings(info, smoothedMa);
+    }
+
+    // ==================== Nhắc nhở bất thường ====================
+
+    /**
+     * Dựng lại danh sách cảnh báo.
+     *
+     * <p>Chỉ vẽ lại khi tập cảnh báo <b>thật sự đổi</b>. Không kiểm tra chỗ này thì
+     * cứ hai giây các dòng chữ lại bị gỡ ra gắn vào, gây nháy và ăn CPU vô ích
+     * trong chính màn hình đang quảng cáo là tối ưu điện năng.
+     */
+    private void bindWarnings(@NonNull BatteryInfo info, int smoothedMa) {
+        final List<ChargeWarning> warnings = ChargeAdvisor.analyze(info, smoothedMa);
+        if (warnings.equals(shownWarnings)) return;
+
+        shownWarnings = warnings;
+        binding.warningContainer.removeAllViews();
+
+        if (warnings.isEmpty()) {
+            addWarningLine(getString(R.string.xcharge_all_good), R.color.green_accent, true);
+            return;
+        }
+
+        for (ChargeWarning warning : warnings) {
+            addWarningLine(getString(warning.getMessageRes()), warning.getColorRes(), false);
+        }
+    }
+
+    private void addWarningLine(@NonNull String text, @ColorRes int colorRes, boolean good) {
+        TextView line = new TextView(this);
+        line.setText(getString(good ? R.string.xcharge_line_done : R.string.xcharge_line_warn,
+                text));
+        line.setTextSize(14f);
+        line.setTextColor(ContextCompat.getColor(this, colorRes));
+        line.setLineSpacing(0f, 1.1f);
+
+        final int padding = getResources().getDimensionPixelSize(R.dimen.space_xs);
+        line.setPadding(0, padding, 0, padding);
+        binding.warningContainer.addView(line);
     }
 
     @Override
     public void onPowerStateChanged(boolean connected) {
-        // Cắm hoặc rút sạc đều là bắt đầu một lần theo dõi mới
-        sessionStartMs = SystemClock.elapsedRealtime();
         loadUsableCapacity();
+        loadDrainCount();
     }
 
     private void bindHeader(@NonNull BatteryInfo info, int smoothedMa) {
         binding.tvPercent.setText(String.format(Locale.getDefault(), "%d%%", info.getPercent()));
-        binding.progressBattery.setProgress(info.getPercent());
+        binding.liquidBattery.setPercent(info.getPercent());
 
-        final boolean plugged = info.getPlugType().isPlugged();
-        if (!plugged) {
-            binding.tvStatus.setText(R.string.xcharge_not_charging);
+        final boolean charging = info.getPlugType().isPlugged() && smoothedMa > 0;
+        final ChargeSpeed speed = charging
+                ? ChargeSpeed.fromCurrent(smoothedMa)
+                : ChargeSpeed.UNKNOWN;
+
+        binding.tvSpeed.setText(info.getPlugType().isPlugged()
+                ? speed.getLabelRes()
+                : R.string.speed_not_charging);
+        binding.tvSpeed.setTextColor(ContextCompat.getColor(this, speed.getColorRes()));
+
+        binding.tvCurrent.setText(charging
+                ? String.format(Locale.US, "%d mA", smoothedMa)
+                : getString(R.string.value_placeholder));
+
+        // Hai thang đo cùng lúc: người dùng quen ℉ vẫn đọc được mà không phải quy đổi
+        final float celsius = info.getTemperatureCelsius();
+        binding.tvTemperature.setText(String.format(Locale.getDefault(), "%.0f℃/ %.0f℉",
+                celsius, FormatUtils.celsiusToFahrenheit(celsius)));
+    }
+
+    /** Làm nổi giai đoạn đang diễn ra, hai giai đoạn còn lại để mờ. */
+    private void bindStages(@NonNull BatteryInfo info) {
+        final ChargeStage current = ChargeStage.fromPercent(info.getPercent());
+
+        applyStageState(binding.stageFast, current == ChargeStage.FAST);
+        applyStageState(binding.stageCycle, current == ChargeStage.CYCLE);
+        applyStageState(binding.stageTrickle, current == ChargeStage.TRICKLE);
+    }
+
+    private void applyStageState(@NonNull ViewChargeStageBinding stage, boolean active) {
+        final int color = ContextCompat.getColor(this,
+                active ? R.color.text_on_primary : R.color.stage_inactive);
+
+        stage.tvStage.setTextColor(color);
+        ImageViewCompat.setImageTintList(stage.imgStage, ColorStateList.valueOf(color));
+
+        // Viền vòng tròn nằm ở background nên phải nhuộm riêng. Bắt buộc gọi
+        // mutate(): ba vòng tròn được nạp từ cùng một tệp drawable nên dùng chung
+        // ConstantState – nhuộm một cái là cả ba đổi màu theo, chỉ còn lại màu của
+        // lần gọi cuối cùng.
+        stage.imgStage.getBackground().mutate().setTint(color);
+    }
+
+    private void bindRemaining(@NonNull BatteryInfo info, int smoothedMa) {
+        if (!info.getPlugType().isPlugged()) {
             binding.tvRemaining.setText(R.string.xcharge_plug_in);
             return;
         }
-
-        binding.tvStatus.setText(ChargeSpeed.fromCurrent(smoothedMa).getLabelRes());
 
         final long remainingMs = UsageCalculator.estimateTimeToFull(
                 info.getPercent(), smoothedMa, usableCapacityMah);
         binding.tvRemaining.setText(remainingMs > 0
                 ? getString(R.string.xcharge_remaining, FormatUtils.formatDuration(remainingMs))
                 : getString(R.string.xcharge_calculating));
-    }
-
-    private void bindCards(@NonNull BatteryInfo info, int smoothedMa) {
-        setCardValue(binding.cardCurrent, smoothedMa == BatteryInfo.UNKNOWN_INT
-                ? getString(R.string.value_placeholder)
-                : String.format(Locale.US, "%d mA", Math.abs(smoothedMa)));
-
-        setCardValue(binding.cardVoltage, info.getVoltage() > 0
-                ? FormatUtils.formatVoltage(info.getVoltage())
-                : getString(R.string.value_placeholder));
-
-        setCardValue(binding.cardTemperature,
-                String.format(Locale.getDefault(), "%.1f℃", info.getTemperatureCelsius()));
-
-        setCardValue(binding.cardElapsed,
-                FormatUtils.formatDuration(SystemClock.elapsedRealtime() - sessionStartMs));
-    }
-
-    private void setCardValue(@NonNull ViewStatColumnBinding card, @NonNull String value) {
-        card.tvStatValue.setText(value);
-        // Cỡ chữ mặc định của layout gốc quá lớn cho lưới 2 cột ở màn này
-        card.tvStatValue.setTextSize(22f);
-    }
-
-    /**
-     * Cảnh báo bất thường: nhiệt độ cao hoặc dòng nạp quá thấp.
-     * Chỉ hiện khi đang cắm sạc, vì lúc dùng pin thì hai chỉ số này không nói lên gì.
-     */
-    private void bindWarning(@NonNull BatteryInfo info, int smoothedMa) {
-        if (!info.getPlugType().isPlugged()) {
-            binding.tvWarning.setVisibility(View.GONE);
-            return;
-        }
-
-        if (info.getTemperatureCelsius() >= WARN_TEMPERATURE) {
-            binding.tvWarning.setText(R.string.xcharge_warn_hot);
-            binding.tvWarning.setVisibility(View.VISIBLE);
-            return;
-        }
-
-        if (smoothedMa != BatteryInfo.UNKNOWN_INT
-                && smoothedMa > 0 && smoothedMa < WARN_LOW_CURRENT) {
-            binding.tvWarning.setText(R.string.xcharge_warn_slow);
-            binding.tvWarning.setVisibility(View.VISIBLE);
-            return;
-        }
-
-        binding.tvWarning.setVisibility(View.GONE);
     }
 }

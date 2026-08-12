@@ -58,6 +58,9 @@ public class CheckPowerActivity extends BaseActivity<ActivityCheckPowerBinding>
     /** Dòng nạp cao nhất đo được trong phiên; 0 nghĩa là chưa từng cắm sạc. */
     private int maxChargingMa;
 
+    /** Trạng thái cắm nguồn của lần cập nhật gần nhất. */
+    private boolean lastPlugged;
+
     public static void start(@NonNull Context context) {
         context.startActivity(new Intent(context, CheckPowerActivity.class));
     }
@@ -96,6 +99,11 @@ public class CheckPowerActivity extends BaseActivity<ActivityCheckPowerBinding>
         // ở PrefManager.KEY_LAST_CHARGING_MA
         lastChargingMa = prefs.getInt(PrefManager.KEY_LAST_CHARGING_MA, BatteryInfo.UNKNOWN_INT);
         lastIdleMa = prefs.getInt(PrefManager.KEY_LAST_IDLE_MA, BatteryInfo.UNKNOWN_INT);
+
+        // Trạng thái nguồn phải biết ngay từ đầu, nếu không ô dòng vào sẽ hiện
+        // "0 mA" trong khoảnh khắc đầu tiên dù máy đang cắm sạc
+        final BatteryInfo current = monitor.getLastInfo();
+        lastPlugged = current != null && current.getPlugType().isPlugged();
         bindCurrentTexts();
     }
 
@@ -128,6 +136,7 @@ public class CheckPowerActivity extends BaseActivity<ActivityCheckPowerBinding>
     public void onBatteryUpdated(@NonNull BatteryInfo info, int smoothedMa) {
         if (binding == null) return;
 
+        lastPlugged = info.getPlugType().isPlugged();
         rememberCurrent(info, smoothedMa);
         bindGauge(info, smoothedMa);
         bindCurrentTexts();
@@ -185,10 +194,19 @@ public class CheckPowerActivity extends BaseActivity<ActivityCheckPowerBinding>
         binding.arcGauge.setPulseLevel(plugged ? level : -1f);
     }
 
-    /** Chưa đo được chiều nào thì để dấu gạch, không hiện "0 mA" gây hiểu nhầm. */
+    /**
+     * Đổ hai con số ra giao diện.
+     *
+     * <p>Chiều đang diễn ra luôn là số đo trực tiếp; chiều còn lại giữ giá trị đo
+     * được gần nhất để ô không bị bỏ trống.
+     *
+     * <p>Riêng lúc <b>rút sạc thì dòng vào đúng bằng 0</b> – đó là một sự thật, không
+     * phải "chưa đo được". Giữ nguyên con số lúc còn cắm sạc thì màn hình nói rằng
+     * máy vẫn đang nạp điện trong khi dây đã rút, sai hoàn toàn.
+     */
     private void bindCurrentTexts() {
-        binding.tvCurrentIn.setText(
-                getString(R.string.check_current_in, formatMa(lastChargingMa)));
+        binding.tvCurrentIn.setText(getString(R.string.check_current_in,
+                lastPlugged ? formatMa(lastChargingMa) : formatMa(0)));
         binding.tvCurrentIdle.setText(
                 getString(R.string.check_current_idle, formatMa(lastIdleMa)));
     }

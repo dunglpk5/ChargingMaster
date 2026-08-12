@@ -43,6 +43,12 @@
     <color name="shield_green">#C6DE8C</color>
     <!-- Khiên của hạng mục đã đạt: xanh nước biển, đủ đậm để không cần làm mờ -->
     <color name="shield_blue">#3E9BD8</color>
+
+    <!-- Màn X-Sạc: vòng tròn chất lỏng và chip đếm mục cần tắt -->
+    <color name="liquid_ring">#3D8A7C</color>
+    <color name="liquid_fill">#7FCBB6</color>
+    <color name="chip_dark">#2B3A38</color>
+    <color name="stage_inactive">#66FFFFFF</color>
     <color name="badge_red">#D32F2F</color>
 
     <!-- Sóng điện trong hộp thoại kiểm tra nguồn -->

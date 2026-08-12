@@ -1,0 +1,6 @@
+<!-- Nền tối bo góc cho chip số mục cần tắt thủ công -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/chip_dark" />
+    <corners android:radius="6dp" />
+</shape>

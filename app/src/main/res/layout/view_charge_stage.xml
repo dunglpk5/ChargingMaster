@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Một giai đoạn sạc: vòng tròn viền chứa biểu tượng, bên dưới là tên giai đoạn.
+  Dùng lại ba lần trong activity_x_charge.xml.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/imgStage"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:background="@drawable/bg_stage_circle"
+        android:importantForAccessibility="no"
+        android:padding="14dp"
+        tools:src="@drawable/ic_voltage" />
+
+    <TextView
+        android:id="@+id/tvStage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_sm"
+        android:textColor="@color/text_on_primary"
+        android:textSize="@dimen/text_body"
+        tools:text="NHANH" />
+
+</LinearLayout>
