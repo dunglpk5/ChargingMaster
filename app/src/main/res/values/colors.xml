@@ -41,6 +41,8 @@
     <color name="shield_orange">#F5C878</color>
     <color name="shield_yellow">#EFD87A</color>
     <color name="shield_green">#C6DE8C</color>
+    <!-- Khiên của hạng mục đã đạt: xanh nước biển, đủ đậm để không cần làm mờ -->
+    <color name="shield_blue">#3E9BD8</color>
     <color name="badge_red">#D32F2F</color>
 
     <!-- Sóng điện trong hộp thoại kiểm tra nguồn -->

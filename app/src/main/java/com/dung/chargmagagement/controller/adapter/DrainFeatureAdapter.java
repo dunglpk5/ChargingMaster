@@ -78,20 +78,26 @@ public class DrainFeatureAdapter
             final PowerDrainFeature feature = status.getFeature();
 
             binding.imgShield.setImageResource(R.drawable.ic_shield);
+            // Mục đã đạt dùng khiên xanh nước biển; mục cần xử lý giữ màu cảnh báo
+            // riêng của nó để mắt phân biệt được ngay hai nhóm
             ImageViewCompat.setImageTintList(binding.imgShield,
-                    ContextCompat.getColorStateList(context(), feature.getShieldColorRes()));
+                    ContextCompat.getColorStateList(context(),
+                            active ? feature.getShieldColorRes() : R.color.shield_blue));
 
             binding.imgIcon.setImageResource(feature.getIconRes());
             binding.tvLabel.setText(feature.getLabelRes());
             binding.tvDetail.setText(feature.getDescriptionRes());
 
-            // Chấm than chỉ hiện ở mục đang cần xử lý; mục đã đạt thì làm mờ khiên
             binding.imgBadge.setVisibility(active ? View.VISIBLE : View.GONE);
-            binding.imgShield.setAlpha(active ? 1f : 0.45f);
+            // Không làm mờ nữa: màu xanh đã đủ để phân biệt, mà làm mờ thì mục đã
+            // đạt trông như đang bị vô hiệu hoá
+            binding.imgShield.setAlpha(1f);
 
-            // Mục đã đạt vẫn giữ nút để người dùng chủ động vào xem, chỉ đổi nhãn
-            binding.btnTurnOff.setText(active ? R.string.check_detect : R.string.check_ok);
-            binding.btnTurnOff.setEnabled(active || !feature.hasSettingsPage());
+            // Mục đã đạt không còn việc gì để bấm, thay nút bằng dấu tích.
+            // INVISIBLE chứ không GONE – xem ghi chú trong item_drain_feature.xml
+            binding.btnTurnOff.setVisibility(active ? View.VISIBLE : View.INVISIBLE);
+            binding.imgOk.setVisibility(active ? View.GONE : View.VISIBLE);
+            binding.btnTurnOff.setText(R.string.check_detect);
 
             binding.btnTurnOff.setOnClickListener(v -> {
                 if (listener != null) listener.onFeatureClick(status);
