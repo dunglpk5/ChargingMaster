@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tệp lâu không dùng: trang tài liệu kèm đồng hồ -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="@color/teal_primary">
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M13,2H6C4.9,2 4,2.9 4,4v16c0,1.1 0.9,2 2,2h5.26c-0.79,-0.85 -1.38,-1.87 -1.72,-3H6V4h6v5h5v1.06c0.71,0.1 1.38,0.31 2,0.6V8L13,2z" />
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M17,12c-2.76,0 -5,2.24 -5,5s2.24,5 5,5s5,-2.24 5,-5S19.76,12 17,12zM18.5,19.5l-2.25,-1.35V14.5h1.25v2.9l1.75,1.03L18.5,19.5z" />
+</vector>

@@ -84,37 +84,59 @@
                     app:layout_constraintTop_toBottomOf="@id/tvCurrentIn"
                     tools:text="Dòng chờ: -251 mA" />
 
+                <!--
+                  Hai nút chia đôi bề ngang. Chữ tự co trong khoảng 11–14sp và bị
+                  ép một dòng, nhờ vậy nhãn dài ngắn khác nhau vẫn cho hai nút cao
+                  bằng nhau thay vì nút nào xuống dòng thì cao hơn.
+                -->
                 <TextView
                     android:id="@+id/btnCheckSource"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/action_button_height"
                     android:layout_marginTop="@dimen/space_lg"
                     android:layout_marginEnd="@dimen/space_sm"
                     android:background="@drawable/bg_header_button"
                     android:clickable="true"
+                    android:ellipsize="end"
                     android:focusable="true"
                     android:gravity="center"
-                    android:paddingTop="@dimen/space_md"
-                    android:paddingBottom="@dimen/space_md"
+                    android:maxLines="1"
+                    android:paddingStart="@dimen/space_sm"
+                    android:paddingEnd="@dimen/space_sm"
                     android:text="@string/check_power_source"
                     android:textColor="@color/text_on_primary"
+                    app:autoSizeMaxTextSize="14sp"
+                    app:autoSizeMinTextSize="11sp"
+                    app:autoSizeStepGranularity="1sp"
+                    app:autoSizeTextType="uniform"
                     app:layout_constraintEnd_toStartOf="@id/btnXCharge"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvCurrentIdle" />
 
+                <!--
+                  Chiều cao 0dp neo theo nút bên trái: dù chữ có co thế nào thì hai
+                  nút vẫn cao đúng bằng nhau.
+                -->
                 <TextView
                     android:id="@+id/btnXCharge"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_marginStart="@dimen/space_sm"
                     android:background="@drawable/bg_header_button"
                     android:clickable="true"
+                    android:ellipsize="end"
                     android:focusable="true"
                     android:gravity="center"
-                    android:paddingTop="@dimen/space_md"
-                    android:paddingBottom="@dimen/space_md"
+                    android:maxLines="1"
+                    android:paddingStart="@dimen/space_sm"
+                    android:paddingEnd="@dimen/space_sm"
                     android:text="@string/check_x_charge"
                     android:textColor="@color/text_on_primary"
+                    app:autoSizeMaxTextSize="14sp"
+                    app:autoSizeMinTextSize="11sp"
+                    app:autoSizeStepGranularity="1sp"
+                    app:autoSizeTextType="uniform"
+                    app:layout_constraintBottom_toBottomOf="@id/btnCheckSource"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/btnCheckSource"
                     app:layout_constraintTop_toTopOf="@id/btnCheckSource" />

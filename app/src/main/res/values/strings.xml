@@ -9,10 +9,16 @@
     <string name="tab_battery_usage">Battery usage</string>
 
     <!-- Màn Trang chủ -->
-    <string name="home_detect">DETECT</string>
+    <string name="home_detect">Detect</string>
+    <string name="home_ad_badge">AD</string>
+    <string name="home_battery_word">Battery</string>
+    <string name="home_battery_life">Estimated battery life</string>
+    <string name="home_health_label">Status</string>
+    <string name="home_time_to_full">Time left until full</string>
+    <string name="home_charge_status">Charging status</string>
+    <string name="home_battery_status">Battery status</string>
+    <string name="home_charge_speed_avg">Average charging speed</string>
     <string name="msg_coming_soon">Coming soon</string>
-    <string name="home_time_remaining">Time remaining</string>
-    <string name="home_charging_power">Charging power</string>
     <string name="home_plugged">Plugged</string>
     <string name="home_temperature">Temperature</string>
     <string name="home_health">Health</string>
@@ -59,6 +65,25 @@
     <string name="tools_phone_temperature">Phone temperature</string>
     <string name="tools_charge_detect">Charge detection</string>
     <string name="tools_cpu_usage">CPU usage</string>
+    <string name="tools_stat_storage">Storage</string>
+    <string name="tools_stat_ram">RAM</string>
+    <string name="tools_stat_battery">Battery</string>
+    <string name="tools_action_scan">Scan</string>
+    <string name="tools_action_details">Details</string>
+    <string name="tools_action_monitor">Monitor</string>
+
+    <!-- Màn Giám sát pin -->
+    <string name="monitor_title">Battery</string>
+    <string name="monitor_recent_days">Last 3 days</string>
+    <string name="monitor_chart_title">Battery history</string>
+    <string name="monitor_last_charge">Last charge</string>
+    <string name="monitor_last_speed">Last charge</string>
+    <string name="monitor_last_source">Charging mode</string>
+    <string name="monitor_last_duration">Charging time</string>
+    <string name="monitor_last_quality">Charge range</string>
+    <string name="monitor_since_full">Since last full charge</string>
+    <string name="monitor_range">From %1$d%% to %2$d%%</string>
+    <string name="monitor_no_result">No data</string>
 
     <!-- Màn Sử dụng pin -->
     <string name="usage_battery_health">Battery health</string>
@@ -222,10 +247,39 @@
     <string name="cpu_estimated_note">This device blocks exact CPU readings, so the load below is estimated from clock speed and tends to read higher than the real figure.</string>
 
     <!-- Màn Sử dụng CPU -->
-    <string name="cpu_frequency">CPU frequency</string>
-    <string name="cpu_core_count">CPU cores</string>
-    <string name="cpu_core_label">CPU Core %1$d</string>
-    <string name="cpu_freq_range">%1$s ~ %2$s</string>
+    <string name="cpu_core_label">CPU %1$d</string>
+    <string name="cpu_freq_range">%1$s - %2$s</string>
+    <string name="cpu_spec_name">Name</string>
+    <string name="cpu_spec_vendor">Manufacturer</string>
+    <string name="cpu_spec_speed">Speed</string>
+    <string name="cpu_spec_cores">Cores</string>
+    <string name="cpu_spec_arch">Architecture</string>
+    <string name="cpu_current_clock">Current speed</string>
+    <string name="cpu_core_min">Min</string>
+    <string name="cpu_core_max">Max</string>
+
+    <!-- Màn Dọn dẹp bộ nhớ -->
+    <string name="clean_title">Clean</string>
+    <string name="clean_junk_cache">Junk cache</string>
+    <string name="clean_app_cache">App cache</string>
+    <string name="clean_obsolete_apk">Obsolete APK</string>
+    <string name="clean_ad_cache">Ad cache</string>
+    <string name="clean_downloads">Downloaded files</string>
+    <string name="clean_large_files">Large files</string>
+    <string name="clean_scanning">Scanning…</string>
+    <string name="clean_scan_done">Scan complete</string>
+    <string name="clean_cleaning">Cleaning…</string>
+    <string name="clean_action">Clean up</string>
+    <string name="clean_selected">Selected: %1$s</string>
+    <string name="clean_select_group">Select this group</string>
+    <string name="clean_freed">Freed %1$s</string>
+    <string name="clean_confirm_title">Delete these files?</string>
+    <string name="clean_confirm_message">%1$s will be deleted from: %2$s.\n\nThis cannot be undone.</string>
+    <string name="clean_grant_permission">Grant access</string>
+    <string name="clean_stale_files">Long-unused files</string>
+    <string name="clean_permission_required">Storage access required</string>
+    <string name="clean_permission_message">Scanning needs full file access. Without it Android hides other apps\' files, so the scan cannot see or delete any junk. Grant the permission to continue.</string>
+    <string name="clean_permission_unavailable">This device has no screen for granting that permission</string>
 
     <!-- Màn Dọn dẹp thông báo -->
     <string name="clean_nothing">Nothing to clean up</string>

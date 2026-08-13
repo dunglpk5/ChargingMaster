@@ -1,94 +1,205 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Màn Sử dụng CPU: header thông tin chip + lưới 2 cột biểu đồ từng nhân -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+  Màn Sử dụng CPU:
+  1. Thẻ thông số chip (tên, hãng, dải xung, số nhân, kiến trúc, tập lệnh)
+  2. Thẻ xung nhịp hiện tại của từng nhân, hai cột
+  3. Lưới 2 cột thẻ tải từng nhân
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_surface"
-    android:orientation="vertical">
+    android:background="@drawable/bg_app">
 
-    <include
-        android:id="@+id/toolbarInclude"
-        layout="@layout/view_toolbar" />
-
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="@dimen/space_md">
-
-        <ImageView
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_cpu_large" />
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:paddingTop="@dimen/toolbar_height">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space_md"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingStart="@dimen/space_md"
+            android:paddingEnd="@dimen/space_md"
+            android:paddingBottom="@dimen/space_lg">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <!-- ==================== 1. THÔNG SỐ CHIP ==================== -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/cpu_frequency"
-                android:textColor="@color/text_primary"
-                android:textSize="20sp" />
+                android:layout_marginTop="@dimen/space_md"
+                android:background="@drawable/bg_card_rounded"
+                android:orientation="vertical"
+                android:paddingStart="@dimen/space_md"
+                android:paddingTop="@dimen/space_sm"
+                android:paddingEnd="@dimen/space_md"
+                android:paddingBottom="@dimen/space_sm">
 
-            <TextView
-                android:id="@+id/tvFrequency"
-                android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal">
+
+                    <include
+                        android:id="@+id/specName"
+                        layout="@layout/view_cpu_spec_cell"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <include
+                        android:id="@+id/specVendor"
+                        layout="@layout/view_cpu_spec_cell"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_md"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal">
+
+                    <include
+                        android:id="@+id/specSpeed"
+                        layout="@layout/view_cpu_spec_cell"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <include
+                        android:id="@+id/specCores"
+                        layout="@layout/view_cpu_spec_cell"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_md"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal">
+
+                    <include
+                        android:id="@+id/specArch"
+                        layout="@layout/view_cpu_spec_cell"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <include
+                        android:id="@+id/specAbi"
+                        layout="@layout/view_cpu_spec_cell"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_md"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- ==================== 2. XUNG NHỊP HIỆN TẠI ==================== -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/value_placeholder"
-                android:textColor="@color/text_value"
-                android:textSize="20sp"
-                tools:text="500Mhz ~ 2200Mhz" />
+                android:layout_marginTop="@dimen/space_md"
+                android:background="@drawable/bg_card_rounded"
+                android:orientation="vertical"
+                android:padding="@dimen/space_md">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cpu_current_clock"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_body"
+                    android:textStyle="bold" />
+
+                <!-- Các hàng dựng bằng code vì số nhân khác nhau theo máy -->
+                <LinearLayout
+                    android:id="@+id/clockRows"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_xs"
+                    android:orientation="vertical" />
+
+            </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tvUnavailable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_md"
+                android:background="@drawable/bg_card_rounded"
+                android:padding="@dimen/space_md"
+                android:text="@string/cpu_unavailable"
+                android:textColor="@color/state_warning"
+                android:textSize="@dimen/text_caption"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <!-- ==================== 3. TẢI TỪNG NHÂN ==================== -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvCores"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_sm"
-                android:text="@string/cpu_core_count"
-                android:textColor="@color/text_primary"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/tvCoreCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/value_placeholder"
-                android:textColor="@color/text_value"
-                android:textSize="20sp"
-                tools:text="8" />
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                tools:itemCount="8"
+                tools:listitem="@layout/item_cpu_core"
+                tools:spanCount="2" />
 
         </LinearLayout>
 
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Thanh tiêu đề mỏng, nổi đè lên nội dung -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="@color/teal_primary"
+        android:baselineAligned="false"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/space_sm"
+        android:paddingEnd="@dimen/space_md">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/cd_back"
+            android:padding="@dimen/space_sm"
+            android:src="@drawable/ic_back"
+            app:tint="@color/text_on_primary" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_sm"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/tools_cpu_usage"
+            android:textColor="@color/text_on_primary"
+            android:textSize="@dimen/text_title"
+            android:textStyle="bold" />
+
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvUnavailable"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="@dimen/space_md"
-        android:text="@string/cpu_unavailable"
-        android:textColor="@color/state_warning"
-        android:textSize="@dimen/text_caption"
-        android:visibility="gone"
-        tools:visibility="visible" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvCores"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:overScrollMode="never"
-        android:paddingBottom="@dimen/space_md"
-        tools:itemCount="8"
-        tools:listitem="@layout/item_cpu_core"
-        tools:spanCount="2" />
-
-</LinearLayout>
+</FrameLayout>

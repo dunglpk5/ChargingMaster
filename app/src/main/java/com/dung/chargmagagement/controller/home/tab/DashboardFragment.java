@@ -1,29 +1,31 @@
 package com.dung.chargmagagement.controller.home.tab;
 
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.core.content.ContextCompat;
 
 import com.dung.chargmagagement.R;
 import com.dung.chargmagagement.common.FormatUtils;
-import com.dung.chargmagagement.controller.adapter.InfoAdapter;
 import com.dung.chargmagagement.controller.base.BaseFragment;
 import com.dung.chargmagagement.controller.power.CheckPowerActivity;
+import com.dung.chargmagagement.controller.settings.SettingsActivity;
+import com.dung.chargmagagement.controller.tools.BatteryMonitorActivity;
+import com.dung.chargmagagement.controller.vip.VipActivity;
 import com.dung.chargmagagement.databinding.FragmentDashboardBinding;
+import com.dung.chargmagagement.databinding.ViewChargeStatRowBinding;
+import com.dung.chargmagagement.databinding.ViewDeviceInfoRowBinding;
 import com.dung.chargmagagement.model.battery.BatteryInfo;
 import com.dung.chargmagagement.model.battery.BatteryMonitor;
 import com.dung.chargmagagement.model.repository.BatteryRepository;
+import com.dung.chargmagagement.model.stats.BatteryUsageStats;
 import com.dung.chargmagagement.model.stats.UsageCalculator;
-import com.dung.chargmagagement.model.ui.InfoItem;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -36,25 +38,27 @@ import java.util.Locale;
 public class DashboardFragment extends BaseFragment<FragmentDashboardBinding>
         implements BatteryMonitor.Listener {
 
-    // Khoá của từng dòng thông tin, giữ cố định để DiffUtil so sánh đúng
-    private static final String KEY_PLUGGED = "plugged";
-    private static final String KEY_TEMPERATURE = "temperature";
-    private static final String KEY_HEALTH = "health";
-    private static final String KEY_CURRENT = "current";
-    private static final String KEY_VOLTAGE = "voltage";
-    private static final String KEY_CAPACITY = "capacity";
-    private static final String KEY_TECHNOLOGY = "technology";
-    private static final String KEY_MODEL = "model";
+    /** Dòng nạp coi là mức tối đa của thanh tiến trình (mA). */
+    private static final int MAX_CURRENT_MA = 3_000;
+
+    /** Dải điện áp pin lithium để quy thanh tiến trình về phần trăm (V). */
+    private static final float MIN_VOLTAGE = 3.0f;
+    private static final float MAX_VOLTAGE = 4.5f;
+
+    /** Tốc độ sạc coi là mức tối đa của thanh tiến trình (%/giờ). */
+    private static final float MAX_CHARGE_SPEED = 60f;
 
     private BatteryMonitor monitor;
     private BatteryRepository repository;
-    private InfoAdapter infoAdapter;
 
     /**
      * Dung lượng pin dùng để ước tính thời gian sạc đầy.
      * Đọc một lần từ database khi mở màn, không đọc lại ở mỗi lần cập nhật.
      */
     private int usableCapacityMah = BatteryInfo.UNKNOWN_INT;
+
+    /** Tốc độ sạc trung bình lấy từ lịch sử; 0 nghĩa là chưa đủ dữ liệu. */
+    private float averageChargeSpeed;
 
     @NonNull
     @Override
@@ -68,42 +72,65 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding>
         monitor = BatteryMonitor.get(requireContext());
         repository = BatteryRepository.get(requireContext());
 
-        setupInfoList();
+        setupBatteryCircle();
+        setupStaticLabels();
         setupActions();
+
         loadUsableCapacity();
     }
 
-    private void setupInfoList() {
-        infoAdapter = new InfoAdapter();
-        binding.rvInfo.setLayoutManager(new LinearLayoutManager(requireContext()));
-        binding.rvInfo.setAdapter(infoAdapter);
-        // Số dòng cố định nên tắt tính lại kích thước cho nhẹ
-        binding.rvInfo.setHasFixedSize(true);
+    /**
+     * Vòng tròn mức pin: nền tối, phần pin còn lại màu thương hiệu, mặt nước gợn
+     * sóng, bao ngoài là vòng vạch chạy như thanh tiến trình.
+     */
+    private void setupBatteryCircle() {
+        binding.batteryCircle.setPalette(
+                ContextCompat.getColor(requireContext(), R.color.battery_circle_bg),
+                ContextCompat.getColor(requireContext(), R.color.teal_primary),
+                Color.TRANSPARENT);
+        binding.batteryCircle.setTickRing(
+                ContextCompat.getColor(requireContext(), R.color.teal_primary),
+                ContextCompat.getColor(requireContext(), R.color.battery_tick_inactive));
+    }
+
+    /** Nhãn của các dòng dùng chung layout, gán một lần lúc dựng màn. */
+    private void setupStaticLabels() {
+        binding.rowCurrent.tvStatLabel.setText(R.string.home_current);
+        binding.rowVoltage.tvStatLabel.setText(R.string.home_voltage);
+        binding.rowSpeed.tvStatLabel.setText(R.string.home_charge_speed_avg);
+
+        binding.rowStatus.tvInfoLabel.setText(R.string.home_health_label);
+        binding.rowTemperature.tvInfoLabel.setText(R.string.home_temperature);
+        binding.rowCapacity.tvInfoLabel.setText(R.string.home_capacity);
+        binding.rowTechnology.tvInfoLabel.setText(R.string.home_technology);
+        binding.rowModel.tvInfoLabel.setText(R.string.home_model);
+        binding.rowPlugged.tvInfoLabel.setText(R.string.home_plugged);
+        binding.rowTimeToFull.tvInfoLabel.setText(R.string.home_time_to_full);
+
+        // Tên máy không đổi khi máy đang chạy nên gán luôn ở đây
+        binding.rowModel.tvInfoValue.setText(String.format(Locale.US, "%s %s",
+                Build.BRAND.toUpperCase(Locale.US), Build.MODEL));
     }
 
     private void setupActions() {
-        binding.btnDetect.setOnClickListener(v -> onDetectClicked());
-
-        // Hai nút này sẽ nối vào màn VIP và menu ở các phase sau
-        binding.btnRemoveAds.setOnClickListener(v -> showComingSoon());
-        binding.btnMore.setOnClickListener(v -> showComingSoon());
+        binding.btnDetect.setOnClickListener(v -> CheckPowerActivity.start(requireContext()));
+        binding.btnRemoveAds.setOnClickListener(v -> VipActivity.start(requireContext()));
+        binding.btnMore.setOnClickListener(v -> SettingsActivity.start(requireContext()));
+        // Thẻ trạng thái pin mở màn Giám sát pin, cùng đích với nút "Giám sát" ở tab Công cụ
+        binding.cardBatteryStatus.setOnClickListener(
+                v -> BatteryMonitorActivity.start(requireContext()));
     }
 
-    /** Mở màn kiểm tra nguồn sạc; màn đó tự bắt đầu một phiên đo mới. */
-    private void onDetectClicked() {
-        CheckPowerActivity.start(requireContext());
-    }
-
-    private void showComingSoon() {
-        Toast.makeText(requireContext(), R.string.msg_coming_soon, Toast.LENGTH_SHORT).show();
-    }
-
-    /** Đọc dung lượng khả dụng ở thread nền (có truy vấn database). */
+    /** Đọc dung lượng khả dụng và tốc độ sạc trung bình ở thread nền (có database). */
     private void loadUsableCapacity() {
         executors.execute(repository::getUsableCapacityMah, result -> {
-            if (result != null) {
-                usableCapacityMah = result;
-            }
+            if (result != null) usableCapacityMah = result;
+        });
+
+        executors.execute(repository::getUsageStatsSync, stats -> {
+            if (binding == null || stats == null) return;
+            averageChargeSpeed = stats.getAverageChargedPercentPerDay();
+            bindAverageSpeed();
         });
     }
 
@@ -111,12 +138,18 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding>
     public void onResume() {
         super.onResume();
         monitor.addListener(this);
+        binding.batteryCircle.setWaveEnabled(true);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         monitor.removeListener(this);
+
+        // Tắt sóng khi rời tab. ViewPager2 giữ tab này sống ở nền chứ không ẩn view
+        // đi, nên nếu chỉ dựa vào onVisibilityChanged của chính view thì sóng vẫn
+        // vẽ lại 60 lần mỗi giây trong lúc người dùng đang xem tab khác.
+        binding.batteryCircle.setWaveEnabled(false);
     }
 
     // ==================== Cập nhật giao diện ====================
@@ -125,8 +158,31 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding>
     public void onBatteryUpdated(@NonNull BatteryInfo info, int smoothedMa) {
         if (binding == null) return;
 
-        bindHeader(info, smoothedMa);
-        infoAdapter.submitList(buildInfoItems(info, smoothedMa));
+        bindBatteryCard(info, smoothedMa);
+        bindChargeStatus(info, smoothedMa);
+        bindBatteryStatus(info, smoothedMa);
+    }
+
+    /** Thẻ "Trạng thái pin": bảy dòng thông tin, cập nhật theo từng lần đo. */
+    private void bindBatteryStatus(@NonNull BatteryInfo info, int smoothedMa) {
+        binding.rowStatus.tvInfoValue.setText(info.getHealth().getLabelRes());
+
+        // Hiện cả hai thang đo: người dùng quen ℉ không phải tự quy đổi
+        final float celsius = info.getTemperatureCelsius();
+        binding.rowTemperature.tvInfoValue.setText(String.format(Locale.getDefault(),
+                "%.1f℃/ %.0f℉", celsius, FormatUtils.celsiusToFahrenheit(celsius)));
+
+        binding.rowCapacity.tvInfoValue.setText(
+                info.getDesignCapacityMah() == BatteryInfo.UNKNOWN_INT
+                        ? getString(R.string.value_placeholder)
+                        : String.format(Locale.US, "%d mAh", info.getDesignCapacityMah()));
+
+        binding.rowTechnology.tvInfoValue.setText(info.getTechnology().isEmpty()
+                ? getString(R.string.value_placeholder)
+                : info.getTechnology());
+
+        binding.rowPlugged.tvInfoValue.setText(info.getPlugType().getLabelRes());
+        binding.rowTimeToFull.tvInfoValue.setText(formatTimeRemaining(info, smoothedMa));
     }
 
     @Override
@@ -135,15 +191,33 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding>
         loadUsableCapacity();
     }
 
-    private void bindHeader(@NonNull BatteryInfo info, int smoothedMa) {
+    private void bindBatteryCard(@NonNull BatteryInfo info, int smoothedMa) {
         binding.tvPercent.setText(String.format(Locale.US, "%d%%", info.getPercent()));
-        binding.tvRemainingValue.setText(formatTimeRemaining(info, smoothedMa));
-        binding.tvPowerValue.setText(formatChargingPower(info, smoothedMa));
+        binding.batteryCircle.setPercent(info.getPercent());
+        binding.tvBatteryLifeValue.setText(formatBatteryLife(info, smoothedMa));
     }
 
     /**
-     * Thời gian còn lại: chỉ hiện khi đang nạp thật sự. Lúc dùng pin thì con số
-     * này không có ý nghĩa nên để "-" đúng như bản thiết kế.
+     * Thời lượng pin còn dùng được.
+     *
+     * <p>Chỉ tính khi đang <b>dùng pin</b>: lúc cắm sạc thì pin đang lên chứ không
+     * xuống, con số "còn dùng được bao lâu" không có nghĩa gì.
+     */
+    private String formatBatteryLife(@NonNull BatteryInfo info, int smoothedMa) {
+        if (info.getPlugType().isPlugged() || smoothedMa >= 0
+                || smoothedMa == BatteryInfo.UNKNOWN_INT
+                || usableCapacityMah == BatteryInfo.UNKNOWN_INT) {
+            return getString(R.string.value_placeholder);
+        }
+
+        final float remainingMah = usableCapacityMah * info.getPercent() / 100f;
+        final float hours = remainingMah / Math.abs(smoothedMa);
+        return FormatUtils.formatDuration(Math.round(hours * 3_600_000f));
+    }
+
+    /**
+     * Thời gian còn lại để sạc xong: chỉ hiện khi đang nạp thật sự. Lúc dùng pin thì
+     * con số này không có ý nghĩa nên để "-" đúng như bản thiết kế.
      */
     private String formatTimeRemaining(@NonNull BatteryInfo info, int smoothedMa) {
         if (!info.isCharging() || smoothedMa <= 0) {
@@ -156,55 +230,57 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding>
                 : getString(R.string.value_placeholder);
     }
 
-    /** Công suất sạc = U × I, chỉ hiện khi đang cắm nguồn. */
-    private String formatChargingPower(@NonNull BatteryInfo info, int smoothedMa) {
-        if (!info.getPlugType().isPlugged() || smoothedMa <= 0 || info.getVoltage() <= 0) {
-            return getString(R.string.value_placeholder);
+    // ==================== Thẻ "Trạng thái sạc" ====================
+
+    private void bindChargeStatus(@NonNull BatteryInfo info, int smoothedMa) {
+        bindCurrentRow(info, smoothedMa);
+        bindVoltageRow(info);
+        bindAverageSpeed();
+    }
+
+    /** Dòng sạc hiển thị kèm công suất, đúng như bản thiết kế: "3.5 W / 892 mA". */
+    private void bindCurrentRow(@NonNull BatteryInfo info, int smoothedMa) {
+        final boolean charging = info.getPlugType().isPlugged() && smoothedMa > 0;
+        if (!charging) {
+            setRow(binding.rowCurrent, getString(R.string.value_placeholder), 0);
+            return;
         }
-        float watt = info.getVoltage() * smoothedMa / 1000f;
-        return String.format(Locale.US, "%.1f W", watt);
+
+        final float watt = info.getVoltage() * smoothedMa / 1000f;
+        setRow(binding.rowCurrent,
+                String.format(Locale.US, "%.1f W / %d mA", watt, smoothedMa),
+                Math.round(smoothedMa * 100f / MAX_CURRENT_MA));
     }
 
-    /** Dựng lại danh sách 8 dòng thông tin; DiffUtil lo phần chỉ vẽ dòng đổi. */
-    private List<InfoItem> buildInfoItems(@NonNull BatteryInfo info, int smoothedMa) {
-        final String placeholder = getString(R.string.value_placeholder);
-        List<InfoItem> items = new ArrayList<>(8);
+    private void bindVoltageRow(@NonNull BatteryInfo info) {
+        if (info.getVoltage() <= 0) {
+            setRow(binding.rowVoltage, getString(R.string.value_placeholder), 0);
+            return;
+        }
 
-        items.add(new InfoItem(KEY_PLUGGED, R.drawable.ic_plug, R.string.home_plugged,
-                getString(info.getPlugType().getLabelRes())));
-
-        items.add(new InfoItem(KEY_TEMPERATURE, R.drawable.ic_thermometer, R.string.home_temperature,
-                FormatUtils.formatTemperature(info.getTemperatureCelsius())));
-
-        items.add(new InfoItem(KEY_HEALTH, R.drawable.ic_heart, R.string.home_health,
-                getString(info.getHealth().getLabelRes())));
-
-        items.add(new InfoItem(KEY_CURRENT, R.drawable.ic_current, R.string.home_current,
-                smoothedMa == BatteryInfo.UNKNOWN_INT
-                        ? placeholder
-                        : String.format(Locale.US, "%d mA", smoothedMa)));
-
-        items.add(new InfoItem(KEY_VOLTAGE, R.drawable.ic_voltage, R.string.home_voltage,
-                info.getVoltage() > 0
-                        ? FormatUtils.formatVoltage(info.getVoltage())
-                        : placeholder));
-
-        items.add(new InfoItem(KEY_CAPACITY, R.drawable.ic_capacity, R.string.home_capacity,
-                info.getDesignCapacityMah() == BatteryInfo.UNKNOWN_INT
-                        ? placeholder
-                        : String.format(Locale.US, "%d mAh", info.getDesignCapacityMah())));
-
-        items.add(new InfoItem(KEY_TECHNOLOGY, R.drawable.ic_technology, R.string.home_technology,
-                info.getTechnology().isEmpty() ? placeholder : info.getTechnology()));
-
-        items.add(new InfoItem(KEY_MODEL, R.drawable.ic_phone, R.string.home_model,
-                getDeviceModel()));
-
-        return items;
+        // Quy về phần trăm trong dải làm việc của pin lithium chứ không phải 0..max:
+        // pin gần cạn vẫn ở khoảng 3.2 V, để thang bắt đầu từ 0 thì thanh lúc nào
+        // cũng gần đầy và không nói lên điều gì
+        final float ratio = (info.getVoltage() - MIN_VOLTAGE) / (MAX_VOLTAGE - MIN_VOLTAGE);
+        setRow(binding.rowVoltage,
+                String.format(Locale.US, "%.0f mV", info.getVoltage() * 1000f),
+                Math.round(ratio * 100f));
     }
 
-    /** Tên máy dạng "TECNO LH7n(TECNO)" giống bản thiết kế. */
-    private String getDeviceModel() {
-        return String.format(Locale.US, "%s(%s)", Build.MODEL, Build.BRAND.toUpperCase(Locale.US));
+    private void bindAverageSpeed() {
+        if (binding == null) return;
+
+        if (averageChargeSpeed <= 0f) {
+            setRow(binding.rowSpeed, getString(R.string.value_placeholder), 0);
+            return;
+        }
+        setRow(binding.rowSpeed,
+                String.format(Locale.US, "%.1f%%/h", averageChargeSpeed),
+                Math.round(averageChargeSpeed * 100f / MAX_CHARGE_SPEED));
+    }
+
+    private void setRow(@NonNull ViewChargeStatRowBinding row, @NonNull String value, int percent) {
+        row.tvStatValue.setText(value);
+        row.progressStat.setProgress(Math.max(0, Math.min(100, percent)));
     }
 }

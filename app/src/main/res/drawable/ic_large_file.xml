@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tệp tin lớn: trang tài liệu đặc -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="@color/teal_primary">
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M6,2h8l6,6v12c0,1.1 -0.9,2 -2,2H6c-1.1,0 -2,-0.9 -2,-2V4C4,2.9 4.9,2 6,2zM13,3.5V9h5.5L13,3.5z" />
+</vector>

@@ -1,41 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Một nhân CPU: biểu đồ nhỏ + ô màu và nhãn "CPU Core N" -->
+<!--
+  Thẻ một nhân CPU: mức tải + xung hiện tại, thanh tải, rồi tên nhân và dải xung.
+  Chiều rộng match_parent để GridLayoutManager chia đều hai cột.
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="@dimen/space_xs"
+    android:background="@drawable/bg_card_rounded"
     android:orientation="vertical"
-    android:paddingStart="@dimen/space_sm"
-    android:paddingTop="@dimen/space_sm"
-    android:paddingEnd="@dimen/space_sm"
-    android:paddingBottom="@dimen/space_sm">
-
-    <com.dung.chargmagagement.controller.widget.MiniCpuChartView
-        android:id="@+id/chartCore"
-        android:layout_width="match_parent"
-        android:layout_height="120dp" />
+    android:padding="@dimen/space_md">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/space_xs"
-        android:layout_marginStart="34dp"
-        android:gravity="center_vertical"
+        android:baselineAligned="false"
+        android:gravity="bottom"
         android:orientation="horizontal">
 
-        <View
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:background="@color/cpu_chart_line" />
+        <TextView
+            android:id="@+id/tvCoreLoad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_value"
+            android:textSize="@dimen/text_title"
+            android:textStyle="bold"
+            tools:text="100%" />
+
+        <TextView
+            android:id="@+id/tvCoreClock"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_xs"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:maxLines="1"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/text_caption"
+            android:textStyle="bold"
+            tools:text="2 GHz" />
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressCore"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:layout_marginTop="@dimen/space_sm"
+        android:max="100"
+        android:progressDrawable="@drawable/bg_progress_track"
+        tools:progress="100" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_sm"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tvCoreLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space_xs"
-            android:textColor="@color/text_primary"
+            android:textColor="@color/text_secondary"
             android:textSize="@dimen/text_caption"
-            tools:text="CPU Core 0" />
+            tools:text="CPU 1" />
+
+        <TextView
+            android:id="@+id/tvCoreName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_xs"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:maxLines="1"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_caption"
+            tools:text="Cortex-A55" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_sm"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cpu_core_min"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_caption" />
+
+        <TextView
+            android:id="@+id/tvCoreMin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_xs"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:maxLines="1"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_caption"
+            tools:text="500 MHz" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cpu_core_max"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_caption" />
+
+        <TextView
+            android:id="@+id/tvCoreMax"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_xs"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:maxLines="1"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_caption"
+            tools:text="2 GHz" />
 
     </LinearLayout>
 

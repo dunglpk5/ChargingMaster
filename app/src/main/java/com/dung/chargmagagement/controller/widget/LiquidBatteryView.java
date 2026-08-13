@@ -3,6 +3,7 @@ package com.dung.chargmagagement.controller.widget;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
@@ -43,8 +44,18 @@ public class LiquidBatteryView extends View {
     /** Mực nước dâng mượt tới giá trị mới trong bấy nhiêu ms. */
     private static final long LEVEL_ANIM_MS = 700L;
 
+    /** Số vạch trên vòng ngoài. Dày như vậy để nhìn ra một vòng liền chứ không rời rạc. */
+    private static final int TICK_COUNT = 72;
+
+    /** Độ dài vạch và khe hở tới vòng tròn, tính theo tỉ lệ bán kính ngoài. */
+    private static final float TICK_LENGTH_RATIO = 0.14f;
+    private static final float TICK_GAP_RATIO = 0.06f;
+
+    private final Paint circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint ringPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint liquidPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint tickActivePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint tickInactivePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Path wavePath = new Path();
     private final Path clipPath = new Path();
     private final RectF bounds = new RectF();
@@ -55,6 +66,12 @@ public class LiquidBatteryView extends View {
 
     /** Pha sóng 0..1. */
     private float wavePhase;
+
+    /** Có gợn sóng hay để mặt nước phẳng. */
+    private boolean waveEnabled = true;
+
+    /** Có vẽ vòng vạch chỉ mức pin ở ngoài hay không. */
+    private boolean tickRingEnabled;
 
     @Nullable
     private ValueAnimator waveAnimator;
@@ -81,6 +98,66 @@ public class LiquidBatteryView extends View {
 
         liquidPaint.setStyle(Paint.Style.FILL);
         liquidPaint.setColor(ContextCompat.getColor(context, R.color.liquid_fill));
+
+        circlePaint.setStyle(Paint.Style.FILL);
+        circlePaint.setColor(Color.TRANSPARENT);
+
+        tickActivePaint.setStyle(Paint.Style.STROKE);
+        tickActivePaint.setStrokeWidth(2f * density);
+        tickInactivePaint.setStyle(Paint.Style.STROKE);
+        tickInactivePaint.setStrokeWidth(2f * density);
+    }
+
+    /**
+     * Bật vòng vạch bao ngoài, chạy như một thanh tiến trình vòng.
+     *
+     * <p>Số vạch được tô đậm tỉ lệ với mức pin, chạy theo chiều kim đồng hồ từ đỉnh.
+     * Vòng này đọc được từ xa hơn hẳn con số bên trong: liếc một cái là ước lượng
+     * được mức pin mà không cần đọc chữ.
+     *
+     * <p>Khi bật, vòng tròn chất lỏng bên trong tự thu nhỏ lại để nhường chỗ.
+     *
+     * @param activeColor   màu vạch đã đạt tới
+     * @param inactiveColor màu vạch còn lại
+     */
+    public void setTickRing(int activeColor, int inactiveColor) {
+        tickRingEnabled = true;
+        tickActivePaint.setColor(activeColor);
+        tickInactivePaint.setColor(inactiveColor);
+        invalidate();
+    }
+
+    /**
+     * Đổi bảng màu để dùng lại view này ở nhiều màn.
+     *
+     * @param circleColor màu nền cả vòng tròn; {@link Color#TRANSPARENT} thì không vẽ
+     * @param fillColor   màu phần chất lỏng
+     * @param ringColor   màu viền; {@link Color#TRANSPARENT} thì không vẽ
+     */
+    public void setPalette(int circleColor, int fillColor, int ringColor) {
+        circlePaint.setColor(circleColor);
+        liquidPaint.setColor(fillColor);
+        ringPaint.setColor(ringColor);
+        invalidate();
+    }
+
+    /**
+     * Bật/tắt sóng gợn trên mặt nước.
+     *
+     * <p>Tắt ở những màn chỉ hiển thị mức pin tĩnh: sóng vẽ lại 60 lần mỗi giây, ở
+     * màn nào cũng bật thì chính app tiết kiệm pin lại là thứ ngốn pin.
+     */
+    public void setWaveEnabled(boolean enabled) {
+        if (waveEnabled == enabled) return;
+
+        waveEnabled = enabled;
+        if (enabled) {
+            startWave();
+        } else {
+            stopWave();
+            wavePhase = 0f;
+            invalidate();
+        }
     }
 
     /**
@@ -141,7 +218,7 @@ public class LiquidBatteryView extends View {
     }
 
     private void startWave() {
-        if (waveAnimator != null || !isAttachedToWindow()) return;
+        if (!waveEnabled || waveAnimator != null || !isAttachedToWindow()) return;
 
         waveAnimator = ValueAnimator.ofFloat(0f, 1f);
         waveAnimator.setDuration(WAVE_DURATION_MS);
@@ -177,14 +254,51 @@ public class LiquidBatteryView extends View {
         if (size <= 0) return;
 
         final float stroke = ringPaint.getStrokeWidth();
-        final float radius = size / 2f - stroke;
+        final float outerRadius = size / 2f - stroke;
         final float centerX = getWidth() / 2f;
         final float centerY = getHeight() / 2f;
 
+        // Vòng vạch chiếm phần vành ngoài, vòng tròn chất lỏng lùi vào trong
+        final float tickLength = tickRingEnabled ? outerRadius * TICK_LENGTH_RATIO : 0f;
+        final float gap = tickRingEnabled ? outerRadius * TICK_GAP_RATIO : 0f;
+        final float radius = outerRadius - tickLength - gap;
+
+        if (tickRingEnabled) {
+            drawTickRing(canvas, centerX, centerY, outerRadius, tickLength);
+        }
+
         bounds.set(centerX - radius, centerY - radius, centerX + radius, centerY + radius);
 
+        if (circlePaint.getColor() != Color.TRANSPARENT) {
+            canvas.drawCircle(centerX, centerY, radius, circlePaint);
+        }
         drawLiquid(canvas, centerX, centerY, radius);
-        canvas.drawCircle(centerX, centerY, radius, ringPaint);
+        if (ringPaint.getColor() != Color.TRANSPARENT) {
+            canvas.drawCircle(centerX, centerY, radius, ringPaint);
+        }
+    }
+
+    /**
+     * Vòng vạch chỉ mức pin.
+     *
+     * <p>Bắt đầu từ đỉnh và chạy theo chiều kim đồng hồ, nên góc gốc là -90 độ chứ
+     * không phải 0 – hệ toạ độ của Canvas lấy mốc 0 độ ở phía bên phải.
+     */
+    private void drawTickRing(@NonNull Canvas canvas, float centerX, float centerY,
+                              float outerRadius, float tickLength) {
+        final float innerRadius = outerRadius - tickLength;
+        final int activeCount = Math.round(TICK_COUNT * level);
+
+        for (int i = 0; i < TICK_COUNT; i++) {
+            final double angle = Math.toRadians(-90.0 + i * 360.0 / TICK_COUNT);
+            final float cos = (float) Math.cos(angle);
+            final float sin = (float) Math.sin(angle);
+
+            canvas.drawLine(
+                    centerX + innerRadius * cos, centerY + innerRadius * sin,
+                    centerX + outerRadius * cos, centerY + outerRadius * sin,
+                    i < activeCount ? tickActivePaint : tickInactivePaint);
+        }
     }
 
     private void drawLiquid(@NonNull Canvas canvas, float centerX, float centerY, float radius) {
@@ -199,15 +313,19 @@ public class LiquidBatteryView extends View {
         wavePath.reset();
         wavePath.moveTo(left, surfaceY);
 
-        for (int i = 0; i <= WAVE_STEPS; i++) {
-            final float x = left + width * i / (float) WAVE_STEPS;
-            // Hai sóng sin lệch tần số chồng lên nhau: một sóng đơn trông quá đều
-            // và lộ ngay là đồ hoạ máy tính
-            final double angle = 2 * Math.PI * (i / (float) WAVE_STEPS + wavePhase);
-            final float y = surfaceY
-                    + (float) (Math.sin(angle) * waveHeight)
-                    + (float) (Math.sin(angle * 2.3 + 1.1) * waveHeight * 0.45);
-            wavePath.lineTo(x, y);
+        if (waveEnabled) {
+            for (int i = 0; i <= WAVE_STEPS; i++) {
+                final float x = left + width * i / (float) WAVE_STEPS;
+                // Hai sóng sin lệch tần số chồng lên nhau: một sóng đơn trông quá
+                // đều và lộ ngay là đồ hoạ máy tính
+                final double angle = 2 * Math.PI * (i / (float) WAVE_STEPS + wavePhase);
+                final float y = surfaceY
+                        + (float) (Math.sin(angle) * waveHeight)
+                        + (float) (Math.sin(angle * 2.3 + 1.1) * waveHeight * 0.45);
+                wavePath.lineTo(x, y);
+            }
+        } else {
+            wavePath.lineTo(centerX + radius, surfaceY);
         }
 
         wavePath.lineTo(centerX + radius, centerY + radius);

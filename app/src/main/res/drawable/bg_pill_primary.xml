@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nút bo tròn hết cỡ, nền màu thương hiệu: nút "Phát hiện" ở Trang chủ -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/teal_primary" />
+    <corners android:radius="@dimen/radius_pill" />
+</shape>

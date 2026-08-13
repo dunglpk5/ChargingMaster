@@ -19,4 +19,11 @@
     <dimen name="info_icon_size">24dp</dimen>
     <dimen name="tool_icon_size">36dp</dimen>
     <dimen name="bottom_nav_height">60dp</dimen>
+    <!-- Thanh tiêu đề nổi ở Trang chủ: mỏng, chỉ vừa đủ chứa nút 32dp -->
+    <dimen name="toolbar_height">48dp</dimen>
+    <!-- Nút hành động đôi: cao cố định để chữ tự co mà hai nút vẫn bằng nhau -->
+    <dimen name="action_button_height">48dp</dimen>
+    <!-- Vòng tiến trình quét ở màn Dọn dẹp -->
+    <dimen name="clean_ring_size">240dp</dimen>
+    <dimen name="divider_height">1dp</dimen>
 </resources>

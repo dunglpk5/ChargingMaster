@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Một ô công cụ: icon trên, nhãn dưới (tối đa 2 dòng như bản thiết kế) -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -19,18 +20,29 @@
         android:importantForAccessibility="no"
         tools:src="@drawable/ic_tool_history" />
 
+    <!--
+      Nhãn luôn gói gọn trong đúng một dòng.
+
+      Lưới 3 cột khá hẹp mà nhãn dài ngắn rất khác nhau ("Lối tắt" và "Dọn dẹp
+      thông báo" chẳng hạn). Để xuống dòng thì các ô cao thấp so le nhau, còn cắt
+      bằng dấu ba chấm thì mất nghĩa. Dùng autoSizeTextType: chữ tự thu nhỏ vừa đủ
+      cho những nhãn dài, nhãn ngắn vẫn giữ cỡ chuẩn.
+    -->
     <TextView
         android:id="@+id/tvLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space_sm"
-        android:ellipsize="end"
         android:gravity="center"
-        android:maxLines="2"
+        android:maxLines="1"
         android:paddingStart="@dimen/space_xs"
         android:paddingEnd="@dimen/space_xs"
-        android:textColor="@color/text_primary"
+        android:textColor="@color/text_value"
         android:textSize="@dimen/text_caption"
+        app:autoSizeMaxTextSize="@dimen/text_caption"
+        app:autoSizeMinTextSize="9sp"
+        app:autoSizeStepGranularity="1sp"
+        app:autoSizeTextType="uniform"
         tools:text="Lịch sử sạc" />
 
 </LinearLayout>

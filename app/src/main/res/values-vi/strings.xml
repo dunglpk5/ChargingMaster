@@ -6,10 +6,16 @@
     <string name="tab_tools">Công cụ</string>
     <string name="tab_battery_usage">Sử dụng pin</string>
 
-    <string name="home_detect">PHÁT HIỆN</string>
+    <string name="home_detect">Phát hiện</string>
+    <string name="home_ad_badge">AD</string>
+    <string name="home_battery_word">Pin</string>
+    <string name="home_battery_life">Thời lượng pin ước tính</string>
+    <string name="home_health_label">Trạng thái</string>
+    <string name="home_time_to_full">Thời gian còn lại để sạc xong</string>
+    <string name="home_charge_status">Trạng thái sạc</string>
+    <string name="home_battery_status">Trạng thái pin</string>
+    <string name="home_charge_speed_avg">Tốc độ sạc trung bình</string>
     <string name="msg_coming_soon">Sắp có</string>
-    <string name="home_time_remaining">Thời gian còn lại</string>
-    <string name="home_charging_power">Công suất sạc</string>
     <string name="home_plugged">Đã cắm</string>
     <string name="home_temperature">Nhiệt độ</string>
     <string name="home_health">Tình trạng</string>
@@ -53,6 +59,25 @@
     <string name="tools_phone_temperature">Nhiệt độ điện thoại</string>
     <string name="tools_charge_detect">Phát hiện sạc</string>
     <string name="tools_cpu_usage">Sử dụng CPU</string>
+    <string name="tools_stat_storage">Bộ nhớ</string>
+    <string name="tools_stat_ram">RAM</string>
+    <string name="tools_stat_battery">Pin</string>
+    <string name="tools_action_scan">Quét</string>
+    <string name="tools_action_details">Chi tiết</string>
+    <string name="tools_action_monitor">Giám sát</string>
+
+    <!-- Màn Giám sát pin -->
+    <string name="monitor_title">Pin</string>
+    <string name="monitor_recent_days">Lịch sử 3 ngày gần đây</string>
+    <string name="monitor_chart_title">Lịch sử Pin</string>
+    <string name="monitor_last_charge">Thông tin lần sạc cuối</string>
+    <string name="monitor_last_speed">Lần sạc cuối cùng</string>
+    <string name="monitor_last_source">Chế độ sạc pin</string>
+    <string name="monitor_last_duration">Thời gian sạc pin</string>
+    <string name="monitor_last_quality">Chất lượng sạc pin</string>
+    <string name="monitor_since_full">Kể từ lần cuối sạc đầy</string>
+    <string name="monitor_range">Từ %1$d%% đến %2$d%%</string>
+    <string name="monitor_no_result">Không có kết quả</string>
 
     <string name="usage_battery_health">Tình trạng pin</string>
     <string name="usage_health_desc">So sánh dung lượng ước tính của pin với dung lượng thiết kế cho thấy mức độ suy giảm của pin. Chu kỳ sạc dài hơn sẽ cho kết quả ước tính chính xác hơn. Chu kỳ ngắn có thể có sai số đáng kể.</string>
@@ -208,10 +233,39 @@
     <string name="cpu_unavailable">Máy này không cho phép đọc mức sử dụng CPU</string>
     <string name="cpu_estimated_note">Máy này chặn số đo CPU chính xác, nên mức tải bên dưới được ước tính từ xung nhịp và thường cao hơn con số thật.</string>
 
-    <string name="cpu_frequency">Tần số CPU</string>
-    <string name="cpu_core_count">Số lõi CPU</string>
-    <string name="cpu_core_label">CPU Core %1$d</string>
-    <string name="cpu_freq_range">%1$s ~ %2$s</string>
+    <string name="cpu_core_label">CPU %1$d</string>
+    <string name="cpu_freq_range">%1$s - %2$s</string>
+    <string name="cpu_spec_name">Tên</string>
+    <string name="cpu_spec_vendor">Nhà sản xuất</string>
+    <string name="cpu_spec_speed">Tốc độ</string>
+    <string name="cpu_spec_cores">Số nhân</string>
+    <string name="cpu_spec_arch">Kiến trúc</string>
+    <string name="cpu_current_clock">Tốc độ hiện tại</string>
+    <string name="cpu_core_min">Min</string>
+    <string name="cpu_core_max">Max</string>
+
+    <!-- Màn Dọn dẹp bộ nhớ -->
+    <string name="clean_title">Dọn dẹp</string>
+    <string name="clean_junk_cache">Bộ đệm rác</string>
+    <string name="clean_app_cache">Bộ nhớ đệm ứng dụng</string>
+    <string name="clean_obsolete_apk">APK cũ</string>
+    <string name="clean_ad_cache">Bộ đệm AD</string>
+    <string name="clean_downloads">Tệp đã tải</string>
+    <string name="clean_large_files">Tệp tin lớn</string>
+    <string name="clean_scanning">Đang quét…</string>
+    <string name="clean_scan_done">Quét xong</string>
+    <string name="clean_cleaning">Đang dọn…</string>
+    <string name="clean_action">Dọn dẹp</string>
+    <string name="clean_selected">Đã chọn: %1$s</string>
+    <string name="clean_select_group">Chọn nhóm này</string>
+    <string name="clean_freed">Đã giải phóng %1$s</string>
+    <string name="clean_confirm_title">Xoá các tệp này?</string>
+    <string name="clean_confirm_message">Sẽ xoá %1$s thuộc: %2$s.\n\nThao tác này không hoàn tác được.</string>
+    <string name="clean_grant_permission">Cấp quyền</string>
+    <string name="clean_stale_files">Tệp lâu không dùng</string>
+    <string name="clean_permission_required">Cần quyền truy cập bộ nhớ</string>
+    <string name="clean_permission_message">Chức năng quét cần quyền truy cập toàn bộ tệp. Thiếu quyền này, Android che tệp của ứng dụng khác nên lượt quét không thấy và cũng không xoá được tệp rác nào. Hãy cấp quyền để tiếp tục.</string>
+    <string name="clean_permission_unavailable">Máy này không có màn hình để cấp quyền đó</string>
 
     <string name="clean_nothing">Không có dữ liệu cần dọn dẹp</string>
     <string name="clean_card_title">Phát hiện sạc</string>

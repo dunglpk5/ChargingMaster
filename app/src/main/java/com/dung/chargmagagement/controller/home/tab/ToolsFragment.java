@@ -1,6 +1,7 @@
 package com.dung.chargmagagement.controller.home.tab;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,9 +10,11 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
@@ -30,16 +33,18 @@ import com.dung.chargmagagement.controller.history.ChargeHistoryActivity;
 import com.dung.chargmagagement.controller.power.CheckPowerActivity;
 import com.dung.chargmagagement.controller.power.XChargeActivity;
 import com.dung.chargmagagement.controller.settings.SettingsActivity;
+import com.dung.chargmagagement.controller.tools.BatteryMonitorActivity;
 import com.dung.chargmagagement.controller.tools.CpuUsageActivity;
 import com.dung.chargmagagement.controller.tools.NotificationCleanActivity;
 import com.dung.chargmagagement.controller.tools.PhoneTemperatureActivity;
+import com.dung.chargmagagement.controller.tools.StorageCleanActivity;
 import com.dung.chargmagagement.controller.vip.VipActivity;
 import com.dung.chargmagagement.model.ads.AdManager;
 import com.dung.chargmagagement.model.settings.AppLinks;
 import com.dung.chargmagagement.model.vip.VipManager;
 import com.dung.chargmagagement.databinding.FragmentToolsBinding;
 import com.dung.chargmagagement.databinding.ItemMenuRowBinding;
-import com.dung.chargmagagement.databinding.ViewStatColumnBinding;
+import com.dung.chargmagagement.databinding.ViewStatRingCardBinding;
 import com.dung.chargmagagement.model.battery.BatteryInfo;
 import com.dung.chargmagagement.model.battery.BatteryMonitor;
 import com.dung.chargmagagement.model.device.StorageInfo;
@@ -78,20 +83,50 @@ public class ToolsFragment extends BaseFragment<FragmentToolsBinding>
         monitor = BatteryMonitor.get(requireContext());
         systemInfoProvider = new SystemInfoProvider(requireContext());
 
-        setupStatIcons();
+        setupStatCards();
         setupToolGrid(binding.rvVipTools, buildVipTools());
         setupToolGrid(binding.rvDetectTools, buildDetectTools());
         setupToolGrid(binding.rvGeneralTools, buildGeneralTools());
         setupMenuRows();
 
+        binding.btnRemoveAds.setOnClickListener(v -> VipActivity.start(requireContext()));
+        binding.btnMore.setOnClickListener(v -> SettingsActivity.start(requireContext()));
         binding.tvAppVersion.setText(getString(R.string.settings_version, BuildConfig.VERSION_NAME));
     }
 
-    /** Ba cột chỉ số dùng chung một layout nên phải gán icon bằng code. */
-    private void setupStatIcons() {
-        binding.statStorage.imgStatIcon.setImageResource(R.drawable.ic_stat_storage);
-        binding.statRam.imgStatIcon.setImageResource(R.drawable.ic_stat_ram);
-        binding.statTemperature.imgStatIcon.setImageResource(R.drawable.ic_stat_temp);
+    /**
+     * Ba thẻ chỉ số dùng chung một layout nên phải gán màu, nhãn và hành động
+     * bằng code. Mỗi thẻ một màu riêng để phân biệt được ngay từ xa.
+     */
+    private void setupStatCards() {
+        bindStatCard(binding.cardStorage, R.string.tools_stat_storage,
+                R.string.tools_action_scan, R.color.stat_storage,
+                () -> StorageCleanActivity.start(requireContext()));
+
+        bindStatCard(binding.cardRam, R.string.tools_stat_ram,
+                R.string.tools_action_details, R.color.teal_primary,
+                () -> PhoneDetailActivity.start(requireContext()));
+
+        bindStatCard(binding.cardBattery, R.string.tools_stat_battery,
+                R.string.tools_action_monitor, R.color.stat_battery,
+                () -> BatteryMonitorActivity.start(requireContext()));
+    }
+
+    private void bindStatCard(@NonNull ViewStatRingCardBinding card, int titleRes,
+                              int actionRes, @ColorRes int colorRes, @NonNull Runnable onAction) {
+        final int color = ContextCompat.getColor(requireContext(), colorRes);
+
+        card.tvRingTitle.setText(titleRes);
+        card.tvRingPercent.setTextColor(color);
+        card.ringProgress.setProgressColor(color);
+
+        card.btnRingAction.setText(actionRes);
+        card.btnRingAction.setBackgroundResource(R.drawable.bg_pill_primary);
+        // Nhuộm nền nút thay vì tạo ba drawable gần giống nhau. Dùng backgroundTintList
+        // của View chứ không setTint lên chính drawable: ba nút nạp từ cùng một tệp
+        // nên dùng chung ConstantState, nhuộm trực tiếp là cả ba đổi màu theo.
+        card.btnRingAction.setBackgroundTintList(ColorStateList.valueOf(color));
+        card.btnRingAction.setOnClickListener(v -> onAction.run());
     }
 
     private void setupToolGrid(@NonNull RecyclerView recyclerView, @NonNull List<ToolItem> items) {
@@ -108,43 +143,43 @@ public class ToolsFragment extends BaseFragment<FragmentToolsBinding>
     private List<ToolItem> buildVipTools() {
         return Arrays.asList(
                 new ToolItem(ToolItem.Action.NO_ADS,
-                        R.drawable.ic_tool_no_ads, R.string.tools_no_ads, R.color.icon_dark),
+                        R.drawable.ic_tool_no_ads, R.string.tools_no_ads, R.color.teal_primary),
                 new ToolItem(ToolItem.Action.CHARGE_ALARM,
-                        R.drawable.ic_tool_alarm, R.string.tools_charge_alarm, R.color.icon_dark),
+                        R.drawable.ic_tool_alarm, R.string.tools_charge_alarm, R.color.teal_primary),
                 new ToolItem(ToolItem.Action.PRIORITY_SUPPORT,
-                        R.drawable.ic_tool_support, R.string.tools_priority_support, R.color.icon_dark),
+                        R.drawable.ic_tool_support, R.string.tools_priority_support, R.color.teal_primary),
                 new ToolItem(ToolItem.Action.CHARGE_HISTORY,
-                        R.drawable.ic_tool_history, R.string.tools_charge_history, R.color.icon_dark),
+                        R.drawable.ic_tool_history, R.string.tools_charge_history, R.color.teal_primary),
                 new ToolItem(ToolItem.Action.X_CHARGE,
-                        R.drawable.ic_tool_check, R.string.tools_x_charge, R.color.icon_dark),
+                        R.drawable.ic_voltage, R.string.tools_x_charge, R.color.teal_primary),
                 new ToolItem(ToolItem.Action.MORE,
-                        R.drawable.ic_tool_more, R.string.tools_more, R.color.icon_dark));
+                        R.drawable.ic_tool_more, R.string.tools_more, R.color.teal_primary));
     }
 
     private List<ToolItem> buildDetectTools() {
         return Arrays.asList(
                 new ToolItem(ToolItem.Action.DEVICE_INFO,
-                        R.drawable.ic_phone, R.string.tools_device_info, R.color.icon_accent),
+                        R.drawable.ic_phone, R.string.tools_device_info, R.color.teal_primary),
                 new ToolItem(ToolItem.Action.CLEAN_NOTIFICATION,
-                        R.drawable.ic_tool_notification, R.string.tools_clean_notification, R.color.icon_accent),
+                        R.drawable.ic_tool_notification, R.string.tools_clean_notification, R.color.teal_primary),
                 new ToolItem(ToolItem.Action.CLEAN_CLIPBOARD,
-                        R.drawable.ic_tool_clipboard, R.string.tools_clean_clipboard, R.color.icon_accent),
+                        R.drawable.ic_tool_clipboard, R.string.tools_clean_clipboard, R.color.teal_primary),
                 new ToolItem(ToolItem.Action.PHONE_TEMPERATURE,
-                        R.drawable.ic_tool_snowflake, R.string.tools_phone_temperature, R.color.icon_accent),
+                        R.drawable.ic_tool_snowflake, R.string.tools_phone_temperature, R.color.teal_primary),
                 new ToolItem(ToolItem.Action.CHARGE_DETECT,
-                        R.drawable.ic_tool_charge, R.string.tools_charge_detect, R.color.icon_accent),
+                        R.drawable.ic_xcharge, R.string.tools_charge_detect, R.color.teal_primary),
                 new ToolItem(ToolItem.Action.CPU_USAGE,
-                        R.drawable.ic_tool_cpu, R.string.tools_cpu_usage, R.color.icon_accent));
+                        R.drawable.ic_tool_cpu, R.string.tools_cpu_usage, R.color.teal_primary));
     }
 
     private List<ToolItem> buildGeneralTools() {
         return Arrays.asList(
                 new ToolItem(ToolItem.Action.MANAGE_APPS,
-                        R.drawable.ic_logo_android, R.string.tools_manage_apps, R.color.icon_accent),
+                        R.drawable.ic_logo_android, R.string.tools_manage_apps, R.color.teal_primary),
                 new ToolItem(ToolItem.Action.SHORTCUT,
-                        R.drawable.ic_xcharge, R.string.tools_shortcut, R.color.icon_accent),
+                        R.drawable.ic_heart, R.string.tools_shortcut, R.color.teal_primary),
                 new ToolItem(ToolItem.Action.CLEAR_CACHE,
-                        R.drawable.ic_clear_cache, R.string.tools_clear_cache, R.color.icon_accent));
+                        R.drawable.ic_clear_cache, R.string.tools_clear_cache, R.color.teal_primary));
     }
 
     /** Bốn dòng của nhóm "Khác" dùng chung một layout nên gán nội dung bằng code. */
@@ -201,17 +236,18 @@ public class ToolsFragment extends BaseFragment<FragmentToolsBinding>
     /** Đọc bộ nhớ và RAM ở thread nền rồi đổ ra header. */
     private void loadSystemInfo() {
         executors.execute(systemInfoProvider::getStorageInfo,
-                result -> bindStat(binding == null ? null : binding.statStorage, result));
+                result -> bindStat(binding == null ? null : binding.cardStorage, result));
 
         executors.execute(systemInfoProvider::getRamInfo,
-                result -> bindStat(binding == null ? null : binding.statRam, result));
+                result -> bindStat(binding == null ? null : binding.cardRam, result));
     }
 
-    private void bindStat(@Nullable ViewStatColumnBinding column, @Nullable StorageInfo info) {
-        if (column == null || info == null || !info.hasData()) return;
+    private void bindStat(@Nullable ViewStatRingCardBinding card, @Nullable StorageInfo info) {
+        if (card == null || info == null || !info.hasData()) return;
 
-        column.tvStatValue.setText(String.format(Locale.US, "%d%%", info.getUsedPercent()));
-        column.tvStatDetail.setText(String.format(Locale.US, "%s/%s",
+        card.ringProgress.setPercent(info.getUsedPercent());
+        card.tvRingPercent.setText(String.format(Locale.US, "%d%%", info.getUsedPercent()));
+        card.tvRingDetail.setText(String.format(Locale.US, "%s/%s",
                 FormatUtils.formatBytes(info.getUsedBytes()),
                 FormatUtils.formatBytes(info.getTotalBytes())));
     }
@@ -220,11 +256,11 @@ public class ToolsFragment extends BaseFragment<FragmentToolsBinding>
     public void onBatteryUpdated(@NonNull BatteryInfo info, int smoothedMa) {
         if (binding == null) return;
 
-        final float celsius = info.getTemperatureCelsius();
-        binding.statTemperature.tvStatValue.setText(
-                String.format(Locale.US, "%.0f ℃", celsius));
-        binding.statTemperature.tvStatDetail.setText(
-                String.format(Locale.US, "%.0f ℉", FormatUtils.celsiusToFahrenheit(celsius)));
+        binding.cardBattery.ringProgress.setPercent(info.getPercent());
+        binding.cardBattery.tvRingPercent.setText(
+                String.format(Locale.US, "%d%%", info.getPercent()));
+        binding.cardBattery.tvRingDetail.setText(
+                String.format(Locale.US, "%.0f℃", info.getTemperatureCelsius()));
     }
 
     // ==================== Điều hướng ====================

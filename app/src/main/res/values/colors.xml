@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- ==== Màu thương hiệu (lấy từ bản thiết kế) ==== -->
-    <color name="teal_primary">#0F7A6E</color>
-    <color name="teal_primary_dark">#0A5F56</color>
+    <!-- ==== Màu thương hiệu ==== -->
+    <color name="teal_primary">#008D9B</color>
+    <color name="teal_primary_dark">#006B76</color>
     <color name="green_accent">#00C853</color>
 
+    <!-- Vòng tròn mức pin ở Trang chủ: nền tối, phần pin còn lại màu thương hiệu -->
+    <color name="battery_circle_bg">#111417</color>
+    <!-- Vạch chưa đạt tới trên vòng tiến trình: cùng tông nhưng nhạt hẳn -->
+    <color name="battery_tick_inactive">#33008D9B</color>
+
     <!-- ==== Nền & bề mặt ==== -->
-    <color name="bg_screen">#F5F5F5</color>
+    <!-- Khớp đúng màu thân của bg_app.png để không thấy đường ghép ở mép -->
+    <color name="bg_screen">#F0F0EE</color>
     <color name="bg_surface">#FFFFFF</color>
     <color name="divider">#E0E0E0</color>
 
     <!-- ==== Chữ ==== -->
     <color name="text_primary">#212121</color>
     <color name="text_secondary">#9E9E9E</color>
-    <color name="text_value">#0F7A6E</color>
+    <color name="text_value">#008D9B</color>
     <color name="text_on_primary">#FFFFFF</color>
     <color name="text_on_primary_60">#99FFFFFF</color>
 
@@ -22,9 +28,13 @@
     <color name="state_warning">#FFA000</color>
     <color name="state_danger">#E53935</color>
 
+    <!-- ==== Ba thẻ chỉ số đầu tab Công cụ ==== -->
+    <color name="ring_track">#E8EAEA</color>
+    <color name="stat_storage">#2E9B2E</color>
+    <color name="stat_battery">#1565C0</color>
+
     <!-- ==== Icon ==== -->
     <color name="icon_dark">#212121</color>
-    <color name="icon_accent">#00C853</color>
 
     <!-- ==== Nhiệt kế (màn Nhiệt độ điện thoại) ==== -->
     <color name="thermo_fill">#FF7A00</color>
@@ -45,9 +55,9 @@
     <color name="shield_blue">#3E9BD8</color>
 
     <!-- Màn X-Sạc: vòng tròn chất lỏng và chip đếm mục cần tắt -->
-    <color name="liquid_ring">#3D8A7C</color>
-    <color name="liquid_fill">#7FCBB6</color>
-    <color name="chip_dark">#2B3A38</color>
+    <color name="liquid_ring">#3FA7B2</color>
+    <color name="liquid_fill">#7FCBD3</color>
+    <color name="chip_dark">#2B3739</color>
     <color name="stage_inactive">#66FFFFFF</color>
     <color name="badge_red">#D32F2F</color>
 

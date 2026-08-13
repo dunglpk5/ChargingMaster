@@ -1,198 +1,319 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Tab Trang chủ:
-  - Khối header teal: tiêu đề + 2 nút, % pin, nút PHÁT HIỆN, 2 cột số liệu
-  - Danh sách thông tin pin bên dưới (RecyclerView nền trắng)
+  Tab Trang chủ, xếp thành các thẻ trắng:
+  1. Mức pin (vòng tròn) + thời lượng ước tính + trạng thái + nút Phát hiện
+  2. Trạng thái nguồn + thời gian sạc xong + công suất sạc
+  3. Trạng thái sạc: dòng sạc / điện áp / tốc độ sạc trung bình
+  4. Thông tin máy
+
+  Nền là ảnh bg_app (dải teal cong ở đầu, thân xám). Ảnh được đặt ở FrameLayout
+  ngoài cùng nên nó đứng yên khi nội dung bên trong cuộn – đặt vào chính
+  NestedScrollView thì nền sẽ trôi theo và dải teal biến mất ngay khi cuộn.
 -->
-<androidx.constraintlayout.widget.ConstraintLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_screen">
+    android:background="@drawable/bg_app">
 
-    <!-- ==================== HEADER ==================== -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/header"
-        android:layout_width="0dp"
+<androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:fillViewport="true"
+    android:overScrollMode="never"
+    android:paddingTop="@dimen/toolbar_height">
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/space_lg">
+
+        <!-- ==================== 1. MỨC PIN ==================== -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_md"
+            android:layout_marginTop="@dimen/space_md"
+            android:layout_marginEnd="@dimen/space_md"
+            android:background="@drawable/bg_card_rounded"
+            android:baselineAligned="false"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/space_md">
+
+            <!--
+              Vòng tròn mức pin, chữ đặt đè lên giữa.
+              Khung rộng hơn phần chất lỏng vì còn phải chứa vòng vạch bao ngoài.
+            -->
+            <FrameLayout
+                android:layout_width="140dp"
+                android:layout_height="140dp">
+
+                <com.dung.chargmagagement.controller.widget.LiquidBatteryView
+                    android:id="@+id/batteryCircle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvPercent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_on_primary"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        tools:text="41%" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/home_battery_word"
+                        android:textAllCaps="true"
+                        android:textColor="@color/text_on_primary"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_md"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvBatteryLifeValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_title"
+                    android:textStyle="bold"
+                    tools:text="8 giờ" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/home_battery_life"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_caption" />
+
+                <TextView
+                    android:id="@+id/btnDetect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_md"
+                    android:background="@drawable/bg_pill_primary"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:paddingStart="@dimen/space_lg"
+                    android:paddingTop="12dp"
+                    android:paddingEnd="@dimen/space_lg"
+                    android:paddingBottom="12dp"
+                    android:text="@string/home_detect"
+                    android:textColor="@color/text_on_primary"
+                    android:textSize="@dimen/text_body"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- ==================== 3. TRẠNG THÁI SẠC ==================== -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_md"
+            android:layout_marginTop="@dimen/space_md"
+            android:layout_marginEnd="@dimen/space_md"
+            android:background="@drawable/bg_card_rounded"
+            android:orientation="vertical"
+            android:padding="@dimen/space_md">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/home_charge_status"
+                android:textColor="@color/text_primary"
+                android:textSize="@dimen/text_title"
+                android:textStyle="bold" />
+
+            <include
+                android:id="@+id/rowCurrent"
+                layout="@layout/view_charge_stat_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_md" />
+
+            <include
+                android:id="@+id/rowVoltage"
+                layout="@layout/view_charge_stat_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_md" />
+
+            <include
+                android:id="@+id/rowSpeed"
+                layout="@layout/view_charge_stat_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_md" />
+
+        </LinearLayout>
+
+        <!-- ==================== 3. TRẠNG THÁI PIN ==================== -->
+        <LinearLayout
+            android:id="@+id/cardBatteryStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_md"
+            android:layout_marginTop="@dimen/space_md"
+            android:layout_marginEnd="@dimen/space_md"
+            android:background="@drawable/bg_card_rounded"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/space_md"
+            android:paddingTop="@dimen/space_md"
+            android:paddingEnd="@dimen/space_md"
+            android:paddingBottom="@dimen/space_sm">
+
+            <!-- Tiêu đề kèm mũi tên: cả thẻ bấm được, dẫn sang Thông tin thiết bị -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/home_battery_status"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_title"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_chevron_right"
+                    app:tint="@color/text_secondary" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@drawable/divider_horizontal"
+                android:orientation="vertical"
+                android:showDividers="middle">
+
+                <include
+                    android:id="@+id/rowStatus"
+                    layout="@layout/view_device_info_row" />
+
+                <include
+                    android:id="@+id/rowTemperature"
+                    layout="@layout/view_device_info_row" />
+
+                <include
+                    android:id="@+id/rowCapacity"
+                    layout="@layout/view_device_info_row" />
+
+                <include
+                    android:id="@+id/rowTechnology"
+                    layout="@layout/view_device_info_row" />
+
+                <include
+                    android:id="@+id/rowModel"
+                    layout="@layout/view_device_info_row" />
+
+                <include
+                    android:id="@+id/rowPlugged"
+                    layout="@layout/view_device_info_row" />
+
+                <include
+                    android:id="@+id/rowTimeToFull"
+                    layout="@layout/view_device_info_row" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
+
+    <!--
+      Thanh tiêu đề mỏng, nổi đè lên nội dung. Đặt sau NestedScrollView trong
+      FrameLayout để luôn vẽ đè lên trên và nằm yên khi nội dung bên dưới cuộn.
+
+      Nền teal đặc, cùng đúng màu với dải cong của bg_app nên nhìn liền một khối.
+      Không để trong suốt: các thẻ trắng cuộn qua phía sau sẽ lộ ra ngay dưới chữ
+      tiêu đề và làm nó không đọc được.
+    -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
         android:background="@color/teal_primary"
-        android:paddingBottom="@dimen/space_lg"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:baselineAligned="false"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/space_md"
+        android:paddingEnd="@dimen/space_md">
 
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space_md"
-            android:layout_marginTop="@dimen/space_md"
+            android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="@string/app_name"
             android:textAllCaps="true"
             android:textColor="@color/text_on_primary"
-            android:textSize="@dimen/text_title"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@id/btnRemoveAds"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="@dimen/text_body"
+            android:textStyle="bold" />
 
-        <ImageView
+        <TextView
             android:id="@+id/btnRemoveAds"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/bg_circle_outline_white"
+            android:clickable="true"
             android:contentDescription="@string/cd_remove_ads"
-            android:padding="@dimen/space_xs"
-            android:src="@drawable/ic_remove_ads"
-            app:layout_constraintBottom_toBottomOf="@id/tvTitle"
-            app:layout_constraintEnd_toStartOf="@id/btnMore"
-            app:layout_constraintTop_toTopOf="@id/tvTitle" />
+            android:focusable="true"
+            android:gravity="center"
+            android:text="@string/home_ad_badge"
+            android:textColor="@color/text_on_primary"
+            android:textSize="11sp"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/btnMore"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="@dimen/space_md"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="@dimen/space_sm"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/cd_menu"
             android:padding="@dimen/space_xs"
             android:src="@drawable/ic_more"
-            app:layout_constraintBottom_toBottomOf="@id/tvTitle"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tvTitle" />
+            app:tint="@color/text_on_primary" />
 
-        <!-- Cụm icon pin + phần trăm, căn giữa theo cả nhóm -->
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/barrierTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="bottom"
-            app:constraint_referenced_ids="tvTitle,btnMore" />
+    </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/groupPercent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_lg"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/barrierTitle">
-
-            <ImageView
-                android:id="@+id/imgBattery"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:contentDescription="@string/cd_battery_icon"
-                android:src="@drawable/ic_battery_level"
-                app:tint="@color/text_on_primary" />
-
-            <TextView
-                android:id="@+id/tvPercent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/space_sm"
-                android:textColor="@color/text_on_primary"
-                android:textSize="@dimen/text_battery_percent"
-                android:textStyle="bold"
-                tools:text="32%" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/btnDetect"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_md"
-            android:background="@drawable/bg_detect_button"
-            android:clickable="true"
-            android:focusable="true"
-            android:minWidth="200dp"
-            android:paddingStart="@dimen/space_xl"
-            android:paddingTop="14dp"
-            android:paddingEnd="@dimen/space_xl"
-            android:paddingBottom="14dp"
-            android:text="@string/home_detect"
-            android:textAlignment="center"
-            android:textColor="@color/teal_primary"
-            android:textSize="@dimen/text_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/groupPercent" />
-
-        <!-- Hai cột số liệu: Thời gian còn lại | Công suất sạc -->
-        <TextView
-            android:id="@+id/tvRemainingLabel"
-            style="@style/Text.HeaderLabel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_lg"
-            android:gravity="center"
-            android:text="@string/home_time_remaining"
-            app:layout_constraintEnd_toStartOf="@id/tvPowerLabel"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnDetect" />
-
-        <TextView
-            android:id="@+id/tvRemainingValue"
-            style="@style/Text.HeaderLabel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_sm"
-            android:gravity="center"
-            android:text="@string/value_placeholder"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@id/tvRemainingLabel"
-            app:layout_constraintStart_toStartOf="@id/tvRemainingLabel"
-            app:layout_constraintTop_toBottomOf="@id/tvRemainingLabel"
-            tools:text="2h 15m" />
-
-        <TextView
-            android:id="@+id/tvPowerLabel"
-            style="@style/Text.HeaderLabel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/home_charging_power"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tvRemainingLabel"
-            app:layout_constraintTop_toTopOf="@id/tvRemainingLabel" />
-
-        <TextView
-            android:id="@+id/tvPowerValue"
-            style="@style/Text.HeaderLabel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_sm"
-            android:gravity="center"
-            android:text="@string/value_placeholder"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@id/tvPowerLabel"
-            app:layout_constraintStart_toStartOf="@id/tvPowerLabel"
-            app:layout_constraintTop_toBottomOf="@id/tvPowerLabel"
-            tools:text="12.5 W" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!-- ==================== DANH SÁCH THÔNG TIN ==================== -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvInfo"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/bg_surface"
-        android:clipToPadding="false"
-        android:overScrollMode="never"
-        android:paddingTop="@dimen/space_sm"
-        android:paddingBottom="@dimen/space_md"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/header"
-        tools:itemCount="8"
-        tools:listitem="@layout/item_info_row" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

@@ -1,5 +1,7 @@
 package com.dung.chargmagagement.model.device;
 
+import android.os.Build;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
@@ -43,6 +45,50 @@ public final class CpuInfoReader {
             if (value != null && !value.isEmpty()) return value;
         }
         return null;
+    }
+
+    /**
+     * Mã chip hiển thị, ví dụ "MT6789".
+     *
+     * <p>Từ Android 12 hệ thống có sẵn {@code Build.SOC_MODEL} và đó là nguồn
+     * đáng tin nhất. Máy cũ hơn phải lùi về {@code /proc/cpuinfo}, cuối cùng mới
+     * dùng {@code Build.HARDWARE} vì trường này hay chứa tên nội bộ của ROM.
+     */
+    @WorkerThread
+    @Nullable
+    public static String getSocModel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && isUsable(Build.SOC_MODEL)) {
+            return Build.SOC_MODEL;
+        }
+        final String fromProc = getChipName();
+        if (isUsable(fromProc)) return fromProc;
+        return isUsable(Build.HARDWARE) ? Build.HARDWARE : null;
+    }
+
+    /** Hãng sản xuất chip; null nếu không xác định được. */
+    @WorkerThread
+    @Nullable
+    public static String getSocManufacturer() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && isUsable(Build.SOC_MANUFACTURER)) {
+            return Build.SOC_MANUFACTURER;
+        }
+        return CpuVendor.fromChipName(getSocModel());
+    }
+
+    /** Tập lệnh đang chạy, ví dụ "Arm64-v8a". */
+    @Nullable
+    public static String getPrimaryAbi() {
+        final String[] abis = Build.SUPPORTED_ABIS;
+        if (abis == null || abis.length == 0 || !isUsable(abis[0])) return null;
+
+        final String abi = abis[0];
+        return Character.toUpperCase(abi.charAt(0)) + abi.substring(1);
+    }
+
+    /** Android trả chuỗi "unknown" khi thiếu dữ liệu, phải loại cùng với null. */
+    private static boolean isUsable(@Nullable String value) {
+        return value != null && !value.trim().isEmpty()
+                && !"unknown".equalsIgnoreCase(value.trim());
     }
 
     /** Kiến trúc tập lệnh, ví dụ "AArch64". */
@@ -104,6 +150,36 @@ public final class CpuInfoReader {
     public static long getCurrentFrequencyKhz(int core) {
         Long value = FileUtils.readLong(CPU_DIR + core + "/cpufreq/scaling_cur_freq");
         return value == null ? 0L : value;
+    }
+
+    /**
+     * Mã "CPU part" của từng nhân, theo thứ tự nhân trong {@code /proc/cpuinfo}.
+     *
+     * <p>Mảng luôn dài đúng {@code coreCount}; phần tử -1 nghĩa là không đọc được.
+     * Một số ROM chỉ liệt kê các nhân đang thức, nên số dòng đọc được có thể ít
+     * hơn số nhân thật – phần thiếu giữ nguyên -1 thay vì dồn lệch chỉ số.
+     */
+    @WorkerThread
+    @NonNull
+    public static int[] readCoreParts(int coreCount) {
+        int[] parts = new int[Math.max(0, coreCount)];
+        java.util.Arrays.fill(parts, -1);
+
+        try (java.io.BufferedReader reader =
+                     new java.io.BufferedReader(new java.io.FileReader(PROC_CPUINFO), 2048)) {
+            String line;
+            int slot = 0;
+            while ((line = reader.readLine()) != null && slot < parts.length) {
+                final int separator = line.indexOf(':');
+                if (separator < 0) continue;
+
+                if (!"CPU part".equalsIgnoreCase(line.substring(0, separator).trim())) continue;
+                parts[slot++] = CpuPartName.parsePart(line.substring(separator + 1));
+            }
+        } catch (Exception e) {
+            // Giữ nguyên mảng -1: thiếu tên nhân thì màn hình bỏ trống chỗ đó
+        }
+        return parts;
     }
 
     /** Đổi kHz sang chuỗi GHz dễ đọc, ví dụ "2.40 GHz". */

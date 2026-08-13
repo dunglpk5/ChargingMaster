@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Chấm chỉ trang biểu đồ; màu được đổi bằng backgroundTintList trong code -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="@color/text_on_primary" />
+</shape>

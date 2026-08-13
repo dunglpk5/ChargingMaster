@@ -20,6 +20,22 @@
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
 
+    <!--
+      Quét và xoá tệp rác ở màn Dọn dẹp bộ nhớ.
+      Từ Android 11 READ_EXTERNAL_STORAGE không còn thấy tệp của ứng dụng khác,
+      muốn duyệt cả bộ nhớ phải có MANAGE_EXTERNAL_STORAGE – quyền đặc biệt,
+      người dùng phải tự bật trong Cài đặt.
+    -->
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="29" />
+    <uses-permission
+        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+
     <!-- Foreground service theo dõi phiên sạc liên tục -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
@@ -140,6 +156,20 @@
         <activity
             android:name=".controller.tools.PhoneTemperatureActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
+        <activity
+            android:name=".controller.tools.BatteryMonitorActivity"
+            android:exported="false"
+            android:parentActivityName=".controller.home.HomeActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
+        <activity
+            android:name=".controller.tools.StorageCleanActivity"
+            android:exported="false"
+            android:parentActivityName=".controller.home.HomeActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
 

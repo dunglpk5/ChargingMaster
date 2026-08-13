@@ -1,5 +1,6 @@
 package com.dung.chargmagagement.controller.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -8,86 +9,72 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dung.chargmagagement.R;
 import com.dung.chargmagagement.databinding.ItemCpuCoreBinding;
+import com.dung.chargmagagement.model.device.ClockFormat;
+import com.dung.chargmagagement.model.device.CpuCore;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
- * Adapter cho lưới biểu đồ tải từng nhân CPU.
+ * Lưới thẻ tải từng nhân CPU.
  *
- * <p>Khác với các adapter còn lại, adapter này <b>giữ tham chiếu tới view của mỗi
- * ô</b>: biểu đồ là cửa sổ trượt, mỗi chu kỳ ta chỉ thêm một mẫu mới chứ không
- * dựng lại dữ liệu. Nếu dùng {@code notifyItemChanged} thì lịch sử vẽ trong view
- * sẽ bị mất mỗi lần bind lại.
+ * <p>Adapter đọc thẳng danh sách {@link CpuCore} do màn hình sở hữu và chỉ báo
+ * "dữ liệu đã đổi" sau mỗi lần lấy mẫu. Cách này thay cho bản cũ vốn phải giữ
+ * tham chiếu tới từng ViewHolder – thứ chỉ cần thiết khi ô có biểu đồ trượt cần
+ * nhớ lịch sử, mà thiết kế mới thì không còn.
  */
 public class CpuCoreAdapter extends RecyclerView.Adapter<CpuCoreAdapter.CoreViewHolder> {
 
-    private final int coreCount;
+    private final List<CpuCore> cores;
 
-    /** ViewHolder theo vị trí nhân, để đẩy mẫu mới vào đúng biểu đồ. */
-    private final List<CoreViewHolder> holders = new ArrayList<>();
-
-    public CpuCoreAdapter(int coreCount) {
-        this.coreCount = Math.max(0, coreCount);
+    public CpuCoreAdapter(@NonNull List<CpuCore> cores) {
+        this.cores = cores;
     }
 
     @NonNull
     @Override
     public CoreViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemCpuCoreBinding binding = ItemCpuCoreBinding.inflate(
-                LayoutInflater.from(parent.getContext()), parent, false);
-        return new CoreViewHolder(binding);
+        return new CoreViewHolder(ItemCpuCoreBinding.inflate(
+                LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull CoreViewHolder holder, int position) {
-        holder.bind(position);
-        if (!holders.contains(holder)) {
-            holders.add(holder);
-        }
-    }
-
-    @Override
-    public void onViewRecycled(@NonNull CoreViewHolder holder) {
-        super.onViewRecycled(holder);
-        holders.remove(holder);
+        holder.bind(cores.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return coreCount;
-    }
-
-    /**
-     * Đẩy một mẫu mới vào biểu đồ của một nhân.
-     *
-     * @param core    chỉ số nhân
-     * @param percent mức tải 0..100
-     */
-    public void addSample(int core, int percent) {
-        for (CoreViewHolder holder : holders) {
-            if (holder.coreIndex == core) {
-                holder.binding.chartCore.addSample(percent);
-                return;
-            }
-        }
+        return cores.size();
     }
 
     static class CoreViewHolder extends RecyclerView.ViewHolder {
 
         private final ItemCpuCoreBinding binding;
-        private int coreIndex;
 
         CoreViewHolder(@NonNull ItemCpuCoreBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
-        void bind(int core) {
-            coreIndex = core;
+        void bind(@NonNull CpuCore core) {
+            final Context context = binding.getRoot().getContext();
+
             binding.tvCoreLabel.setText(
-                    binding.getRoot().getContext().getString(R.string.cpu_core_label, core));
-            binding.chartCore.clear();
+                    context.getString(R.string.cpu_core_label, core.getDisplayNumber()));
+            binding.tvCoreName.setText(core.name == null ? "" : core.name);
+
+            binding.tvCoreClock.setText(ClockFormat.format(core.currentKhz));
+            binding.tvCoreMin.setText(ClockFormat.format(core.minKhz));
+            binding.tvCoreMax.setText(ClockFormat.format(core.maxKhz));
+
+            // Chưa đo được thì để trống và thanh về 0, tuyệt đối không hiện "0%"
+            // vì 0% trông y hệt một nhân đang hoàn toàn rảnh
+            final boolean measured = core.loadPercent != CpuCore.LOAD_UNKNOWN;
+            binding.tvCoreLoad.setText(measured
+                    ? String.format(Locale.getDefault(), "%d%%", core.loadPercent)
+                    : context.getString(R.string.value_placeholder));
+            binding.progressCore.setProgress(measured ? core.loadPercent : 0);
         }
     }
 }

@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Màn Dọn dẹp bộ nhớ, mở từ nút "Quét" ở thẻ Bộ nhớ trong tab Công cụ:
+  1. Vòng tiến trình quét, tổng dung lượng tìm được ở giữa
+  2. Sáu nhóm tệp thừa, mỗi nhóm tick được
+  3. Thanh dưới cùng: tổng đã chọn + nút dọn
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_app">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:paddingTop="@dimen/toolbar_height">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/space_md"
+            android:paddingEnd="@dimen/space_md"
+            android:paddingBottom="@dimen/space_lg">
+
+            <!-- ==================== 1. VÒNG TIẾN TRÌNH ==================== -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_md"
+                android:background="@drawable/bg_card_rounded"
+                android:padding="@dimen/space_lg">
+
+                <FrameLayout
+                    android:layout_width="@dimen/clean_ring_size"
+                    android:layout_height="@dimen/clean_ring_size"
+                    android:layout_gravity="center">
+
+                    <com.dung.chargmagagement.controller.widget.RingProgressView
+                        android:id="@+id/ringScan"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/ivScanIcon"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_broom"
+                            app:tint="@color/teal_primary" />
+
+                        <TextView
+                            android:id="@+id/tvFoundSize"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_sm"
+                            android:textColor="@color/text_value"
+                            android:textSize="@dimen/text_title"
+                            android:textStyle="bold"
+                            tools:text="2.66 GB" />
+
+                        <TextView
+                            android:id="@+id/tvScanState"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="@dimen/text_caption"
+                            tools:text="Đang quét…" />
+
+                    </LinearLayout>
+
+                </FrameLayout>
+
+            </FrameLayout>
+
+            <!-- Chỉ hiện khi chưa được cấp quyền quản lý tệp -->
+            <LinearLayout
+                android:id="@+id/cardPermission"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_md"
+                android:background="@drawable/bg_card_rounded"
+                android:orientation="vertical"
+                android:padding="@dimen/space_md"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/clean_permission_message"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_caption" />
+
+                <TextView
+                    android:id="@+id/btnGrantPermission"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="@dimen/space_sm"
+                    android:background="@drawable/bg_pill_primary"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:paddingStart="@dimen/space_lg"
+                    android:paddingTop="@dimen/space_sm"
+                    android:paddingEnd="@dimen/space_lg"
+                    android:paddingBottom="@dimen/space_sm"
+                    android:text="@string/clean_grant_permission"
+                    android:textColor="@color/text_on_primary"
+                    android:textSize="@dimen/text_body" />
+
+            </LinearLayout>
+
+            <!-- ==================== 2. CÁC NHÓM RÁC ==================== -->
+            <LinearLayout
+                android:id="@+id/groupRows"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_md"
+                android:background="@drawable/bg_card_rounded"
+                android:orientation="vertical"
+                android:paddingStart="@dimen/space_md"
+                android:paddingEnd="@dimen/space_md" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- ==================== 3. THANH HÀNH ĐỘNG ==================== -->
+    <LinearLayout
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/bg_surface"
+        android:baselineAligned="false"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/space_md">
+
+        <TextView
+            android:id="@+id/tvSelectedSize"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/text_caption"
+            tools:text="Đã chọn 6.80 MB" />
+
+        <TextView
+            android:id="@+id/btnClean"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/action_button_height"
+            android:layout_marginStart="@dimen/space_md"
+            android:background="@drawable/bg_pill_primary"
+            android:clickable="true"
+            android:enabled="false"
+            android:focusable="true"
+            android:gravity="center"
+            android:minWidth="140dp"
+            android:text="@string/clean_action"
+            android:textColor="@color/text_on_primary"
+            android:textSize="@dimen/text_body" />
+
+    </LinearLayout>
+
+    <!-- Thanh tiêu đề mỏng, nổi đè lên nội dung -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="@color/teal_primary"
+        android:baselineAligned="false"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/space_sm"
+        android:paddingEnd="@dimen/space_md">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/cd_back"
+            android:padding="@dimen/space_sm"
+            android:src="@drawable/ic_back"
+            app:tint="@color/text_on_primary" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_sm"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/clean_title"
+            android:textColor="@color/text_on_primary"
+            android:textSize="@dimen/text_title"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</FrameLayout>

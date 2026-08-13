@@ -67,6 +67,16 @@ public interface ChargingSessionDao {
             + "WHERE end_time > 0 AND start_time >= :from")
     float sumChargedMahSince(long from);
 
+    /**
+     * Thời điểm kết thúc của lần sạc đầy gần nhất; 0 nếu chưa từng sạc đầy.
+     *
+     * <p>Lấy mốc 100% chứ không phải 99%: pin lithium chỉ được coi là một chu kỳ
+     * đầy khi bộ điều khiển sạc thật sự chuyển sang giai đoạn nhỏ giọt.
+     */
+    @Query("SELECT COALESCE(MAX(end_time), 0) FROM charging_session "
+            + "WHERE end_time > 0 AND end_percent >= 100")
+    long findLastFullChargeTime();
+
     /** Thời điểm phiên sạc đầu tiên từng ghi được; 0 nếu chưa có phiên nào. */
     @Query("SELECT COALESCE(MIN(start_time), 0) FROM charging_session WHERE end_time > 0")
     long findFirstSessionTime();

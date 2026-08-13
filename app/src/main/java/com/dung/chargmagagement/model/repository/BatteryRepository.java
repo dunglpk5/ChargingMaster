@@ -19,6 +19,7 @@ import com.dung.chargmagagement.model.entity.BatterySampleEntity;
 import com.dung.chargmagagement.model.entity.ChargingSessionEntity;
 import com.dung.chargmagagement.model.entity.ScreenSessionEntity;
 import com.dung.chargmagagement.model.stats.BatteryUsageStats;
+import com.dung.chargmagagement.model.stats.LastChargeInfo;
 import com.dung.chargmagagement.model.stats.UsageCalculator;
 import com.dung.chargmagagement.model.stats.UsageRate;
 
@@ -167,6 +168,23 @@ public final class BatteryRepository {
      */
     public void loadUsageStats(@NonNull AppExecutors.Callback<BatteryUsageStats> callback) {
         executors.execute(this::computeUsageStats, callback);
+    }
+
+    /** Tóm tắt lần sạc gần nhất cho màn Giám sát pin. */
+    public void loadLastChargeInfo(@NonNull AppExecutors.Callback<LastChargeInfo> callback) {
+        executors.execute(() -> {
+            List<ChargingSessionEntity> latest = sessionDao.getHistory(1, 0);
+            if (latest.isEmpty()) return LastChargeInfo.EMPTY;
+
+            return new LastChargeInfo(latest.get(0), sessionDao.findLastFullChargeTime());
+        }, callback);
+    }
+
+    /** Bản đồng bộ cho nơi gọi đã tự chạy sẵn ở thread nền. */
+    @WorkerThread
+    @NonNull
+    public BatteryUsageStats getUsageStatsSync() {
+        return computeUsageStats();
     }
 
     @WorkerThread
