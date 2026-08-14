@@ -106,10 +106,17 @@ public final class BatteryUsageStats {
         return firstSessionTime;
     }
 
-    /** Số % pin nạp trung bình mỗi ngày trong cửa sổ thống kê. */
+    /**
+     * Số % pin nạp trung bình mỗi ngày.
+     *
+     * <p>Mẫu số là số ngày <b>thật sự có dữ liệu</b>, không phải trần 7 ngày: máy
+     * vừa cài ứng dụng hôm qua mà chia cho bảy thì con số bé đi bảy lần.
+     */
     public float getAverageChargedPercentPerDay() {
-        if (statsWindowDays <= 0) return 0f;
-        return (float) totalChargedPercent / statsWindowDays;
+        final int days = UsageCalculator.observedDays(
+                firstSessionTime, System.currentTimeMillis(), statsWindowDays);
+        if (days <= 0) return 0f;
+        return (float) totalChargedPercent / days;
     }
 
     /** Đang có phiên sạc chạy dở hay không. */

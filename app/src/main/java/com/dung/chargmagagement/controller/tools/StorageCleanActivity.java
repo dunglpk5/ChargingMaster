@@ -21,6 +21,7 @@ import com.dung.chargmagagement.databinding.ActivityStorageCleanBinding;
 import com.dung.chargmagagement.databinding.ItemJunkGroupBinding;
 import com.dung.chargmagagement.model.clean.JunkCategory;
 import com.dung.chargmagagement.model.clean.JunkCleaner;
+import com.dung.chargmagagement.model.clean.JunkFile;
 import com.dung.chargmagagement.model.clean.JunkGroup;
 import com.dung.chargmagagement.model.clean.JunkScanner;
 import com.dung.chargmagagement.model.clean.StoragePermission;
@@ -184,7 +185,15 @@ public class StorageCleanActivity extends BaseActivity<ActivityStorageCleanBindi
             row.tvGroupLabel.setText(category.getLabelRes());
             row.tvGroupSize.setText(R.string.value_placeholder);
             row.cbGroup.setChecked(group.isSelected());
-            row.getRoot().setOnClickListener(v -> toggleGroup(group, row));
+
+            // Nhóm chọn theo tệp không dùng ô tick mà mở danh sách; mũi tên báo
+            // cho người dùng biết bấm vào sẽ mở ra một màn khác
+            row.cbGroup.setVisibility(
+                    category.isPerFileSelection() ? View.GONE : View.VISIBLE);
+            row.ivGroupChevron.setVisibility(
+                    category.isPerFileSelection() ? View.VISIBLE : View.GONE);
+
+            row.getRoot().setOnClickListener(v -> onGroupClicked(group, row));
 
             binding.groupRows.addView(row.getRoot());
             rows.add(row);
@@ -205,35 +214,85 @@ public class StorageCleanActivity extends BaseActivity<ActivityStorageCleanBindi
         return divider;
     }
 
-    private void toggleGroup(@NonNull JunkGroup group, @NonNull ItemJunkGroupBinding row) {
+    private void onGroupClicked(@NonNull JunkGroup group, @NonNull ItemJunkGroupBinding row) {
         if (scanning || cleaning || group.isEmpty()) return;
         if (!StoragePermission.hasAccess(this)) return;
+
+        if (group.category.isPerFileSelection()) {
+            showFilePicker(group, row);
+            return;
+        }
 
         group.setSelected(!group.isSelected());
         row.cbGroup.setChecked(group.isSelected());
         updateSelectionSummary();
     }
 
+    /**
+     * Cho chọn từng tệp trong nhóm APK cũ và Tệp tin lớn.
+     *
+     * <p>Chỉ ghi lựa chọn vào model khi người dùng bấm Xong: bấm ra ngoài hoặc
+     * bấm Huỷ phải bỏ hết những gì vừa tick, không được lưu nửa vời.
+     */
+    private void showFilePicker(@NonNull JunkGroup group, @NonNull ItemJunkGroupBinding row) {
+        final List<JunkFile> files = group.getFiles();
+
+        final CharSequence[] labels = new CharSequence[files.size()];
+        final boolean[] checked = new boolean[files.size()];
+        for (int i = 0; i < files.size(); i++) {
+            final JunkFile file = files.get(i);
+            labels[i] = getString(R.string.clean_file_entry,
+                    file.getName(), FormatUtils.formatBytes(file.sizeBytes));
+            checked[i] = file.isSelected();
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.clean_pick_files,
+                        getString(group.category.getLabelRes()), files.size()))
+                .setMultiChoiceItems(labels, checked,
+                        (dialog, which, isChecked) -> checked[which] = isChecked)
+                .setNegativeButton(R.string.action_cancel, null)
+                .setPositiveButton(R.string.action_ok, (dialog, which) -> {
+                    for (int i = 0; i < files.size(); i++) {
+                        files.get(i).setSelected(checked[i]);
+                    }
+                    bindGroupRow(group, row);
+                    updateSelectionSummary();
+                })
+                .show();
+    }
+
     private void bindGroupSizes() {
         for (int i = 0; i < rows.size(); i++) {
-            final JunkCategory category = JunkCategory.values()[i];
-            final JunkGroup group = groups.get(category);
-            if (group == null) continue;
-
-            final ItemJunkGroupBinding row = rows.get(i);
-            row.tvGroupSize.setText(FormatUtils.formatBytes(group.getTotalBytes()));
-
-            // Nhóm rỗng thì bỏ tick và mờ đi: không có gì để dọn
-            row.cbGroup.setEnabled(!group.isEmpty());
-            row.cbGroup.setChecked(!group.isEmpty() && group.isSelected());
-            row.getRoot().setAlpha(group.isEmpty() ? 0.5f : 1f);
+            final JunkGroup group = groups.get(JunkCategory.values()[i]);
+            if (group != null) bindGroupRow(group, rows.get(i));
         }
+    }
+
+    private void bindGroupRow(@NonNull JunkGroup group, @NonNull ItemJunkGroupBinding row) {
+        // Nhóm chọn theo tệp hiện dung lượng đang chọn kèm số tệp; con số này thay
+        // đổi theo lựa chọn nên phải nói rõ "3/12 tệp" chứ không chỉ một dung lượng
+        if (group.category.isPerFileSelection() && group.hasSelection()) {
+            row.tvGroupSize.setText(FormatUtils.formatBytes(group.getSelectedBytes()));
+            row.tvGroupCount.setText(getString(R.string.clean_file_count,
+                    group.getSelectedCount(), group.getFiles().size()));
+            row.tvGroupCount.setVisibility(View.VISIBLE);
+        } else {
+            row.tvGroupSize.setText(FormatUtils.formatBytes(group.getTotalBytes()));
+            row.tvGroupCount.setVisibility(View.GONE);
+        }
+
+        // Nhóm rỗng thì bỏ tick và mờ đi: không có gì để dọn
+        row.cbGroup.setEnabled(!group.isEmpty());
+        row.cbGroup.setChecked(!group.isEmpty() && group.isSelected());
+        row.ivGroupChevron.setAlpha(group.isEmpty() ? 0.3f : 1f);
+        row.getRoot().setAlpha(group.isEmpty() ? 0.5f : 1f);
     }
 
     private void updateSelectionSummary() {
         long selected = 0L;
         for (JunkGroup group : groups.values()) {
-            if (group.isSelected()) selected += group.getTotalBytes();
+            selected += group.getSelectedBytes();
         }
 
         binding.tvSelectedSize.setText(getString(R.string.clean_selected,
@@ -320,10 +379,10 @@ public class StorageCleanActivity extends BaseActivity<ActivityStorageCleanBindi
         final List<String> names = new ArrayList<>();
         long selected = 0L;
         for (JunkGroup group : groups.values()) {
-            if (!group.isSelected() || group.isEmpty()) continue;
+            if (!group.hasSelection()) continue;
 
             names.add(getString(group.category.getLabelRes()));
-            selected += group.getTotalBytes();
+            selected += group.getSelectedBytes();
         }
         if (names.isEmpty()) return;
 

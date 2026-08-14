@@ -35,6 +35,11 @@ public final class DateUtils {
         return toDayKey(System.currentTimeMillis());
     }
 
+    /** Timestamp có rơi vào hôm nay không (theo múi giờ máy). */
+    public static boolean isToday(long timestamp) {
+        return toDayKey(timestamp) == todayKey();
+    }
+
     /** Mốc 00:00 của ngày chứa timestamp. */
     public static long startOfDay(long timestamp) {
         Calendar calendar = Calendar.getInstance();

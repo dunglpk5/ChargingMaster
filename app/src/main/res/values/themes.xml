@@ -22,6 +22,27 @@
         <item name="android:windowLightNavigationBar" tools:targetApi="27">false</item>
     </style>
 
+    <!--
+      Màn sạc phủ toàn màn hình: không có nền riêng, lấy thẳng hình nền của máy.
+
+      windowShowWallpaper là cách duy nhất làm được việc này mà không cần quyền:
+      đọc hình nền bằng WallpaperManager đòi quyền READ_EXTERNAL_STORAGE từ
+      Android 13 và trả về ảnh mặc định nếu không có. Cờ này để hệ thống tự vẽ
+      hình nền thật phía sau cửa sổ, kể cả khi đang ở màn khoá.
+
+      Bắt buộc đi kèm windowIsTranslucent, nếu không hệ thống vẫn tô nền cửa sổ
+      đè lên hình nền và cờ trên thành vô nghĩa.
+    -->
+    <style name="Theme.ChargManagement.ChargingScreen" parent="Theme.ChargManagement">
+        <item name="android:windowShowWallpaper">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">false</item>
+    </style>
+
     <!-- Splash: nền teal full màn, không có thanh trạng thái khác màu -->
     <style name="Theme.ChargManagement.Splash">
         <item name="android:windowBackground">@color/teal_primary</item>

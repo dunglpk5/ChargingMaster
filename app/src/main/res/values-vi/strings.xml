@@ -244,6 +244,16 @@
     <string name="cpu_core_min">Min</string>
     <string name="cpu_core_max">Max</string>
 
+    <!-- Màn sạc phủ toàn màn hình -->
+    <string name="charging_screen_charging">Đang sạc</string>
+    <string name="charging_screen_charging_left">Đang sạc\n(còn %1$s)</string>
+    <string name="charging_screen_full">Đã sạc đầy</string>
+    <string name="charging_screen_unplugged">Đã rút sạc</string>
+    <string name="charging_screen_source">%1$s, %2$s</string>
+    <string name="charging_screen_detect">Phát hiện tốc độ sạc &gt;&gt;</string>
+    <string name="charging_screen_swipe">Trượt để mở khóa</string>
+    <string name="charging_screen_open_app">Mở ứng dụng</string>
+
     <!-- Màn Dọn dẹp bộ nhớ -->
     <string name="clean_title">Dọn dẹp</string>
     <string name="clean_junk_cache">Bộ đệm rác</string>
@@ -258,6 +268,9 @@
     <string name="clean_action">Dọn dẹp</string>
     <string name="clean_selected">Đã chọn: %1$s</string>
     <string name="clean_select_group">Chọn nhóm này</string>
+    <string name="clean_pick_files">%1$s (%2$d tệp)</string>
+    <string name="clean_file_entry">%1$s — %2$s</string>
+    <string name="clean_file_count">%1$d/%2$d tệp</string>
     <string name="clean_freed">Đã giải phóng %1$s</string>
     <string name="clean_confirm_title">Xoá các tệp này?</string>
     <string name="clean_confirm_message">Sẽ xoá %1$s thuộc: %2$s.\n\nThao tác này không hoàn tác được.</string>
@@ -266,11 +279,19 @@
     <string name="clean_permission_required">Cần quyền truy cập bộ nhớ</string>
     <string name="clean_permission_message">Chức năng quét cần quyền truy cập toàn bộ tệp. Thiếu quyền này, Android che tệp của ứng dụng khác nên lượt quét không thấy và cũng không xoá được tệp rác nào. Hãy cấp quyền để tiếp tục.</string>
     <string name="clean_permission_unavailable">Máy này không có màn hình để cấp quyền đó</string>
-
-    <string name="clean_nothing">Không có dữ liệu cần dọn dẹp</string>
+    <string name="clean_permission_notification">Việc dọn thông báo cần quyền truy cập thông báo. Android chỉ cho cấp quyền này trong Cài đặt hệ thống, và thiếu nó thì màn hình này không nhìn thấy được thông báo nào cả.</string>
+    <string name="clean_title_count">DỌN DẸP THÔNG BÁO (%1$d)</string>
+    <string name="clean_action_all">DỌN DẸP TẤT CẢ</string>
+    <string name="clean_time_today">%1$s Hôm nay</string>
+    <string name="clean_time_other">%1$s %2$s</string>
     <string name="clean_card_title">Phát hiện sạc</string>
     <string name="clean_card_desc">Kiểm tra tốc độ sạc và trạng thái nguồn</string>
-    <string name="clean_need_permission">Cấp quyền đọc thông báo để app dọn dẹp được</string>
+    <string name="clipboard_title_count">DỌN DẸP CLIPBOARD (%1$d)</string>
+    <string name="clipboard_item_label">Nội dung đã sao chép</string>
+    <string name="clipboard_cleared">Đã xoá bộ nhớ tạm</string>
+    <string name="clean_permission_restricted">Gặp thông báo \"Cài đặt hạn chế\"? Android khoá quyền này với ứng dụng cài từ file APK. Hãy vào Cài đặt › Ứng dụng › Charging Master, bấm ⋮ ở góc trên rồi chọn \"Cho phép cài đặt hạn chế\", sau đó quay lại đây.</string>
+
+    <string name="clean_nothing">Không có dữ liệu cần dọn dẹp</string>
     <string name="clean_done">Đã dọn dẹp thông báo</string>
 
     <string name="cd_back">Quay lại</string>

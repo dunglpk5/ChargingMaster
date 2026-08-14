@@ -4,6 +4,7 @@
   Cả dòng bấm được để đổi trạng thái tick, vùng chạm rộng hơn hẳn ô vuông nhỏ.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -32,15 +33,34 @@
         android:textSize="@dimen/text_body"
         tools:text="Bộ đệm rác" />
 
-    <TextView
-        android:id="@+id/tvGroupSize"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/space_sm"
-        android:textColor="@color/text_value"
-        android:textSize="@dimen/text_body"
-        android:textStyle="bold"
-        tools:text="6.77 MB" />
+        android:gravity="end"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvGroupSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_value"
+            android:textSize="@dimen/text_body"
+            android:textStyle="bold"
+            tools:text="6.77 MB" />
+
+        <!-- "3/12 tệp", chỉ hiện ở nhóm cho chọn từng tệp và khi đã chọn -->
+        <TextView
+            android:id="@+id/tvGroupCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_caption"
+            android:visibility="gone"
+            tools:text="3/12 tệp"
+            tools:visibility="visible" />
+
+    </LinearLayout>
 
     <CheckBox
         android:id="@+id/cbGroup"
@@ -50,5 +70,17 @@
         android:clickable="false"
         android:contentDescription="@string/clean_select_group"
         android:focusable="false" />
+
+    <!-- Thay cho ô tick ở nhóm cho chọn từng tệp -->
+    <ImageView
+        android:id="@+id/ivGroupChevron"
+        android:layout_width="@dimen/info_icon_size"
+        android:layout_height="@dimen/info_icon_size"
+        android:layout_marginStart="@dimen/space_sm"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_chevron_right"
+        android:visibility="gone"
+        app:tint="@color/text_secondary"
+        tools:visibility="visible" />
 
 </LinearLayout>

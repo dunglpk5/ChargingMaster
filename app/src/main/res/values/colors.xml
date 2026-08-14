@@ -65,4 +65,10 @@
     <color name="wave_line">#29B6F6</color>
 
     <color name="transparent">#00000000</color>
+
+    <!--
+      Lớp phủ tối trên màn sạc. Không có nó thì chữ trắng biến mất hoàn toàn trên
+      hình nền sáng màu; 45% là mức đủ đọc mà vẫn thấy rõ hình nền.
+    -->
+    <color name="charging_screen_scrim">#73000000</color>
 </resources>

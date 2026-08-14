@@ -1,7 +1,10 @@
 package com.dung.chargmagagement.service;
 
+import android.app.Notification;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
@@ -10,6 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.dung.chargmagagement.common.Logger;
+import com.dung.chargmagagement.model.ui.NotificationItem;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Dịch vụ đọc và xoá thông báo trên thanh trạng thái.
@@ -30,11 +38,46 @@ public class NotificationCleanerService extends NotificationListenerService {
     @Nullable
     private static NotificationCleanerService instance;
 
+    /** Màn hình đang mở lắng nghe thay đổi để cập nhật danh sách ngay lập tức. */
+    public interface Listener {
+        void onNotificationsChanged();
+    }
+
+    @Nullable
+    private static Listener listener;
+
+    /**
+     * Đăng ký nhận thông báo thay đổi.
+     *
+     * <p>Màn hình phải gỡ đăng ký ở {@code onPause()}: dịch vụ này sống lâu hơn
+     * Activity rất nhiều, giữ tham chiếu lại là rò rỉ nguyên một màn hình.
+     */
+    public static void setListener(@Nullable Listener value) {
+        listener = value;
+    }
+
     @Override
     public void onListenerConnected() {
         super.onListenerConnected();
         instance = this;
+        notifyChanged();
         Logger.d(TAG, "Đã kết nối dịch vụ đọc thông báo");
+    }
+
+    @Override
+    public void onNotificationPosted(StatusBarNotification notification) {
+        notifyChanged();
+    }
+
+    @Override
+    public void onNotificationRemoved(StatusBarNotification notification) {
+        notifyChanged();
+    }
+
+    /** Các callback của lớp này đã chạy sẵn trên main thread nên gọi thẳng được. */
+    private static void notifyChanged() {
+        final Listener current = listener;
+        if (current != null) current.onNotificationsChanged();
     }
 
     @Override
@@ -62,29 +105,85 @@ public class NotificationCleanerService extends NotificationListenerService {
     }
 
     /**
-     * Số thông báo đang hiển thị có thể xoá được.
+     * Danh sách thông báo xoá được, mới nhất trước.
      *
-     * @return -1 nếu dịch vụ chưa sẵn sàng (chưa cấp quyền hoặc hệ thống chưa kết nối)
+     * <p>Trả về danh sách rỗng khi dịch vụ chưa sẵn sàng. Chỉ lấy thông báo
+     * {@code isClearable()}: thông báo thường trú (đang phát nhạc, service chạy
+     * nền…) không xoá được, liệt kê ra thì người dùng bấm dọn mà chúng vẫn nằm đó.
      */
-    public static int countClearable() {
+    @NonNull
+    public static List<NotificationItem> listClearable() {
         final NotificationCleanerService service = instance;
-        if (service == null) return -1;
+        if (service == null) return new ArrayList<>();
 
         try {
             StatusBarNotification[] notifications = service.getActiveNotifications();
-            if (notifications == null) return 0;
+            if (notifications == null) return new ArrayList<>();
 
-            int count = 0;
+            List<NotificationItem> items = new ArrayList<>(notifications.length);
             for (StatusBarNotification notification : notifications) {
-                // Thông báo thường trú (đang phát nhạc, service chạy nền…) không
-                // xoá được; đếm cả chúng vào sẽ khiến người dùng bấm dọn mà số
-                // không giảm về 0
-                if (notification.isClearable()) count++;
+                if (!notification.isClearable()) continue;
+                items.add(service.toItem(notification));
             }
-            return count;
+
+            Collections.sort(items, (a, b) -> Long.compare(b.postTime, a.postTime));
+            return items;
         } catch (Exception e) {
             Logger.e(TAG, "Không đọc được danh sách thông báo", e);
-            return -1;
+            return new ArrayList<>();
+        }
+    }
+
+    @NonNull
+    private NotificationItem toItem(@NonNull StatusBarNotification notification) {
+        final Notification content = notification.getNotification();
+        final Bundle extras = content.extras;
+
+        return new NotificationItem(
+                notification.getKey(),
+                notification.getPackageName(),
+                resolveAppName(notification.getPackageName()),
+                textOf(extras, Notification.EXTRA_TITLE),
+                textOf(extras, Notification.EXTRA_TEXT),
+                notification.getPostTime(),
+                content.getLargeIcon());
+    }
+
+    /** Nhãn ứng dụng; lùi về tên gói nếu ứng dụng vừa bị gỡ. */
+    @NonNull
+    private String resolveAppName(@NonNull String packageName) {
+        try {
+            final PackageManager pm = getPackageManager();
+            return pm.getApplicationLabel(pm.getApplicationInfo(packageName, 0)).toString();
+        } catch (Exception e) {
+            return packageName;
+        }
+    }
+
+    /** Các trường EXTRA có thể là CharSequence có định dạng, phải đổi sang chuỗi thường. */
+    @NonNull
+    private static String textOf(@Nullable Bundle extras, @NonNull String key) {
+        if (extras == null) return "";
+
+        final CharSequence value = extras.getCharSequence(key);
+        return value == null ? "" : value.toString();
+    }
+
+    /**
+     * Xoá một thông báo cụ thể.
+     *
+     * @return true nếu đã thực hiện, false nếu dịch vụ chưa sẵn sàng
+     */
+    public static boolean cancel(@NonNull String key) {
+        final NotificationCleanerService service = instance;
+        if (service == null) return false;
+
+        try {
+            service.cancelNotification(key);
+            return true;
+        } catch (Exception e) {
+            Logger.e(TAG, "Không xoá được thông báo", e);
+            return false;
         }
     }
 

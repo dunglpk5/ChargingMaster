@@ -74,6 +74,12 @@ public class JunkScanner {
 
         scanOwnCache(context, groups);
         scanExternalStorage(groups, listener);
+
+        // Nhóm cho chọn từng tệp phải xếp tệp lớn lên đầu, người dùng cuộn danh
+        // sách vài trăm dòng thì thứ đáng xoá nhất cần nằm ngay trên cùng
+        for (JunkGroup group : groups.values()) {
+            if (group.category.isPerFileSelection()) group.sortBySizeDesc();
+        }
         return groups;
     }
 

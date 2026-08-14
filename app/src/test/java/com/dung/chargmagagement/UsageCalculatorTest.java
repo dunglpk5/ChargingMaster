@@ -75,13 +75,52 @@ public class UsageCalculatorTest {
         assertEquals(1.287f, rate.getPercentPerHour(), 0.01f);
     }
 
+    /**
+     * Khoảng không tụt phần trăm vẫn phải tính vào tổng thời gian.
+     *
+     * <p>Máy chỉ báo pin theo bước 1%, nên phần lớn khoảng ngắn mở và đóng ở cùng
+     * một mức. Bỏ chúng đi thì 5% bị chia cho 1 giờ thay vì 2 giờ và tỉ lệ %/h
+     * gấp đôi sự thật.
+     */
     @Test
-    public void calculateRate_khoangKhongTieuHao_biBoQua() {
+    public void calculateRate_khoangKhongTieuHao_vanTinhThoiGian() {
         UsageRate rate = UsageCalculator.calculateRate(Arrays.asList(
                 screen(50, 50, HOUR_MS, false),   // không đổi
                 screen(50, 45, HOUR_MS, false))); // tụt 5%
         assertEquals(5, rate.getTotalPercentDrop());
-        assertEquals(1f, rate.getTotalHours(), 0.01f);
+        assertEquals(2f, rate.getTotalHours(), 0.01f);
+        assertEquals(2.5f, rate.getPercentPerHour(), 0.01f);
+    }
+
+    /** Phần trăm tăng lúc không sạc là dữ liệu hỏng: bỏ % nhưng giữ thời gian. */
+    @Test
+    public void calculateRate_khoangTangPhanTram_khongTruVaoTong() {
+        UsageRate rate = UsageCalculator.calculateRate(Arrays.asList(
+                screen(50, 55, HOUR_MS, false),
+                screen(55, 45, HOUR_MS, false)));
+        assertEquals(10, rate.getTotalPercentDrop());
+        assertEquals(2f, rate.getTotalHours(), 0.01f);
+    }
+
+    // ==================== Số ngày có dữ liệu ====================
+
+    private static final long DAY_MS = 24 * HOUR_MS;
+    private static final long NOW = 1_700_000_000_000L;
+
+    @Test
+    public void observedDays_mayMoiCai_khongChiaChoCaCuaSo() {
+        assertEquals(1, UsageCalculator.observedDays(NOW - HOUR_MS, NOW, 7));
+        assertEquals(2, UsageCalculator.observedDays(NOW - 2 * DAY_MS, NOW, 7));
+    }
+
+    @Test
+    public void observedDays_chanTranOCuaSoThongKe() {
+        assertEquals(7, UsageCalculator.observedDays(NOW - 30 * DAY_MS, NOW, 7));
+    }
+
+    @Test
+    public void observedDays_chuaCoPhienNao_traVeMotNgay() {
+        assertEquals(1, UsageCalculator.observedDays(0L, NOW, 7));
     }
 
     @Test

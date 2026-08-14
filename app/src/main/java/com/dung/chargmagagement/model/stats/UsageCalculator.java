@@ -31,6 +31,11 @@ public final class UsageCalculator {
      *
      * <p>Cộng dồn tổng % tụt và tổng giờ rồi mới chia, <b>không</b> lấy trung bình
      * của từng tỉ lệ: khoảng 5 phút và khoảng 5 tiếng phải có trọng số khác nhau.
+     *
+     * <p>Khoảng không tụt phần trăm nào vẫn được tính vào tổng thời gian. Máy chỉ
+     * báo pin theo bước 1%, nên phần lớn khoảng ngắn đều mở và đóng ở cùng một
+     * mức; bỏ chúng đi thì 1% tụt được chia cho vài phút thay vì vài giờ và tỉ lệ
+     * %/h bị thổi lên nhiều lần.
      */
     public static UsageRate calculateRate(List<ScreenSessionEntity> sessions) {
         if (sessions == null || sessions.isEmpty()) return UsageRate.EMPTY;
@@ -38,14 +43,32 @@ public final class UsageCalculator {
         int totalDrop = 0;
         long totalMs = 0;
         for (ScreenSessionEntity session : sessions) {
-            final int drop = session.startPercent - session.endPercent;
-            if (drop <= 0) continue; // không tiêu hao thì không đưa vào mẫu
-            totalDrop += drop;
-            totalMs += session.getDurationMs();
+            // Phần trăm tăng trong lúc không sạc là dữ liệu hỏng: bỏ phần % đó
+            // nhưng vẫn giữ thời gian, vì khoảng thời gian ấy có thật
+            totalDrop += Math.max(0, session.startPercent - session.endPercent);
+            totalMs += Math.max(0L, session.getDurationMs());
         }
         if (totalMs <= 0) return UsageRate.EMPTY;
 
         return new UsageRate(totalDrop, DateUtils.toHours(totalMs));
+    }
+
+    /**
+     * Số ngày thực sự có dữ liệu, dùng làm mẫu số cho mục "% nạp mỗi ngày".
+     *
+     * <p>Chia cứng cho 7 là sai với máy mới cài: ứng dụng mới ghi được một ngày
+     * mà đã chia cho bảy thì con số bé đi bảy lần so với sự thật.
+     *
+     * @param firstSessionTime thời điểm phiên sạc đầu tiên (0 = chưa có)
+     * @param nowMs            mốc hiện tại
+     * @param windowDays       trần cửa sổ thống kê
+     */
+    public static int observedDays(long firstSessionTime, long nowMs, int windowDays) {
+        if (windowDays <= 0) return 0;
+        if (firstSessionTime <= 0 || nowMs <= firstSessionTime) return 1;
+
+        final int days = (int) Math.ceil((nowMs - firstSessionTime) / (double) DateUtils.DAY_MS);
+        return Math.max(1, Math.min(windowDays, days));
     }
 
     /** Gộp hai nhóm màn bật và màn tắt thành tỉ lệ "sử dụng kết hợp". */

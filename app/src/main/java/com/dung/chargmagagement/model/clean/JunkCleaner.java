@@ -28,9 +28,7 @@ public final class JunkCleaner {
         long freed = 0L;
 
         for (JunkGroup group : groups) {
-            if (!group.isSelected()) continue;
-
-            for (File file : group.getFiles()) {
+            for (File file : group.getSelectedFiles()) {
                 freed += deleteFile(file);
             }
         }

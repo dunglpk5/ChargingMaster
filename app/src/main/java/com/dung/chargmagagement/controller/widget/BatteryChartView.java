@@ -87,14 +87,14 @@ public class BatteryChartView extends View {
         linePaint.setStrokeWidth(2f * density);
         linePaint.setStrokeJoin(Paint.Join.ROUND);
         linePaint.setStrokeCap(Paint.Cap.ROUND);
-        linePaint.setColor(ContextCompat.getColor(context, R.color.green_accent));
+        linePaint.setColor(ContextCompat.getColor(context, R.color.teal_primary));
 
         fillPaint.setStyle(Paint.Style.FILL);
-        fillPaint.setColor(ContextCompat.getColor(context, R.color.green_accent));
+        fillPaint.setColor(ContextCompat.getColor(context, R.color.teal_primary));
         fillPaint.setAlpha(30);
 
         dotPaint.setStyle(Paint.Style.FILL);
-        dotPaint.setColor(ContextCompat.getColor(context, R.color.green_accent));
+        dotPaint.setColor(ContextCompat.getColor(context, R.color.teal_primary));
     }
 
     /**

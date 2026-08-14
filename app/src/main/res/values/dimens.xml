@@ -26,4 +26,11 @@
     <!-- Vòng tiến trình quét ở màn Dọn dẹp -->
     <dimen name="clean_ring_size">240dp</dimen>
     <dimen name="divider_height">1dp</dimen>
+    <!-- Nút "Dọn dẹp tất cả" chiếm hết bề ngang ở đáy màn Dọn dẹp thông báo -->
+    <dimen name="clean_action_height">56dp</dimen>
+
+    <!-- Màn sạc phủ toàn màn hình -->
+    <dimen name="charging_screen_top_margin">100dp</dimen>
+    <dimen name="charging_screen_bolt_size">120dp</dimen>
+    <dimen name="charging_screen_bolt_margin">200dp</dimen>
 </resources>

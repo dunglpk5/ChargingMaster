@@ -36,6 +36,8 @@ import com.dung.chargmagagement.controller.settings.SettingsActivity;
 import com.dung.chargmagagement.controller.tools.BatteryMonitorActivity;
 import com.dung.chargmagagement.controller.tools.CpuUsageActivity;
 import com.dung.chargmagagement.controller.tools.NotificationCleanActivity;
+import com.dung.chargmagagement.controller.power.ChargingScreenActivity;
+import com.dung.chargmagagement.controller.tools.ClipboardCleanActivity;
 import com.dung.chargmagagement.controller.tools.PhoneTemperatureActivity;
 import com.dung.chargmagagement.controller.tools.StorageCleanActivity;
 import com.dung.chargmagagement.controller.vip.VipActivity;
@@ -297,6 +299,9 @@ public class ToolsFragment extends BaseFragment<FragmentToolsBinding>
                 break;
 
             case CLEAN_CLIPBOARD:
+                ClipboardCleanActivity.start(requireContext());
+                break;
+
             case MORE:
                 SettingsActivity.start(requireContext());
                 break;
@@ -315,7 +320,7 @@ public class ToolsFragment extends BaseFragment<FragmentToolsBinding>
                 break;
 
             case SHORTCUT:
-                pinXChargeShortcut();
+                pinChargingScreenShortcut();
                 break;
 
             case CLEAR_CACHE:
@@ -341,14 +346,14 @@ public class ToolsFragment extends BaseFragment<FragmentToolsBinding>
     }
 
     /**
-     * Ghim một biểu tượng X-Sạc ra màn hình chính.
+     * Ghim một biểu tượng ra màn hình chính, bấm vào là mở màn sạc phủ toàn màn hình.
      *
      * <p>Dùng {@link ShortcutManagerCompat} thay vì gọi thẳng API: lớp compat tự lo
      * phần khác biệt giữa các phiên bản Android, kể cả launcher không hỗ trợ ghim
      * (khi đó {@code isRequestPinShortcutSupported} trả về false và ta báo cho
      * người dùng biết thay vì im lặng không làm gì).
      */
-    private void pinXChargeShortcut() {
+    private void pinChargingScreenShortcut() {
         final Resources res = requireContext().getResources();
         if (!ShortcutManagerCompat.isRequestPinShortcutSupported(requireContext())) {
             Toast.makeText(requireContext(), R.string.check_settings_unavailable,
@@ -356,13 +361,15 @@ public class ToolsFragment extends BaseFragment<FragmentToolsBinding>
             return;
         }
 
-        Intent launchIntent = new Intent(requireContext(), XChargeActivity.class);
+        Intent launchIntent = new Intent(requireContext(), ChargingScreenActivity.class);
+        // Lối tắt trên màn hình chính khởi chạy từ launcher nên phải tự mở task mới
         launchIntent.setAction(Intent.ACTION_VIEW);
+        launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         ShortcutInfoCompat shortcut =
-                new ShortcutInfoCompat.Builder(requireContext(), "x_charge")
-                        .setShortLabel(res.getString(R.string.tools_x_charge))
-                        .setIcon(IconCompat.createWithResource(requireContext(), R.drawable.ic_xcharge))
+                new ShortcutInfoCompat.Builder(requireContext(), "charging_screen")
+                        .setShortLabel(res.getString(R.string.tools_shortcut))
+                        .setIcon(IconCompat.createWithResource(requireContext(), R.drawable.ic_heart))
                         .setIntent(launchIntent)
                         .build();
 

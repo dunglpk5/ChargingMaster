@@ -258,6 +258,16 @@
     <string name="cpu_core_min">Min</string>
     <string name="cpu_core_max">Max</string>
 
+    <!-- Màn sạc phủ toàn màn hình -->
+    <string name="charging_screen_charging">Charging</string>
+    <string name="charging_screen_charging_left">Charging\n(%1$s left)</string>
+    <string name="charging_screen_full">Fully charged</string>
+    <string name="charging_screen_unplugged">Unplugged</string>
+    <string name="charging_screen_source">%1$s, %2$s</string>
+    <string name="charging_screen_detect">Check charging speed &gt;&gt;</string>
+    <string name="charging_screen_swipe">Swipe up to unlock</string>
+    <string name="charging_screen_open_app">Open the app</string>
+
     <!-- Màn Dọn dẹp bộ nhớ -->
     <string name="clean_title">Clean</string>
     <string name="clean_junk_cache">Junk cache</string>
@@ -272,6 +282,9 @@
     <string name="clean_action">Clean up</string>
     <string name="clean_selected">Selected: %1$s</string>
     <string name="clean_select_group">Select this group</string>
+    <string name="clean_pick_files">%1$s (%2$d files)</string>
+    <string name="clean_file_entry">%1$s — %2$s</string>
+    <string name="clean_file_count">%1$d/%2$d files</string>
     <string name="clean_freed">Freed %1$s</string>
     <string name="clean_confirm_title">Delete these files?</string>
     <string name="clean_confirm_message">%1$s will be deleted from: %2$s.\n\nThis cannot be undone.</string>
@@ -280,12 +293,20 @@
     <string name="clean_permission_required">Storage access required</string>
     <string name="clean_permission_message">Scanning needs full file access. Without it Android hides other apps\' files, so the scan cannot see or delete any junk. Grant the permission to continue.</string>
     <string name="clean_permission_unavailable">This device has no screen for granting that permission</string>
+    <string name="clean_permission_notification">Clearing notifications requires notification access. Android only lets you grant it from system Settings, and without it this screen cannot see a single notification.</string>
+    <string name="clean_title_count">CLEAN NOTIFICATIONS (%1$d)</string>
+    <string name="clean_action_all">CLEAN ALL</string>
+    <string name="clean_time_today">%1$s Today</string>
+    <string name="clean_time_other">%1$s %2$s</string>
+    <string name="clean_card_title">Charging detection</string>
+    <string name="clean_card_desc">Check charging speed and power status</string>
+    <string name="clipboard_title_count">CLEAN CLIPBOARD (%1$d)</string>
+    <string name="clipboard_item_label">Copied content</string>
+    <string name="clipboard_cleared">Clipboard cleared</string>
+    <string name="clean_permission_restricted">Seeing \"Restricted setting\"? Android blocks this permission for apps installed from an APK file. Open Settings › Apps › Charging Master, tap ⋮ in the top corner and choose \"Allow restricted settings\", then come back here.</string>
 
     <!-- Màn Dọn dẹp thông báo -->
     <string name="clean_nothing">Nothing to clean up</string>
-    <string name="clean_card_title">Charging detection</string>
-    <string name="clean_card_desc">Check charging speed and power status</string>
-    <string name="clean_need_permission">Grant notification access so the app can clear notifications</string>
     <string name="clean_done">Notifications cleared</string>
 
     <string name="cd_back">Back</string>

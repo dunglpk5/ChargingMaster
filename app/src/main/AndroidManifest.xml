@@ -131,6 +131,23 @@
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
 
+        <!--
+          Màn sạc phủ toàn màn hình. excludeFromRecents + noHistory vì đây là màn
+          tạm, không nên nằm lại trong danh sách ứng dụng gần đây. singleTask để
+          lần cắm sạc sau cập nhật vào màn đang mở thay vì chồng thêm một màn nữa.
+        -->
+        <activity
+            android:name=".controller.power.ChargingScreenActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:showOnLockScreen="true"
+            android:taskAffinity=""
+            android:theme="@style/Theme.ChargManagement.ChargingScreen"
+            tools:ignore="LockedOrientationActivity" />
+
         <activity
             android:name=".controller.power.XChargeActivity"
             android:exported="false"
@@ -175,6 +192,12 @@
 
         <activity
             android:name=".controller.tools.CpuUsageActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
+        <activity
+            android:name=".controller.tools.ClipboardCleanActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />

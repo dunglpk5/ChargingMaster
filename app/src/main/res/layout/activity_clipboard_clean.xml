@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Màn Dọn dẹp thông báo, hai trạng thái tách hẳn nhau:
+  Màn Dọn dẹp clipboard, dựng theo đúng kiểu màn Dọn dẹp thông báo:
 
-  1. Có thông báo  – danh sách trên nền trắng, nút "Dọn dẹp tất cả" ở đáy, có quảng cáo.
-  2. Không có gì   – nền teal, chổi và dòng chữ ở giữa, thẻ "Phát hiện sạc" bên dưới,
-                     không quảng cáo, không nút dọn.
+  1. Có nội dung  – danh sách trên nền trắng, nút "Dọn dẹp tất cả" ở đáy, có quảng cáo.
+  2. Không có gì  – nền teal, chổi và dòng chữ ở giữa, thẻ "Phát hiện sạc" bên dưới,
+                    không quảng cáo, không nút dọn.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -22,7 +22,7 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingStart="@dimen/space_sm"
-        android:paddingEnd="@dimen/space_sm">
+        android:paddingEnd="@dimen/space_md">
 
         <ImageView
             android:id="@+id/btnBack"
@@ -45,72 +45,7 @@
             android:textColor="@color/text_on_primary"
             android:textSize="@dimen/text_title"
             android:textStyle="bold"
-            tools:text="DỌN DẸP THÔNG BÁO (1)" />
-
-        <ImageView
-            android:id="@+id/btnSettings"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/settings_title"
-            android:padding="12dp"
-            android:src="@drawable/ic_gear"
-            app:tint="@color/text_on_primary" />
-
-    </LinearLayout>
-
-    <!-- Chỉ hiện khi chưa được cấp quyền đọc thông báo -->
-    <LinearLayout
-        android:id="@+id/cardPermission"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/space_md"
-        android:background="@drawable/bg_card_rounded"
-        android:orientation="vertical"
-        android:padding="@dimen/space_md"
-        android:visibility="gone"
-        tools:visibility="visible">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/clean_permission_notification"
-            android:textColor="@color/text_secondary"
-            android:textSize="@dimen/text_body" />
-
-        <!--
-          Hướng dẫn gỡ "Cài đặt hạn chế". Chỉ hiện khi ứng dụng được cài từ file
-          APK – máy cài qua cửa hàng không gặp cảnh này nên bày ra chỉ gây rối.
-        -->
-        <TextView
-            android:id="@+id/tvRestrictedHint"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_md"
-            android:background="@drawable/bg_hint_box"
-            android:padding="@dimen/space_sm"
-            android:text="@string/clean_permission_restricted"
-            android:textColor="@color/text_secondary"
-            android:textSize="@dimen/text_caption"
-            android:visibility="gone"
-            tools:visibility="visible" />
-
-        <TextView
-            android:id="@+id/btnGrantPermission"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginTop="@dimen/space_md"
-            android:background="@drawable/bg_pill_primary"
-            android:clickable="true"
-            android:focusable="true"
-            android:paddingStart="@dimen/space_lg"
-            android:paddingTop="@dimen/space_sm"
-            android:paddingEnd="@dimen/space_lg"
-            android:paddingBottom="@dimen/space_sm"
-            android:text="@string/clean_grant_permission"
-            android:textColor="@color/text_on_primary"
-            android:textSize="@dimen/text_body" />
+            tools:text="DỌN DẸP CLIPBOARD (1)" />
 
     </LinearLayout>
 
@@ -119,15 +54,15 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <!-- ==================== 1. CÓ THÔNG BÁO ==================== -->
+        <!-- ==================== 1. CÓ NỘI DUNG ==================== -->
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvNotifications"
+            android:id="@+id/rvClips"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/bg_surface"
             android:overScrollMode="never"
-            tools:itemCount="3"
-            tools:listitem="@layout/item_notification" />
+            tools:itemCount="2"
+            tools:listitem="@layout/item_clip" />
 
         <!-- ==================== 2. KHÔNG CÓ GÌ ==================== -->
         <LinearLayout
@@ -156,7 +91,6 @@
                 android:textColor="@color/text_on_primary"
                 android:textSize="24sp" />
 
-            <!-- Thẻ gợi ý hành động tiếp theo -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -224,7 +158,6 @@
 
     </FrameLayout>
 
-    <!-- Quảng cáo và nút dọn chỉ có ở trạng thái có thông báo -->
     <FrameLayout
         android:id="@+id/adContainer"
         android:layout_width="match_parent"
