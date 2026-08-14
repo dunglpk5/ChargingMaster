@@ -17,7 +17,11 @@
 
     <dimen name="info_row_height">56dp</dimen>
     <dimen name="info_icon_size">24dp</dimen>
-    <dimen name="tool_icon_size">36dp</dimen>
+    <dimen name="tool_icon_size">30dp</dimen>
+    <dimen name="menu_row_icon_size">22dp</dimen>
+    <!-- Nhãn ô công cụ và dòng menu; nhỏ hơn text_caption cho lưới 3 cột đỡ chật -->
+    <dimen name="text_tool_label">11sp</dimen>
+    <dimen name="text_menu_row">15sp</dimen>
     <dimen name="bottom_nav_height">60dp</dimen>
     <!-- Thanh tiêu đề nổi ở Trang chủ: mỏng, chỉ vừa đủ chứa nút 32dp -->
     <dimen name="toolbar_height">48dp</dimen>
@@ -28,6 +32,8 @@
     <dimen name="divider_height">1dp</dimen>
     <!-- Nút "Dọn dẹp tất cả" chiếm hết bề ngang ở đáy màn Dọn dẹp thông báo -->
     <dimen name="clean_action_height">56dp</dimen>
+    <!-- Nét viền vòng tròn giai đoạn sạc; phải khớp bg_stage_circle.xml -->
+    <dimen name="stage_ring_stroke">1.5dp</dimen>
 
     <!-- Màn sạc phủ toàn màn hình -->
     <dimen name="charging_screen_top_margin">100dp</dimen>

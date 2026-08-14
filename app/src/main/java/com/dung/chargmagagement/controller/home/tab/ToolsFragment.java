@@ -142,57 +142,62 @@ public class ToolsFragment extends BaseFragment<FragmentToolsBinding>
 
     // ==================== Danh sách công cụ ====================
 
+    /*
+     * Các biểu tượng dưới đây là ảnh PNG đã có sẵn màu, nên truyền
+     * ToolItem.NO_TINT: nhuộm đè lên chúng sẽ bẹt hết thành một mảng màu đặc.
+     */
+
     private List<ToolItem> buildVipTools() {
         return Arrays.asList(
                 new ToolItem(ToolItem.Action.NO_ADS,
-                        R.drawable.ic_tool_no_ads, R.string.tools_no_ads, R.color.teal_primary),
+                        R.drawable.ic_tool_no_ads, R.string.tools_no_ads, ToolItem.NO_TINT),
                 new ToolItem(ToolItem.Action.CHARGE_ALARM,
-                        R.drawable.ic_tool_alarm, R.string.tools_charge_alarm, R.color.teal_primary),
+                        R.drawable.ic_tool_charge_alarm, R.string.tools_charge_alarm, ToolItem.NO_TINT),
                 new ToolItem(ToolItem.Action.PRIORITY_SUPPORT,
-                        R.drawable.ic_tool_support, R.string.tools_priority_support, R.color.teal_primary),
+                        R.drawable.ic_tool_priority_support, R.string.tools_priority_support, ToolItem.NO_TINT),
                 new ToolItem(ToolItem.Action.CHARGE_HISTORY,
-                        R.drawable.ic_tool_history, R.string.tools_charge_history, R.color.teal_primary),
+                        R.drawable.ic_tool_charge_history, R.string.tools_charge_history, ToolItem.NO_TINT),
                 new ToolItem(ToolItem.Action.X_CHARGE,
-                        R.drawable.ic_voltage, R.string.tools_x_charge, R.color.teal_primary),
+                        R.drawable.ic_tool_x_charge, R.string.tools_x_charge, ToolItem.NO_TINT),
                 new ToolItem(ToolItem.Action.MORE,
-                        R.drawable.ic_tool_more, R.string.tools_more, R.color.teal_primary));
+                        R.drawable.ic_tool_more, R.string.tools_more, ToolItem.NO_TINT));
     }
 
     private List<ToolItem> buildDetectTools() {
         return Arrays.asList(
                 new ToolItem(ToolItem.Action.DEVICE_INFO,
-                        R.drawable.ic_phone, R.string.tools_device_info, R.color.teal_primary),
+                        R.drawable.ic_tool_device_info, R.string.tools_device_info, ToolItem.NO_TINT),
                 new ToolItem(ToolItem.Action.CLEAN_NOTIFICATION,
-                        R.drawable.ic_tool_notification, R.string.tools_clean_notification, R.color.teal_primary),
+                        R.drawable.ic_tool_clean_notifications, R.string.tools_clean_notification, ToolItem.NO_TINT),
                 new ToolItem(ToolItem.Action.CLEAN_CLIPBOARD,
-                        R.drawable.ic_tool_clipboard, R.string.tools_clean_clipboard, R.color.teal_primary),
+                        R.drawable.ic_tool_clipboard, R.string.tools_clean_clipboard, ToolItem.NO_TINT),
                 new ToolItem(ToolItem.Action.PHONE_TEMPERATURE,
-                        R.drawable.ic_tool_snowflake, R.string.tools_phone_temperature, R.color.teal_primary),
+                        R.drawable.ic_tool_phone_temperature, R.string.tools_phone_temperature, ToolItem.NO_TINT),
                 new ToolItem(ToolItem.Action.CHARGE_DETECT,
-                        R.drawable.ic_xcharge, R.string.tools_charge_detect, R.color.teal_primary),
+                        R.drawable.ic_tool_charge_detection, R.string.tools_charge_detect, ToolItem.NO_TINT),
                 new ToolItem(ToolItem.Action.CPU_USAGE,
-                        R.drawable.ic_tool_cpu, R.string.tools_cpu_usage, R.color.teal_primary));
+                        R.drawable.ic_tool_cpu_usage, R.string.tools_cpu_usage, ToolItem.NO_TINT));
     }
 
     private List<ToolItem> buildGeneralTools() {
         return Arrays.asList(
                 new ToolItem(ToolItem.Action.MANAGE_APPS,
-                        R.drawable.ic_logo_android, R.string.tools_manage_apps, R.color.teal_primary),
+                        R.drawable.ic_tool_app_manager, R.string.tools_manage_apps, ToolItem.NO_TINT),
                 new ToolItem(ToolItem.Action.SHORTCUT,
-                        R.drawable.ic_heart, R.string.tools_shortcut, R.color.teal_primary),
+                        R.drawable.ic_tool_shortcut, R.string.tools_shortcut, ToolItem.NO_TINT),
                 new ToolItem(ToolItem.Action.CLEAR_CACHE,
-                        R.drawable.ic_clear_cache, R.string.tools_clear_cache, R.color.teal_primary));
+                        R.drawable.ic_tool_clear_cache, R.string.tools_clear_cache, ToolItem.NO_TINT));
     }
 
     /** Bốn dòng của nhóm "Khác" dùng chung một layout nên gán nội dung bằng code. */
     private void setupMenuRows() {
-        bindMenuRow(binding.rowSettings, R.drawable.ic_gear, R.string.settings_title,
+        bindMenuRow(binding.rowSettings, R.drawable.ic_setting, R.string.settings_title,
                 () -> SettingsActivity.start(requireContext()));
         bindMenuRow(binding.rowFeedback, R.drawable.ic_feedback, R.string.tools_feedback,
                 this::openFeedback);
-        bindMenuRow(binding.rowPrivacyPolicy, R.drawable.ic_help_circle, R.string.tools_privacy_policy,
+        bindMenuRow(binding.rowPrivacyPolicy, R.drawable.ic_privacy_policy, R.string.tools_privacy_policy,
                 this::openPrivacyPolicy);
-        bindMenuRow(binding.rowAboutUs, R.drawable.ic_help_circle, R.string.tools_about_us,
+        bindMenuRow(binding.rowAboutUs, R.drawable.ic_about_us, R.string.tools_about_us,
                 this::showAboutUs);
     }
 

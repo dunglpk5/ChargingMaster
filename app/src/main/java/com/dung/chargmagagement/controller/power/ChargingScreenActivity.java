@@ -327,11 +327,8 @@ public class ChargingScreenActivity extends BaseActivity<ActivityChargingScreenB
     }
 
     private void setStageActive(@NonNull ViewChargeStageBinding stage, boolean active) {
-        final int color = ContextCompat.getColor(this,
-                active ? R.color.text_on_primary : R.color.stage_inactive);
-
-        stage.tvStage.setTextColor(color);
-        stage.imgStage.setImageTintList(android.content.res.ColorStateList.valueOf(color));
+        StageStyler.apply(this, stage, ContextCompat.getColor(this,
+                active ? R.color.text_on_primary : R.color.stage_inactive));
         stage.getRoot().setAlpha(active ? 1f : 0.6f);
     }
 

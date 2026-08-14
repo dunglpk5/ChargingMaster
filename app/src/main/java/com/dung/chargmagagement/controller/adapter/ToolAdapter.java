@@ -65,9 +65,14 @@ public class ToolAdapter extends RecyclerView.Adapter<ToolAdapter.ToolViewHolder
 
         void bind(@NonNull ToolItem item, @Nullable OnToolClickListener listener) {
             binding.imgIcon.setImageResource(item.getIconRes());
+
+            // NO_TINT: biểu tượng tự mang màu của nó, phải gỡ hẳn tint cũ vì
+            // ViewHolder được dùng lại cho ô khác
             ImageViewCompat.setImageTintList(binding.imgIcon,
-                    ContextCompat.getColorStateList(
-                            binding.getRoot().getContext(), item.getIconTintRes()));
+                    item.getIconTintRes() == ToolItem.NO_TINT
+                            ? null
+                            : ContextCompat.getColorStateList(
+                                binding.getRoot().getContext(), item.getIconTintRes()));
             binding.tvLabel.setText(item.getLabelRes());
 
             binding.getRoot().setOnClickListener(v -> {

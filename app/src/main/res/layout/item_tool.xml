@@ -38,9 +38,9 @@
         android:paddingStart="@dimen/space_xs"
         android:paddingEnd="@dimen/space_xs"
         android:textColor="@color/text_value"
-        android:textSize="@dimen/text_caption"
-        app:autoSizeMaxTextSize="@dimen/text_caption"
-        app:autoSizeMinTextSize="9sp"
+        android:textSize="@dimen/text_tool_label"
+        app:autoSizeMaxTextSize="@dimen/text_tool_label"
+        app:autoSizeMinTextSize="8sp"
         app:autoSizeStepGranularity="1sp"
         app:autoSizeTextType="uniform"
         tools:text="Lịch sử sạc" />

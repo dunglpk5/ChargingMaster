@@ -11,6 +11,15 @@ import androidx.annotation.StringRes;
 public final class ToolItem {
 
     /**
+     * Không nhuộm màu biểu tượng.
+     *
+     * <p>Dùng cho biểu tượng dạng ảnh đã có sẵn màu: nhuộm đè lên chúng sẽ bẹt hết
+     * mọi chi tiết thành một mảng màu đặc.
+     */
+    @ColorRes
+    public static final int NO_TINT = 0;
+
+    /**
      * Định danh công cụ. Dùng enum thay vì chuỗi để trình biên dịch bắt lỗi khi
      * thiếu nhánh xử lý lúc điều hướng.
      */

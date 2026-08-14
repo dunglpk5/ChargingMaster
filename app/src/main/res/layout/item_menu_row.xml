@@ -13,11 +13,10 @@
 
     <ImageView
         android:id="@+id/imgIcon"
-        android:layout_width="26dp"
-        android:layout_height="26dp"
+        android:layout_width="@dimen/menu_row_icon_size"
+        android:layout_height="@dimen/menu_row_icon_size"
         android:importantForAccessibility="no"
-        app:tint="@color/teal_primary"
-        tools:src="@drawable/ic_gear" />
+        tools:src="@drawable/ic_setting" />
 
     <TextView
         android:id="@+id/tvLabel"
@@ -26,7 +25,7 @@
         android:layout_marginStart="@dimen/space_md"
         android:layout_weight="1"
         android:textColor="@color/text_primary"
-        android:textSize="@dimen/text_body"
+        android:textSize="@dimen/text_menu_row"
         android:textStyle="bold"
         tools:text="Cài đặt" />
 

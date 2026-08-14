@@ -2,7 +2,6 @@ package com.dung.chargmagagement.controller.power;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,7 +16,6 @@ import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.core.widget.ImageViewCompat;
 
 import com.dung.chargmagagement.R;
 import com.dung.chargmagagement.common.FormatUtils;
@@ -354,18 +352,10 @@ public class XChargeActivity extends BaseActivity<ActivityXChargeBinding>
         applyStageState(binding.stageTrickle, current == ChargeStage.TRICKLE);
     }
 
+    /** Giai đoạn đang chạy: viền và biểu tượng thành trắng, ruột vòng tròn để trống. */
     private void applyStageState(@NonNull ViewChargeStageBinding stage, boolean active) {
-        final int color = ContextCompat.getColor(this,
-                active ? R.color.text_on_primary : R.color.stage_inactive);
-
-        stage.tvStage.setTextColor(color);
-        ImageViewCompat.setImageTintList(stage.imgStage, ColorStateList.valueOf(color));
-
-        // Viền vòng tròn nằm ở background nên phải nhuộm riêng. Bắt buộc gọi
-        // mutate(): ba vòng tròn được nạp từ cùng một tệp drawable nên dùng chung
-        // ConstantState – nhuộm một cái là cả ba đổi màu theo, chỉ còn lại màu của
-        // lần gọi cuối cùng.
-        stage.imgStage.getBackground().mutate().setTint(color);
+        StageStyler.apply(this, stage, ContextCompat.getColor(this,
+                active ? R.color.text_on_primary : R.color.stage_inactive));
     }
 
     private void bindRemaining(@NonNull BatteryInfo info, int smoothedMa) {
