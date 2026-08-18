@@ -537,7 +537,10 @@ public class BatteryUsageFragment extends BaseFragment<FragmentBatteryUsageBindi
 
         binding.cardChargeAverage.tvCardValue.setText(String.format(Locale.getDefault(),
                 "%.0f %%", stats.getAverageChargedPercentPerDay()));
-        binding.cardChargeAverage.tvCardDetail.setText(R.string.usage_last_7_days);
+        // Kèm luôn tốc độ nạp trung bình: cùng cửa sổ 7 ngày nên đặt chung một thẻ,
+        // và nhãn "trong 7 ngày qua" ở đây nói rõ đây là số liệu lịch sử
+        binding.cardChargeAverage.tvCardDetail.setText(getString(
+                R.string.usage_charge_rate_detail, stats.getChargeSpeedPercentPerHour()));
 
         bindActiveCharge(stats);
     }

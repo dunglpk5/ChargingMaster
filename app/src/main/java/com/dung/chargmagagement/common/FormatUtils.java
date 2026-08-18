@@ -45,6 +45,24 @@ public final class FormatUtils {
         return String.format(Locale.US, "%dm", minutes);
     }
 
+    /**
+     * Đổi mili giây sang "13h 10m" / "5m 20s" / "46s".
+     *
+     * <p>Khác {@link #formatDuration}: bản này có cả giây, dùng cho những chặng
+     * vừa mới bắt đầu – hiện "0m" trong phút đầu tiên trông như đồng hồ chết.
+     */
+    public static String formatDurationShort(long millis) {
+        if (millis <= 0) return "0s";
+
+        final long hours = TimeUnit.MILLISECONDS.toHours(millis);
+        final long minutes = TimeUnit.MILLISECONDS.toMinutes(millis) % 60;
+        final long seconds = TimeUnit.MILLISECONDS.toSeconds(millis) % 60;
+
+        if (hours > 0) return String.format(Locale.US, "%dh %02dm", hours, minutes);
+        if (minutes > 0) return String.format(Locale.US, "%dm %02ds", minutes, seconds);
+        return String.format(Locale.US, "%ds", seconds);
+    }
+
     /** Làm tròn phần trăm về số nguyên an toàn trong khoảng 0..100. */
     public static int clampPercent(float value) {
         return (int) Math.max(0, Math.min(100, Math.round(value)));

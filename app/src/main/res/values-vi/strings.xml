@@ -14,7 +14,7 @@
     <string name="home_time_to_full">Thời gian còn lại để sạc xong</string>
     <string name="home_charge_status">Trạng thái sạc</string>
     <string name="home_battery_status">Trạng thái pin</string>
-    <string name="home_charge_speed_avg">Tốc độ sạc trung bình</string>
+    <string name="home_charge_speed_avg">Tốc độ sạc</string>
     <string name="msg_coming_soon">Sắp có</string>
     <string name="home_plugged">Đã cắm</string>
     <string name="home_temperature">Nhiệt độ</string>
@@ -94,6 +94,7 @@
     <string name="usage_health_basis">Dựa trên %1$d phiên với %2$d %% sạc cho tổng cộng %3$d mAh.</string>
     <string name="usage_charge_since">từ %1$s</string>
     <string name="usage_charge_daily">Sạc trung bình hàng ngày</string>
+    <string name="usage_charge_rate_detail">trong 7 ngày qua • %1$.1f %%/h</string>
     <string name="usage_charging_now">Đang sạc hiện tại</string>
     <string name="usage_charging_since">Đang sạc từ</string>
 
@@ -286,6 +287,13 @@
     <string name="clean_time_other">%1$s %2$s</string>
     <string name="clean_card_title">Phát hiện sạc</string>
     <string name="clean_card_desc">Kiểm tra tốc độ sạc và trạng thái nguồn</string>
+    <!-- Năm dòng chi tiết trong thông báo thường trú -->
+    <string name="notif_stat_now">Hiện tại: %1$d mA (%2$.1f W) • %3$.1f%%/h • %4$s</string>
+    <string name="notif_stat_avg">Trung bình: %1$d mA • %2$.1f%%/h • %3$.0f mAh (%4$.0f%%)</string>
+    <string name="notif_stat_screen_on">Màn hình bật: %1$s • %2$.0f mAh (%3$.1f%%)</string>
+    <string name="notif_stat_screen_off">Màn hình tắt: %1$s • %2$.0f mAh (%3$.1f%%)</string>
+    <string name="notif_stat_sleep">Thức (Awake): %1$s (%2$.0f%%) • Ngủ sâu (Deep sleep): %3$s (%4$.0f%%)</string>
+
     <string name="clipboard_title_count">DỌN DẸP CLIPBOARD (%1$d)</string>
     <string name="clipboard_item_label">Nội dung đã sao chép</string>
     <string name="clipboard_cleared">Đã xoá bộ nhớ tạm</string>

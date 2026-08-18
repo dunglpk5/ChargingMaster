@@ -219,6 +219,7 @@ public final class BatteryRepository {
                 .designCapacityMah(capacityProvider.getDesignCapacityMah())
                 .chargeSessionCount(sessionDao.countFinishedSince(from))
                 .totalChargedPercent(sessionDao.sumChargedPercentSince(from))
+                .chargingMillis(sessionDao.sumChargingDurationSince(from))
                 .build();
     }
 

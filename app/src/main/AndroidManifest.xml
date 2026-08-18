@@ -13,6 +13,16 @@
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
     <!--
+      Hạ độ sáng toàn máy khi vào chế độ sạc tối ưu (PowerSaver).
+      Quyền đặc biệt: phải khai báo ở đây thì ứng dụng mới xuất hiện trong danh sách
+      "Sửa đổi cài đặt hệ thống" để người dùng bật lên; chỉ gọi
+      Settings.ACTION_MANAGE_WRITE_SETTINGS thôi là chưa đủ.
+    -->
+    <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+
+    <!--
       Xếp hạng ứng dụng theo thời gian dùng ở mục "Sử dụng pin ứng dụng".
       Quyền đặc biệt: khai báo ở đây không đủ, người dùng phải tự bật trong Cài đặt.
     -->

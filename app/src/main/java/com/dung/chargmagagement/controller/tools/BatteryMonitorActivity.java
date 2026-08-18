@@ -281,7 +281,8 @@ public class BatteryMonitorActivity extends BaseActivity<ActivityBatteryMonitorB
 
         binding.cardChargeAverage.tvCardValue.setText(String.format(Locale.getDefault(),
                 "%.0f %%", stats.getAverageChargedPercentPerDay()));
-        binding.cardChargeAverage.tvCardDetail.setText(R.string.usage_last_7_days);
+        binding.cardChargeAverage.tvCardDetail.setText(getString(
+                R.string.usage_charge_rate_detail, stats.getChargeSpeedPercentPerHour()));
     }
 
     // ==================== Đặt dung lượng thiết kế ====================

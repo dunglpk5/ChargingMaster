@@ -57,8 +57,6 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding>
      */
     private int usableCapacityMah = BatteryInfo.UNKNOWN_INT;
 
-    /** Tốc độ sạc trung bình lấy từ lịch sử; 0 nghĩa là chưa đủ dữ liệu. */
-    private float averageChargeSpeed;
 
     @NonNull
     @Override
@@ -121,16 +119,15 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding>
                 v -> BatteryMonitorActivity.start(requireContext()));
     }
 
-    /** Đọc dung lượng khả dụng và tốc độ sạc trung bình ở thread nền (có database). */
+    /**
+     * Đọc dung lượng pin khả dụng ở thread nền (có truy vấn database).
+     *
+     * <p>Đây là mẫu số của mọi phép quy đổi mA sang %/h, nên phải có trước khi các
+     * dòng số liệu hiện được giá trị thật.
+     */
     private void loadUsableCapacity() {
         executors.execute(repository::getUsableCapacityMah, result -> {
             if (result != null) usableCapacityMah = result;
-        });
-
-        executors.execute(repository::getUsageStatsSync, stats -> {
-            if (binding == null || stats == null) return;
-            averageChargeSpeed = stats.getAverageChargedPercentPerDay();
-            bindAverageSpeed();
         });
     }
 
@@ -233,9 +230,13 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding>
     // ==================== Thẻ "Trạng thái sạc" ====================
 
     private void bindChargeStatus(@NonNull BatteryInfo info, int smoothedMa) {
+        // Cả thẻ này nói về việc đang sạc, nên rút sạc là ba dòng cùng về "-".
+        // Giữ lại số cũ khiến người dùng tưởng máy vẫn đang nạp điện.
+        final boolean plugged = info.getPlugType().isPlugged();
+
         bindCurrentRow(info, smoothedMa);
-        bindVoltageRow(info);
-        bindAverageSpeed();
+        bindVoltageRow(info, plugged);
+        bindSpeedRow(plugged, smoothedMa);
     }
 
     /** Dòng sạc hiển thị kèm công suất, đúng như bản thiết kế: "3.5 W / 892 mA". */
@@ -252,8 +253,15 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding>
                 Math.round(smoothedMa * 100f / MAX_CURRENT_MA));
     }
 
-    private void bindVoltageRow(@NonNull BatteryInfo info) {
-        if (info.getVoltage() <= 0) {
+    /**
+     * Điện áp nạp.
+     *
+     * <p>Máy vẫn báo điện áp pin cả khi không cắm sạc, nhưng ở thẻ "Trạng thái
+     * sạc" thì con số đó không còn nghĩa gì – nó là điện áp của viên pin đang
+     * phóng điện, không phải điện áp bộ sạc đang đưa vào.
+     */
+    private void bindVoltageRow(@NonNull BatteryInfo info, boolean plugged) {
+        if (!plugged || info.getVoltage() <= 0) {
             setRow(binding.rowVoltage, getString(R.string.value_placeholder), 0);
             return;
         }
@@ -267,16 +275,30 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding>
                 Math.round(ratio * 100f));
     }
 
-    private void bindAverageSpeed() {
+    /**
+     * Tốc độ đổi mức pin <b>ngay lúc này</b>, tính từ dòng điện và dung lượng pin.
+     *
+     * <p>Trước đây dòng này hiện trung bình 7 ngày, đặt cạnh hai số đo tức thời nên
+     * ai cũng hiểu nhầm là tức thời. Tệ hơn: nó luôn dương, kể cả khi máy đang cắm
+     * sạc mà pin vẫn tụt vì tiêu nhiều hơn nạp.
+     *
+     * <p>Con số mới <b>âm khi pin đang tụt</b>, nên nó nói đúng thứ người dùng cần
+     * biết. Trung bình lịch sử vẫn còn ở tab Sử dụng pin, nơi có sẵn ngữ cảnh
+     * "trong 7 ngày qua".
+     */
+    private void bindSpeedRow(boolean plugged, int smoothedMa) {
         if (binding == null) return;
 
-        if (averageChargeSpeed <= 0f) {
+        if (!plugged || smoothedMa == BatteryInfo.UNKNOWN_INT
+                || usableCapacityMah == BatteryInfo.UNKNOWN_INT || usableCapacityMah <= 0) {
             setRow(binding.rowSpeed, getString(R.string.value_placeholder), 0);
             return;
         }
+
+        final float percentPerHour = smoothedMa * 100f / usableCapacityMah;
         setRow(binding.rowSpeed,
-                String.format(Locale.US, "%.1f%%/h", averageChargeSpeed),
-                Math.round(averageChargeSpeed * 100f / MAX_CHARGE_SPEED));
+                String.format(Locale.US, "%+.1f%%/h", percentPerHour),
+                Math.round(Math.abs(percentPerHour) * 100f / MAX_CHARGE_SPEED));
     }
 
     private void setRow(@NonNull ViewChargeStatRowBinding row, @NonNull String value, int percent) {

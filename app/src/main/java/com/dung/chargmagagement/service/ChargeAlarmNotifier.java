@@ -70,7 +70,10 @@ public final class ChargeAlarmNotifier {
                         // Không setOngoing: người dùng phải vuốt bỏ được thông báo
                         .setPriority(NotificationCompat.PRIORITY_MAX)
                         .setDefaults(0)
-                        .setCategory(NotificationCompat.CATEGORY_ALARM);
+                        // REMINDER chứ không phải ALARM: CATEGORY_ALARM cho phép
+                        // thông báo xuyên qua chế độ Không làm phiền, mà đây chỉ là
+                        // lời nhắc rút sạc – không đáng đánh thức người dùng
+                        .setCategory(NotificationCompat.CATEGORY_REMINDER);
 
         try {
             manager.notify(NOTIFICATION_ID, builder.build());

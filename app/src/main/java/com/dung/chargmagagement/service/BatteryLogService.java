@@ -10,6 +10,9 @@ import android.content.IntentFilter;
 import android.content.pm.ServiceInfo;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.PowerManager;
+import android.os.SystemClock;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,13 +23,17 @@ import com.dung.chargmagagement.ChargApplication;
 import com.dung.chargmagagement.R;
 import com.dung.chargmagagement.common.AppExecutors;
 import com.dung.chargmagagement.common.Logger;
+import com.dung.chargmagagement.common.FormatUtils;
 import com.dung.chargmagagement.common.PrefManager;
 import com.dung.chargmagagement.controller.home.HomeActivity;
 import com.dung.chargmagagement.model.alarm.AlarmSettings;
 import com.dung.chargmagagement.model.alarm.ChargeAlarmChecker;
 import com.dung.chargmagagement.model.battery.BatteryInfo;
 import com.dung.chargmagagement.model.battery.BatteryInfoProvider;
+import com.dung.chargmagagement.model.repository.BatteryRepository;
 import com.dung.chargmagagement.model.repository.SessionRecorder;
+import com.dung.chargmagagement.model.stats.SessionMeter;
+import com.dung.chargmagagement.model.stats.UsageCalculator;
 
 /**
  * Dịch vụ nền <b>duy nhất</b> của ứng dụng: ghi lại mức pin để dựng biểu đồ theo
@@ -60,14 +67,32 @@ public class BatteryLogService extends Service {
      */
     private static final long MIN_PROCESS_INTERVAL_MS = 15_000L;
 
-    /** Notification chỉ vẽ lại tối đa mỗi ngần này, tránh làm hệ thống bận vô ích. */
-    private static final long NOTIFY_INTERVAL_MS = 60_000L;
+    /**
+     * Notification chỉ vẽ lại tối đa mỗi ngần này.
+     *
+     * <p>Khớp với nhịp lấy mẫu ở trên: vẽ lại dày hơn cũng không có số liệu mới,
+     * vẽ lại thưa hơn thì các con số đứng yên trong khi máy vẫn đang đo.
+     */
+    private static final long NOTIFY_INTERVAL_MS = MIN_PROCESS_INTERVAL_MS;
 
     private BatteryInfoProvider provider;
     private SessionRecorder recorder;
     private ChargeAlarmChecker alarmChecker;
     private ChargeAlarmNotifier alarmNotifier;
     private AppExecutors executors;
+
+    /** Số liệu của chặng hiện tại, dựng nên năm dòng chi tiết trong thông báo. */
+    private final SessionMeter meter = new SessionMeter();
+
+    private BatteryRepository repository;
+    private PowerManager powerManager;
+
+    /** Trạng thái nguồn của chặng đang đếm; đổi là bắt đầu chặng mới. */
+    private boolean meterPlugged;
+
+    /** Mốc đo thời gian thức / ngủ sâu, đặt lại cùng lúc với chặng. */
+    private long awakeBaseMs;
+    private long realtimeBaseMs;
 
     private long lastProcessTime;
     private long lastNotifyTime;
@@ -84,8 +109,19 @@ public class BatteryLogService extends Service {
     private final BroadcastReceiver batteryReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent == null) return;
-            handleBroadcast(intent);
+            if (intent == null || intent.getAction() == null) return;
+
+            switch (intent.getAction()) {
+                case Intent.ACTION_SCREEN_ON:
+                    handleScreenChange(true);
+                    break;
+                case Intent.ACTION_SCREEN_OFF:
+                    handleScreenChange(false);
+                    break;
+                default:
+                    handleBroadcast(intent);
+                    break;
+            }
         }
     };
 
@@ -112,9 +148,17 @@ public class BatteryLogService extends Service {
         alarmChecker = new ChargeAlarmChecker();
         alarmNotifier = new ChargeAlarmNotifier(this);
         executors = AppExecutors.get();
+        repository = BatteryRepository.get(this);
+        powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        resetSleepBaseline();
 
-        ContextCompat.registerReceiver(this, batteryReceiver,
-                new IntentFilter(Intent.ACTION_BATTERY_CHANGED),
+        // Bật/tắt màn hình cũng do hệ thống chủ động báo, không tốn gì thêm; nhờ hai
+        // action này mà mốc bật/tắt chính xác tới từng giây thay vì phải suy đoán
+        // từ trạng thái tại thời điểm nhận mẫu pin
+        IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        ContextCompat.registerReceiver(this, batteryReceiver, filter,
                 ContextCompat.RECEIVER_NOT_EXPORTED);
 
         Logger.d(TAG, "Service ghi pin đã khởi động");
@@ -151,6 +195,17 @@ public class BatteryLogService extends Service {
         executors.disk().execute(() -> process(intent));
     }
 
+    /**
+     * Ghi mốc bật/tắt màn hình vào bộ đếm.
+     *
+     * <p>Đẩy sang đúng thread đang nạp mẫu pin: hai luồng cùng chạm vào
+     * {@code SessionMeter} thì các con số cộng dồn sẽ chồng lên nhau.
+     */
+    private void handleScreenChange(boolean screenOn) {
+        final long now = System.currentTimeMillis();
+        executors.disk().execute(() -> meter.setScreenOn(now, screenOn));
+    }
+
     private static int extractPercent(@NonNull Intent intent) {
         final int level = intent.getIntExtra(android.os.BatteryManager.EXTRA_LEVEL, -1);
         final int scale = intent.getIntExtra(android.os.BatteryManager.EXTRA_SCALE, 100);
@@ -166,6 +221,7 @@ public class BatteryLogService extends Service {
             // ghi database sang thread disk
             executors.runOnMain(() -> recorder.onBatteryUpdated(info, info.getCurrentMa()));
 
+            updateMeter(info);
             checkAlarm(info);
             updateNotification(info);
         } catch (Exception e) {
@@ -196,6 +252,39 @@ public class BatteryLogService extends Service {
         alarmNotifier.notifyAlarm(type, info.getPercent());
     }
 
+    // ==================== Số liệu cho thông báo ====================
+
+    /**
+     * Nạp một mẫu vào bộ đếm chặng.
+     *
+     * <p>Chặng được tính lại từ đầu mỗi lần cắm hoặc rút sạc: gộp cả hai chiều vào
+     * một chặng thì mọi số trung bình đều vô nghĩa vì nạp vào và xả ra triệt tiêu
+     * lẫn nhau.
+     */
+    private void updateMeter(@NonNull BatteryInfo info) {
+        final boolean plugged = info.getPlugType().isPlugged();
+        final boolean screenOn = powerManager != null && powerManager.isInteractive();
+        // Giữ nguyên "không đọc được" thay vì quy về 0: bộ đếm cần phân biệt hai
+        // trường hợp này, coi là 0 mA sẽ kéo tụt dòng trung bình một cách giả tạo
+        final int currentMa = info.getCurrentMa() == BatteryInfo.UNKNOWN_INT
+                ? SessionMeter.UNKNOWN_CURRENT
+                : info.getCurrentMa();
+
+        if (plugged != meterPlugged) {
+            meterPlugged = plugged;
+            meter.reset(info.getTimestamp(), info.getPercent());
+            resetSleepBaseline();
+            return;
+        }
+
+        meter.addSample(info.getTimestamp(), info.getPercent(), currentMa, screenOn);
+    }
+
+    private void resetSleepBaseline() {
+        awakeBaseMs = SystemClock.uptimeMillis();
+        realtimeBaseMs = SystemClock.elapsedRealtime();
+    }
+
     // ==================== Notification ====================
 
     private void updateNotification(@NonNull BatteryInfo info) {
@@ -224,14 +313,29 @@ public class BatteryLogService extends Service {
                 new Intent(this, HomeActivity.class),
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        final String content = info == null
-                ? getString(R.string.notif_log_starting)
-                : getString(R.string.notif_log_content, info.getPercent());
+        final NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(this, ChargApplication.CHANNEL_MONITOR);
 
-        return new NotificationCompat.Builder(this, ChargApplication.CHANNEL_MONITOR)
+        String content;
+        if (info == null) {
+            content = getString(R.string.notif_log_starting);
+        } else if (!meter.hasData()) {
+            // Chặng vừa bắt đầu, chưa có mẫu thứ hai để tính chênh lệch
+            content = getString(R.string.notif_log_content, info.getPercent());
+        } else {
+            // Dòng "Hiện tại" làm luôn dòng thu gọn: người dùng thấy số liệu ngay
+            // mà không phải kéo thông báo ra
+            final String[] lines = buildDetailLines(info);
+            content = lines[0];
+            builder.setStyle(new NotificationCompat.BigTextStyle()
+                    .bigText(TextUtils.join("\n", lines)));
+        }
+
+        return builder
                 .setSmallIcon(R.drawable.ic_battery)
                 .setContentTitle(getString(R.string.notif_log_title))
                 .setContentText(content)
+                .setSubText(info == null ? null : info.getPercent() + "%")
                 .setContentIntent(contentIntent)
                 .setOngoing(true)
                 .setShowWhen(false)
@@ -239,6 +343,91 @@ public class BatteryLogService extends Service {
                 .setPriority(NotificationCompat.PRIORITY_MIN)
                 .setCategory(NotificationCompat.CATEGORY_SERVICE)
                 .build();
+    }
+
+    /**
+     * Năm dòng số liệu trong phần mở rộng của thông báo.
+     *
+     * <p>Dung lượng pin đọc từ database mỗi lần dựng, nhưng thông báo chỉ cập nhật
+     * mỗi phút nên chi phí không đáng kể, đổi lại con số theo kịp khi người dùng
+     * vừa tự nhập dung lượng thiết kế.
+     */
+    @NonNull
+    private String[] buildDetailLines(@NonNull BatteryInfo info) {
+        final long now = System.currentTimeMillis();
+        final int capacity = repository.getUsableCapacityMah();
+        final int currentMa = info.getCurrentMa() == BatteryInfo.UNKNOWN_INT
+                ? 0
+                : info.getCurrentMa();
+
+        // Máy khởi động lại thì hai đồng hồ này đếm lại từ 0, mốc cũ lớn hơn giá trị
+        // hiện tại và mọi hiệu số thành âm
+        if (SystemClock.elapsedRealtime() < realtimeBaseMs
+                || SystemClock.uptimeMillis() < awakeBaseMs) {
+            resetSleepBaseline();
+        }
+
+        final long totalMs = SystemClock.elapsedRealtime() - realtimeBaseMs;
+        final long awakeMs = SystemClock.uptimeMillis() - awakeBaseMs;
+        final long deepMs = Math.max(0L, totalMs - awakeMs);
+
+        return new String[]{
+                // Dòng "Hiện tại" phải là số đo tức thời: %/h suy thẳng từ dòng điện
+                // đang đo được, không phải trung bình của cả chặng như dòng dưới
+                getString(R.string.notif_stat_now,
+                        currentMa,
+                        info.getVoltage() * currentMa / 1000f,
+                        percentPerHour(currentMa, capacity),
+                        remainingText(info, currentMa, capacity)),
+                getString(R.string.notif_stat_avg,
+                        meter.getAverageMa(),
+                        orZero(meter.getAveragePercentPerHour(capacity)),
+                        meter.getTotalMah(),
+                        meter.toPercent(meter.getTotalMah(), capacity)),
+                getString(R.string.notif_stat_screen_on,
+                        FormatUtils.formatDurationShort(meter.getScreenOnMs(now)),
+                        meter.getScreenOnMah(),
+                        meter.getScreenOnShare()),
+                getString(R.string.notif_stat_screen_off,
+                        FormatUtils.formatDurationShort(meter.getScreenOffMs(now)),
+                        meter.getScreenOffMah(),
+                        meter.getScreenOffShare()),
+                getString(R.string.notif_stat_sleep,
+                        FormatUtils.formatDurationShort(awakeMs), share(awakeMs, totalMs),
+                        FormatUtils.formatDurationShort(deepMs), share(deepMs, totalMs))
+        };
+    }
+
+    /**
+     * Thời gian còn lại: tới lúc đầy nếu đang sạc, tới lúc cạn nếu đang dùng pin.
+     */
+    @NonNull
+    private String remainingText(@NonNull BatteryInfo info, int currentMa, int capacity) {
+        if (info.getPlugType().isPlugged()) {
+            return FormatUtils.formatDuration(UsageCalculator.estimateTimeToFull(
+                    info.getPercent(), currentMa, capacity));
+        }
+
+        if (currentMa >= 0 || capacity <= 0) return getString(R.string.value_placeholder);
+
+        final float remainingMah = capacity * info.getPercent() / 100f;
+        return FormatUtils.formatDuration(
+                Math.round(remainingMah / Math.abs(currentMa) * 3_600_000f));
+    }
+
+    /** Tốc độ đổi mức pin ứng với một dòng điện tức thời (%/giờ). */
+    private static float percentPerHour(int currentMa, int capacityMah) {
+        if (capacityMah <= 0) return 0f;
+        return currentMa * 100f / capacityMah;
+    }
+
+    private static float share(long part, long total) {
+        return total <= 0L ? 0f : part * 100f / total;
+    }
+
+    /** SessionMeter trả về NaN khi chặng còn quá ngắn; thông báo hiện 0 cho gọn. */
+    private static float orZero(float value) {
+        return Float.isNaN(value) ? 0f : value;
     }
 
     @Override

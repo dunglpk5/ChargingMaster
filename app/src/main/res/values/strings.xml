@@ -17,7 +17,7 @@
     <string name="home_time_to_full">Time left until full</string>
     <string name="home_charge_status">Charging status</string>
     <string name="home_battery_status">Battery status</string>
-    <string name="home_charge_speed_avg">Average charging speed</string>
+    <string name="home_charge_speed_avg">Charging speed</string>
     <string name="msg_coming_soon">Coming soon</string>
     <string name="home_plugged">Plugged</string>
     <string name="home_temperature">Temperature</string>
@@ -101,6 +101,7 @@
     <string name="usage_health_basis">Based on %1$d sessions totalling %2$d %% charged, or %3$d mAh.</string>
     <string name="usage_charge_since">since %1$s</string>
     <string name="usage_charge_daily">Average charged per day</string>
+    <string name="usage_charge_rate_detail">in the last 7 days • %1$.1f %%/h</string>
     <string name="usage_charging_now">Charging session so far</string>
     <string name="usage_charging_since">Charging since</string>
 
@@ -300,6 +301,13 @@
     <string name="clean_time_other">%1$s %2$s</string>
     <string name="clean_card_title">Charging detection</string>
     <string name="clean_card_desc">Check charging speed and power status</string>
+    <!-- Năm dòng chi tiết trong thông báo thường trú -->
+    <string name="notif_stat_now">Now: %1$d mA (%2$.1f W) • %3$.1f%%/h • %4$s</string>
+    <string name="notif_stat_avg">Average: %1$d mA • %2$.1f%%/h • %3$.0f mAh (%4$.0f%%)</string>
+    <string name="notif_stat_screen_on">Screen on: %1$s • %2$.0f mAh (%3$.1f%%)</string>
+    <string name="notif_stat_screen_off">Screen off: %1$s • %2$.0f mAh (%3$.1f%%)</string>
+    <string name="notif_stat_sleep">Awake: %1$s (%2$.0f%%) • Deep sleep: %3$s (%4$.0f%%)</string>
+
     <string name="clipboard_title_count">CLEAN CLIPBOARD (%1$d)</string>
     <string name="clipboard_item_label">Copied content</string>
     <string name="clipboard_cleared">Clipboard cleared</string>

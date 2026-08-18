@@ -21,14 +21,17 @@ import java.util.concurrent.TimeUnit;
 /**
  * Phát một tiếng chuông ngắn kèm rung khi báo động sạc.
  *
- * <p>Dùng {@link Ringtone} với {@link AudioAttributes#USAGE_ALARM}: âm báo sẽ đi
- * theo âm lượng báo thức chứ không phải âm lượng nhạc, nên vẫn kêu được khi máy
- * đang để nhỏ tiếng media — đúng ý nghĩa của một cảnh báo.
+ * <p>Dùng <b>âm báo thông báo</b> chứ không phải nhạc chuông báo thức: cảnh báo
+ * sạc là lời nhắc "ra rút sạc đi", không phải thứ để đánh thức người đang ngủ.
+ * Nhạc báo thức thường dài, to và dồn dập — nghe hoảng chứ không hữu ích.
  *
- * <p><b>Kêu một lần rồi tự tắt</b> sau {@link #MAX_DURATION_MS}. Cảnh báo sạc là
- * lời nhắc, không phải báo thức: kêu dai dẳng tới khi người dùng bấm tắt là cách
- * chắc chắn nhất để họ gỡ app. Thông báo vẫn nằm lại trên màn hình nên không sợ
- * bỏ lỡ dù đang để máy ở phòng khác.
+ * <p>Kéo theo đó, {@link AudioAttributes#USAGE_NOTIFICATION} khiến âm báo đi theo
+ * âm lượng thông báo. Máy để im lặng thì không kêu, đúng như người dùng mong đợi
+ * ở một lời nhắc; nếu dùng USAGE_ALARM thì nó kêu bất chấp chế độ im lặng.
+ *
+ * <p><b>Kêu một lần rồi tự tắt</b> sau {@link #MAX_DURATION_MS}. Kêu dai dẳng tới
+ * khi người dùng bấm tắt là cách chắc chắn nhất để họ gỡ app. Thông báo vẫn nằm
+ * lại trên màn hình nên không sợ bỏ lỡ dù đang để máy ở phòng khác.
  *
  * <p>Chỉ có một phiên chuông tại một thời điểm (đối tượng tĩnh): nếu hai cảnh báo
  * xảy ra sát nhau mà mỗi cái phát một luồng riêng thì người dùng sẽ nghe chồng
@@ -38,11 +41,16 @@ public final class AlarmPlayer {
 
     private static final String TAG = "AlarmPlayer";
 
-    /** Chuông kêu tối đa bấy nhiêu rồi tự tắt (ms). */
-    private static final long MAX_DURATION_MS = 3_000L;
+    /**
+     * Chuông kêu tối đa bấy nhiêu rồi tự tắt (ms).
+     *
+     * <p>Âm báo thông báo thường chỉ dài một, hai giây và tự hết. Mốc này chỉ để
+     * chặn trường hợp người dùng chọn một bản nhạc dài làm âm báo hệ thống.
+     */
+    private static final long MAX_DURATION_MS = 2_000L;
 
-    /** Một nhịp rung duy nhất: chờ 0ms, rung 600ms, nghỉ 400ms, rung 600ms. */
-    private static final long[] VIBRATE_PATTERN = {0L, 600L, 400L, 600L};
+    /** Hai nhịp rung ngắn kiểu thông báo: rung 200ms, nghỉ 150ms, rung 200ms. */
+    private static final long[] VIBRATE_PATTERN = {0L, 200L, 150L, 200L};
 
     @Nullable
     private static Ringtone ringtone;
@@ -82,9 +90,10 @@ public final class AlarmPlayer {
 
     private static void playRingtone(@NonNull Context context) {
         try {
-            Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+            // Âm báo thông báo trước; chỉ khi máy không có mới lùi về nhạc chuông
+            Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             if (uri == null) {
-                uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
             }
             if (uri == null) return;
 
@@ -92,7 +101,7 @@ public final class AlarmPlayer {
             if (current == null) return;
 
             current.setAudioAttributes(new AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_ALARM)
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                     .build());
 

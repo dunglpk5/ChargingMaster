@@ -35,10 +35,17 @@ public final class BatteryMonitor {
 
     private static final String TAG = "BatteryMonitor";
 
-    /** Chu kỳ lấy mẫu khi đang sạc (ms) – đủ mượt cho biểu đồ thời gian thực. */
-    private static final long INTERVAL_CHARGING_MS = 2_000L;
-    /** Chu kỳ khi đang dùng pin (ms) – thưa hơn để tiết kiệm. */
-    private static final long INTERVAL_DISCHARGING_MS = 5_000L;
+    /**
+     * Chu kỳ lấy mẫu: mỗi giây một lần, không phân biệt đang sạc hay dùng pin.
+     *
+     * <p>Chấp nhận được vì lớp này <b>chỉ sống khi có màn hình đang mở</b>: listener
+     * cuối cùng rời đi là việc lấy mẫu dừng hẳn. Trong lúc đó màn hình đang sáng và
+     * ngốn điện gấp nhiều lần một lượt đọc sysfs, nên chi phí này không đáng kể.
+     *
+     * <p>Việc ghi dữ liệu chạy ngầm là chuyện khác hẳn, do
+     * {@code BatteryLogService} lo với nhịp 15 giây.
+     */
+    private static final long SAMPLE_INTERVAL_MS = 1_000L;
 
     private static volatile BatteryMonitor instance;
 
@@ -51,7 +58,6 @@ public final class BatteryMonitor {
 
     private ScheduledFuture<?> samplingTask;
     private volatile BatteryInfo lastInfo;
-    private volatile long currentIntervalMs = INTERVAL_DISCHARGING_MS;
 
     /** Nhận sự kiện cắm/rút sạc từ hệ thống để phản hồi tức thì. */
     private final BroadcastReceiver powerReceiver = new BroadcastReceiver() {
@@ -142,7 +148,7 @@ public final class BatteryMonitor {
         ContextCompat.registerReceiver(appContext, powerReceiver, filter,
                 ContextCompat.RECEIVER_NOT_EXPORTED);
 
-        scheduleSampling(currentIntervalMs);
+        scheduleSampling();
         Logger.d(TAG, "Bắt đầu theo dõi pin");
     }
 
@@ -158,10 +164,10 @@ public final class BatteryMonitor {
         Logger.d(TAG, "Dừng theo dõi pin");
     }
 
-    private void scheduleSampling(long intervalMs) {
+    private void scheduleSampling() {
         cancelSampling();
-        currentIntervalMs = intervalMs;
-        samplingTask = executors.schedulePeriodic(this::sampleOnce, 0L, intervalMs);
+        samplingTask = executors.schedulePeriodic(
+                this::sampleOnce, 0L, SAMPLE_INTERVAL_MS);
     }
 
     private void cancelSampling() {
@@ -185,22 +191,8 @@ public final class BatteryMonitor {
                 }
             });
 
-            rescheduleIfIntervalChanged();
         } catch (Exception e) {
             Logger.e(TAG, "Lỗi khi lấy mẫu pin", e);
-        }
-    }
-
-    /** Đổi chu kỳ khi chuyển giữa trạng thái sạc và dùng pin. */
-    private void rescheduleIfIntervalChanged() {
-        final BatteryInfo info = lastInfo;
-        if (info == null || !running.get()) return;
-
-        final long expected = info.getPlugType().isPlugged()
-                ? INTERVAL_CHARGING_MS
-                : INTERVAL_DISCHARGING_MS;
-        if (expected != currentIntervalMs) {
-            scheduleSampling(expected);
         }
     }
 

@@ -18,6 +18,9 @@ public final class BatteryUsageStats {
 
     private final int chargeSessionCount;
     private final int totalChargedPercent;
+
+    /** Tổng thời gian đã cắm sạc trong cửa sổ thống kê. */
+    private final long chargingMillis;
     private final float totalChargedMah;
     private final int statsWindowDays;
 
@@ -42,6 +45,19 @@ public final class BatteryUsageStats {
         this.designCapacityMah = builder.designCapacityMah;
         this.chargeSessionCount = builder.chargeSessionCount;
         this.totalChargedPercent = builder.totalChargedPercent;
+        this.chargingMillis = builder.chargingMillis;
+    }
+
+    /**
+     * Tốc độ nạp trung bình trong cửa sổ thống kê, tính bằng %/giờ.
+     *
+     * <p>Chia tổng % đã nạp cho tổng thời gian <b>thực sự cắm sạc</b>, không phải
+     * cho số ngày trôi qua: máy cắm sạc 2 tiếng mỗi ngày mà chia cho 24 tiếng thì
+     * con số bé đi hàng chục lần.
+     */
+    public float getChargeSpeedPercentPerHour() {
+        if (chargingMillis <= 0L) return 0f;
+        return totalChargedPercent / (chargingMillis / 3_600_000f);
     }
 
     public UsageRate getCombined() {
@@ -145,6 +161,7 @@ public final class BatteryUsageStats {
         private int designCapacityMah = BatteryInfo.UNKNOWN_INT;
         private int chargeSessionCount;
         private int totalChargedPercent;
+        private long chargingMillis;
         private float totalChargedMah;
         private int statsWindowDays;
         private long firstSessionTime;
@@ -204,6 +221,11 @@ public final class BatteryUsageStats {
 
         public Builder chargeSessionCount(int value) {
             this.chargeSessionCount = value;
+            return this;
+        }
+
+        public Builder chargingMillis(long value) {
+            this.chargingMillis = value;
             return this;
         }
 

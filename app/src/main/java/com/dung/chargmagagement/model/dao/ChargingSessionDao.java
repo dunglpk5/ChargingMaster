@@ -62,6 +62,16 @@ public interface ChargingSessionDao {
             + "WHERE end_time > 0 AND end_percent > start_percent AND start_time >= :from")
     int sumChargedPercentSince(long from);
 
+    /**
+     * Tổng thời gian thực sự cắm sạc kể từ mốc thời gian (ms).
+     *
+     * <p>Cùng bộ lọc với {@code sumChargedPercentSince} để hai số chia được cho
+     * nhau: lấy tử số của phiên này mà mẫu số của phiên khác thì ra tốc độ sai.
+     */
+    @Query("SELECT COALESCE(SUM(end_time - start_time), 0) FROM charging_session "
+            + "WHERE end_time > 0 AND end_percent > start_percent AND start_time >= :from")
+    long sumChargingDurationSince(long from);
+
     /** Tổng điện tích đã nạp kể từ mốc thời gian (mAh), cho dòng tóm tắt sức khoẻ pin. */
     @Query("SELECT COALESCE(SUM(charged_mah), 0) FROM charging_session "
             + "WHERE end_time > 0 AND start_time >= :from")
