@@ -27,8 +27,11 @@ android {
         applicationId = "com.dung.chargmagagement"
         minSdk = 26
         targetSdk = 35
+
+        // --- CHỈNH SỬA VERSION Ở ĐÂY KHI CẬP NHẬT APP ---
         versionCode = 1
         versionName = "1.0.0"
+        // -----------------------------------------------
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -95,6 +98,20 @@ android {
             "META-INF/NOTICE*"
         )
     }
+
+    // --- ĐOẠN CODE THÊM VÀO ĐỂ TỰ ĐỘNG ĐỔI TÊN FILE APK ---
+    applicationVariants.all {
+        val variantName = name
+        val appVersion = versionName
+        val appName = "ChargeManagement" // Bạn có thể đổi tên app ở đây
+
+        outputs.all {
+            val outputImpl = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
+            // Kết quả xuất ra sẽ có dạng: ChargeManagement-release-v1.0.0.apk
+            outputImpl.outputFileName = "${appName}-${variantName}-v${appVersion}.apk"
+        }
+    }
+    // --------------------------------------------------------
 }
 
 // Đảm bảo mọi tác vụ biên dịch Java (kể cả unit test) đều đọc file theo UTF-8

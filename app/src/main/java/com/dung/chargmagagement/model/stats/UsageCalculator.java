@@ -119,6 +119,24 @@ public final class UsageCalculator {
     }
 
     /**
+     * Lượng điện đã nạp của một phiên (mAh), ưu tiên nguồn chính xác hơn.
+     *
+     * <p>Bộ đếm cu-lông do chip pin giữ nên hiệu số của nó là lượng nạp <b>thật</b>,
+     * không phụ thuộc vào việc app lấy mẫu dày hay thưa. Chỉ khi máy không hỗ trợ mới
+     * quay lại cách nhân dòng trung bình với thời lượng.
+     *
+     * @param counterStartUah bộ đếm lúc mở phiên (0 = không có)
+     * @param counterEndUah   bộ đếm lúc đóng phiên (0 = không có)
+     */
+    public static float chargedMah(long counterStartUah, long counterEndUah,
+                                   int avgCurrentMa, long durationMs) {
+        if (counterStartUah > 0L && counterEndUah > counterStartUah) {
+            return (counterEndUah - counterStartUah) / 1000f;
+        }
+        return calculateChargedMah(avgCurrentMa, durationMs);
+    }
+
+    /**
      * Dung lượng giả định khi không cách nào xác định được dung lượng thật.
      * 4000 mAh là mức phổ biến nhất của điện thoại hiện nay.
      */

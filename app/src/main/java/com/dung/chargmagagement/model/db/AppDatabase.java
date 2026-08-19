@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.dung.chargmagagement.model.dao.BatterySampleDao;
 import com.dung.chargmagagement.model.dao.ChargingSessionDao;
@@ -37,8 +39,22 @@ import com.dung.chargmagagement.model.entity.ScreenSessionEntity;
 )
 public abstract class AppDatabase extends RoomDatabase {
 
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
     private static final String DB_NAME = "charg.db";
+
+    /**
+     * v2: thêm {@code charge_counter_start} vào bảng phiên sạc.
+     *
+     * <p>Phiên cũ để nguyên giá trị 0 – nghĩa là "không có bộ đếm", và tầng thống kê
+     * tự quay về cách tính theo dòng trung bình như trước.
+     */
+    static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase db) {
+            db.execSQL("ALTER TABLE charging_session "
+                    + "ADD COLUMN charge_counter_start INTEGER NOT NULL DEFAULT 0");
+        }
+    };
 
     private static volatile AppDatabase instance;
 
@@ -59,6 +75,7 @@ public abstract class AppDatabase extends RoomDatabase {
                             // Ghi mẫu pin diễn ra liên tục ở nền; WAL cho phép đọc
                             // (vẽ biểu đồ) song song với ghi mà không chặn nhau
                             .setJournalMode(JournalMode.WRITE_AHEAD_LOGGING)
+                            .addMigrations(MIGRATION_1_2)
                             .build();
                 }
             }

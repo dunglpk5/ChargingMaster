@@ -229,4 +229,34 @@ public class UsageCalculatorTest {
                         .build();
         assertEquals(80, stats.getHealthPercent());
     }
+    // ==================== Lượng điện đã nạp ====================
+
+    /** Có bộ đếm cu-lông thì lấy hiệu số của nó: 3.000.000 µAh = 3000 mAh. */
+    @Test
+    public void chargedMah_uuTienBoDemCuLong() {
+        assertEquals(3000f,
+                UsageCalculator.chargedMah(1_000_000L, 4_000_000L, 500, 3_600_000L), 0.1f);
+    }
+
+    /** Máy không hỗ trợ bộ đếm: quay về dòng trung bình × thời lượng. */
+    @Test
+    public void chargedMah_khongCoBoDem_dungDongTrungBinh() {
+        assertEquals(500f, UsageCalculator.chargedMah(0L, 0L, 500, 3_600_000L), 0.1f);
+    }
+
+    /**
+     * Bộ đếm bị đặt lại giữa phiên (khởi động máy) nên số cuối nhỏ hơn số đầu.
+     * Hiệu số âm là vô nghĩa, phải bỏ qua chứ không được trả về số âm.
+     */
+    @Test
+    public void chargedMah_boDemLuiVe_dungDongTrungBinh() {
+        assertEquals(500f,
+                UsageCalculator.chargedMah(4_000_000L, 1_000_000L, 500, 3_600_000L), 0.1f);
+    }
+
+    /** Không có nguồn nào đo được thì trả về 0, không đoán bừa. */
+    @Test
+    public void chargedMah_khongDoDuocGiCa() {
+        assertEquals(0f, UsageCalculator.chargedMah(0L, 0L, 0, 3_600_000L), 0.1f);
+    }
 }

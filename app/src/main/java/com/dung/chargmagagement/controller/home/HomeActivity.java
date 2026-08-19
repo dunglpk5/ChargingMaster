@@ -10,6 +10,7 @@ import com.dung.chargmagagement.R;
 import com.dung.chargmagagement.controller.base.BaseActivity;
 import com.dung.chargmagagement.databinding.ActivityHomeBinding;
 import com.dung.chargmagagement.service.BatteryLogService;
+import com.dung.chargmagagement.service.ChargeAlarmScheduler;
 
 /**
  * Màn hình chính: ViewPager2 gồm 3 tab (Trang chủ / Công cụ / Sử dụng pin)
@@ -46,6 +47,11 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding> {
         // là nơi ghi dữ liệu duy nhất. Có hai nguồn cùng ghi thì mỗi lần mở app sẽ
         // sinh ra bản ghi trùng và mọi con số thống kê đều bị đếm hai lần.
         BatteryLogService.start(this);
+
+        // Báo động sạc chạy bằng hẹn giờ, độc lập với việc ghi lịch sử pin. Rà lại ở
+        // đây để cái hẹn được dựng lại nếu hệ thống đã xoá nó (ví dụ sau khi người
+        // dùng buộc dừng ứng dụng).
+        ChargeAlarmScheduler.check(this);
     }
 
     private void setupPager() {

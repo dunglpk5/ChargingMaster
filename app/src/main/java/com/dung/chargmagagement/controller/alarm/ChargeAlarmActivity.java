@@ -19,7 +19,7 @@ import com.dung.chargmagagement.R;
 import com.dung.chargmagagement.controller.base.BaseActivity;
 import com.dung.chargmagagement.databinding.ActivityChargeAlarmBinding;
 import com.dung.chargmagagement.model.alarm.AlarmSettings;
-import com.dung.chargmagagement.service.BatteryLogService;
+import com.dung.chargmagagement.service.ChargeAlarmScheduler;
 
 import java.util.Locale;
 
@@ -157,11 +157,10 @@ public class ChargeAlarmActivity extends BaseActivity<ActivityChargeAlarmBinding
         }
         updatePermissionWarning();
 
-        // Bật cảnh báo trong lúc máy đang cắm sạc thì phải khởi động service ngay,
-        // không thể chờ lần cắm sạc kế tiếp mới bắt đầu theo dõi.
-        if (settings.hasAnyEnabled()) {
-            BatteryLogService.start(this);
-        }
+        // Kiểm tra ngay một lần rồi hẹn lần kế tiếp: bật cảnh báo trong lúc pin đã
+        // vượt ngưỡng thì phải báo luôn, không chờ tới cái hẹn đầu tiên. Tắt hết
+        // cảnh báo thì check() cũng lo việc huỷ hẹn.
+        ChargeAlarmScheduler.check(this);
     }
 
     /** Thanh trượt chỉ dùng được khi cảnh báo tương ứng đang bật. */

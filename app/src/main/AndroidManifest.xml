@@ -255,6 +255,14 @@
                 android:value="Ghi lại mức pin liên tục để dựng biểu đồ lịch sử pin theo ngày" />
         </service>
 
+        <!--
+          Báo động sạc chạy bằng AlarmManager, không cần service nền nào: máy đang
+          cắm sạc thì Doze không áp dụng nên cái hẹn nổ đúng giờ.
+        -->
+        <receiver
+            android:name=".service.ChargeAlarmReceiver"
+            android:exported="false" />
+
         <receiver
             android:name=".service.ChargingStateReceiver"
             android:exported="false">

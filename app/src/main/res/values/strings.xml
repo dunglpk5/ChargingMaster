@@ -232,6 +232,14 @@
     <!-- Màn Cài đặt -->
     <string name="settings_title">Settings</string>
     <string name="settings_version">Version %1$s</string>
+    <string name="settings_battery_logging">Record battery history</string>
+    <string name="settings_battery_logging_desc">Each part below needs a background service while the app is closed. The service does not poll the battery, so the cost is negligible, and it stops as soon as you turn both recording switches off. The charge alarm, charge session count and battery health work without any of this.</string>
+    <string name="settings_log_chart">Battery level chart</string>
+    <string name="settings_log_chart_desc">Records the battery level all day so the 00:00–24:00 chart is continuous.</string>
+    <string name="settings_log_screen">Screen on / off statistics</string>
+    <string name="settings_log_screen_desc">Splits drain by screen state, for the %/h figures and the time-to-empty estimate.</string>
+    <string name="settings_log_details">Live figures in the notification</string>
+    <string name="settings_log_details_desc">Shows current draw, average current and screen time in the ongoing notification. Off keeps just the battery level.</string>
     <string name="settings_notification_access">Notification access</string>
     <string name="settings_app_info">App info</string>
     <string name="about_us_message">%1$s helps you charge safer and understand your battery better.\n\nVersion %2$s</string>

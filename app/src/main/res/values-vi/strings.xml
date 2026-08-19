@@ -220,6 +220,14 @@
     <!-- Màn Cài đặt -->
     <string name="settings_title">Cài đặt</string>
     <string name="settings_version">Phiên bản %1$s</string>
+    <string name="settings_battery_logging">Ghi lịch sử pin</string>
+    <string name="settings_battery_logging_desc">Mỗi phần dưới đây cần một dịch vụ nền khi ứng dụng đã đóng. Dịch vụ không lấy mẫu định kỳ nên gần như không hao pin, và tự dừng ngay khi bạn tắt cả hai phần ghi dữ liệu. Báo động sạc, số phiên sạc và độ chai pin không cần gì trong số này.</string>
+    <string name="settings_log_chart">Biểu đồ mức pin</string>
+    <string name="settings_log_chart_desc">Ghi mức pin suốt ngày để biểu đồ 00:00–24:00 liền mạch.</string>
+    <string name="settings_log_screen">Thống kê màn hình bật / tắt</string>
+    <string name="settings_log_screen_desc">Tách tiêu hao theo trạng thái màn hình, cho các con số %/h và ước tính thời gian pin đầy.</string>
+    <string name="settings_log_details">Số liệu trực tiếp trong thông báo</string>
+    <string name="settings_log_details_desc">Hiện dòng sạc, dòng trung bình và thời gian màn hình trong thông báo thường trú. Tắt thì chỉ còn mức pin.</string>
     <string name="settings_notification_access">Quyền đọc thông báo</string>
     <string name="settings_app_info">Thông tin ứng dụng</string>
     <string name="about_us_message">%1$s giúp bạn sạc pin an toàn hơn và hiểu rõ tình trạng pin của mình.\n\nPhiên bản %2$s</string>

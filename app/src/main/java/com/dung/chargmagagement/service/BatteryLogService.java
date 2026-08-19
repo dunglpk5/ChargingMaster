@@ -26,8 +26,6 @@ import com.dung.chargmagagement.common.Logger;
 import com.dung.chargmagagement.common.FormatUtils;
 import com.dung.chargmagagement.common.PrefManager;
 import com.dung.chargmagagement.controller.home.HomeActivity;
-import com.dung.chargmagagement.model.alarm.AlarmSettings;
-import com.dung.chargmagagement.model.alarm.ChargeAlarmChecker;
 import com.dung.chargmagagement.model.battery.BatteryInfo;
 import com.dung.chargmagagement.model.battery.BatteryInfoProvider;
 import com.dung.chargmagagement.model.repository.BatteryRepository;
@@ -50,8 +48,9 @@ import com.dung.chargmagagement.model.stats.UsageCalculator;
  * ngủ hoàn toàn: không timer, không wakelock, không vòng lặp. Chi phí gần như bằng
  * không, khác hẳn với cách hẹn giờ đọc pin mỗi vài giây.
  *
- * <p>Service cũng kiêm luôn việc kiểm tra báo động sạc, vì nó đã có sẵn dữ liệu –
- * dựng thêm một tiến trình nền thứ hai chỉ để làm việc đó là lãng phí.
+ * <p>Báo động sạc <b>không</b> nằm ở đây mà chạy bằng hẹn giờ riêng
+ * ({@link ChargeAlarmScheduler}): hai chức năng không liên quan gì tới nhau, gộp
+ * chung thì tắt ghi lịch sử pin là mất luôn báo động.
  */
 public class BatteryLogService extends Service {
 
@@ -77,8 +76,6 @@ public class BatteryLogService extends Service {
 
     private BatteryInfoProvider provider;
     private SessionRecorder recorder;
-    private ChargeAlarmChecker alarmChecker;
-    private ChargeAlarmNotifier alarmNotifier;
     private AppExecutors executors;
 
     /** Số liệu của chặng hiện tại, dựng nên năm dòng chi tiết trong thông báo. */
@@ -125,8 +122,63 @@ public class BatteryLogService extends Service {
         }
     };
 
-    /** Khởi động service ghi pin. Gọi lại khi đang chạy cũng không sao. */
+    /**
+     * Service có việc để làm hay không.
+     *
+     * <p>Chỉ cần một trong hai phần ghi dữ liệu đang bật là service phải sống. Cờ
+     * "thông báo chi tiết" không tính vào đây: nó chỉ đổi nội dung thông báo, tự nó
+     * không sinh ra dữ liệu nào để ghi.
+     */
+    public static boolean isEnabled(@NonNull Context context) {
+        return isChartEnabled(context) || isScreenStatsEnabled(context);
+    }
+
+    /** Có ghi mẫu pin cho biểu đồ theo ngày hay không. */
+    public static boolean isChartEnabled(@NonNull Context context) {
+        return PrefManager.get(context).getBoolean(PrefManager.KEY_LOG_CHART, false);
+    }
+
+    /** Có ghi khoảng màn hình bật/tắt cho thống kê %/h hay không. */
+    public static boolean isScreenStatsEnabled(@NonNull Context context) {
+        return PrefManager.get(context).getBoolean(PrefManager.KEY_LOG_SCREEN, false);
+    }
+
+    /** Thông báo thường trú hiện năm dòng số liệu hay chỉ một dòng gọn. */
+    public static boolean isDetailedNotification(@NonNull Context context) {
+        return PrefManager.get(context).getBoolean(PrefManager.KEY_LOG_DETAILS, true);
+    }
+
+    /**
+     * Đổi một trong ba cờ rồi khởi động hoặc dừng service cho khớp ngay.
+     *
+     * <p>Đổi riêng cờ thông báo chi tiết trong lúc service đang chạy thì nội dung mới
+     * xuất hiện ở lần vẽ lại kế tiếp, chậm nhất 15 giây sau.
+     */
+    public static void setFlag(@NonNull Context context, @NonNull String key,
+                               boolean enabled) {
+        PrefManager.get(context).putBoolean(key, enabled);
+
+        if (isEnabled(context)) {
+            start(context);
+        } else {
+            stop(context);
+        }
+    }
+
+    /** Dừng service. Các phiên đang mở được chốt lại trong {@code onDestroy}. */
+    public static void stop(@NonNull Context context) {
+        context.stopService(new Intent(context, BatteryLogService.class));
+    }
+
+    /**
+     * Khởi động service ghi pin. Gọi lại khi đang chạy cũng không sao.
+     *
+     * <p>Không làm gì nếu người dùng chưa bật: đây là cổng duy nhất, nên mọi nơi gọi
+     * {@code start()} đều được chặn ở đây thay vì phải tự kiểm tra.
+     */
     public static void start(@NonNull Context context) {
+        if (!isEnabled(context)) return;
+
         Intent intent = new Intent(context, BatteryLogService.class);
         try {
             ContextCompat.startForegroundService(context, intent);
@@ -145,8 +197,6 @@ public class BatteryLogService extends Service {
 
         provider = new BatteryInfoProvider(this);
         recorder = SessionRecorder.get(this);
-        alarmChecker = new ChargeAlarmChecker();
-        alarmNotifier = new ChargeAlarmNotifier(this);
         executors = AppExecutors.get();
         repository = BatteryRepository.get(this);
         powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -222,34 +272,10 @@ public class BatteryLogService extends Service {
             executors.runOnMain(() -> recorder.onBatteryUpdated(info, info.getCurrentMa()));
 
             updateMeter(info);
-            checkAlarm(info);
             updateNotification(info);
         } catch (Exception e) {
             Logger.e(TAG, "Xử lý mẫu pin thất bại", e);
         }
-    }
-
-    /**
-     * Kiểm tra và phát cảnh báo nếu cần.
-     *
-     * <p>Đọc cấu hình mỗi lần thay vì nhớ sẵn: người dùng có thể vừa đổi thiết lập
-     * ở màn Báo động sạc trong lúc service đang chạy. Đây là đọc SharedPreferences
-     * đã nằm sẵn trong bộ nhớ nên chi phí không đáng kể.
-     */
-    private void checkAlarm(@NonNull BatteryInfo info) {
-        AlarmSettings settings = AlarmSettings.load(PrefManager.get(this));
-        if (!settings.hasAnyEnabled()) return;
-
-        ChargeAlarmChecker.AlarmType type = alarmChecker.check(
-                info.getPercent(),
-                // Dùng "đang cắm nguồn" chứ không phải "đang nạp": khi pin gần đầy
-                // nhiều máy báo trạng thái FULL và isCharging() trả về false, lúc đó
-                // cảnh báo pin đầy sẽ không bao giờ phát
-                info.getPlugType().isPlugged(),
-                info.getTemperatureCelsius(),
-                settings);
-
-        alarmNotifier.notifyAlarm(type, info.getPercent());
     }
 
     // ==================== Số liệu cho thông báo ====================
@@ -319,8 +345,9 @@ public class BatteryLogService extends Service {
         String content;
         if (info == null) {
             content = getString(R.string.notif_log_starting);
-        } else if (!meter.hasData()) {
-            // Chặng vừa bắt đầu, chưa có mẫu thứ hai để tính chênh lệch
+        } else if (!meter.hasData() || !isDetailedNotification(this)) {
+            // Chặng vừa bắt đầu và chưa có mẫu thứ hai để tính chênh lệch, hoặc người
+            // dùng đã tắt phần số liệu chi tiết
             content = getString(R.string.notif_log_content, info.getPercent());
         } else {
             // Dòng "Hiện tại" làm luôn dòng thu gọn: người dùng thấy số liệu ngay
@@ -441,7 +468,6 @@ public class BatteryLogService extends Service {
         // Chốt các phiên đang mở để chúng không nằm lại với end_time = 0, vốn bị
         // mọi truy vấn thống kê loại ra vĩnh viễn
         if (recorder != null) recorder.finalizeOpenSessions();
-        if (alarmNotifier != null) alarmNotifier.cancel();
 
         Logger.d(TAG, "Service ghi pin đã dừng");
         super.onDestroy();

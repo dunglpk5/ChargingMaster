@@ -16,6 +16,18 @@ public final class PrefManager {
     public static final String KEY_LANGUAGE = "language";              // "en" | "vi" | "" (theo hệ thống)
     public static final String KEY_DESIGN_CAPACITY = "design_capacity"; // mAh người dùng tự đặt
     public static final String KEY_FIRST_LAUNCH = "first_launch";
+
+    /**
+     * Ba phần của việc ghi lịch sử pin dưới nền, bật/tắt độc lập.
+     *
+     * <p>Tất cả mặc định <b>tắt</b>: dịch vụ nền phải do người dùng chủ động bật, không
+     * tự chạy sau khi cài. Dịch vụ sống khi ít nhất một trong hai phần ghi dữ liệu
+     * ({@code CHART}, {@code SCREEN}) đang bật; {@code DETAILS} chỉ đổi nội dung thông
+     * báo chứ không tự khởi động gì.
+     */
+    public static final String KEY_LOG_CHART = "battery_logging_chart";
+    public static final String KEY_LOG_SCREEN = "battery_logging_screen";
+    public static final String KEY_LOG_DETAILS = "battery_logging_details";
     public static final String KEY_CURRENT_UNIT_DIVIDER = "current_unit_divider"; // hệ số quy đổi µA -> mA
     public static final String KEY_CURRENT_SIGN = "current_sign";       // 1 hoặc -1, hiệu chỉnh theo hãng
 

@@ -48,7 +48,16 @@ public class ChargingSessionEntity {
     @ColumnInfo(name = "max_temperature")
     public float maxTemperature;
 
-    /** Điện tích đã nạp ước tính (mAh) = dòng trung bình × thời lượng. */
+    /**
+     * Bộ đếm cu-lông của phần cứng lúc mở phiên (µAh); 0 nghĩa là máy không hỗ trợ.
+     *
+     * <p>Chỉ cần thêm một lần đọc lúc rút sạc là ra lượng nạp thật của cả phiên, không
+     * phụ thuộc vào việc app có lấy mẫu liên tục hay không.
+     */
+    @ColumnInfo(name = "charge_counter_start")
+    public long chargeCounterStart;
+
+    /** Điện tích đã nạp (mAh): hiệu số bộ đếm cu-lông, hoặc dòng trung bình × thời lượng. */
     @ColumnInfo(name = "charged_mah")
     public float chargedMah;
 

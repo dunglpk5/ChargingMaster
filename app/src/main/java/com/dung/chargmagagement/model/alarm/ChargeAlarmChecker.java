@@ -102,6 +102,31 @@ public final class ChargeAlarmChecker {
         return AlarmType.NONE;
     }
 
+    /**
+     * Nạp lại trạng thái đã lưu của phiên hiện tại.
+     *
+     * <p>Cần thiết vì báo động chạy bằng hẹn giờ chứ không bằng tiến trình thường
+     * trú: giữa hai lần dậy, đối tượng này đã bị huỷ cùng cả tiến trình. Không khôi
+     * phục thì mỗi lần dậy lại kêu thêm một lần nữa.
+     */
+    public void restore(boolean threshold, boolean full, boolean overheat) {
+        thresholdFired = threshold;
+        fullFired = full;
+        overheatFired = overheat;
+    }
+
+    public boolean isThresholdFired() {
+        return thresholdFired;
+    }
+
+    public boolean isFullFired() {
+        return fullFired;
+    }
+
+    public boolean isOverheatFired() {
+        return overheatFired;
+    }
+
     /** Bắt đầu phiên sạc mới: cho phép mọi cảnh báo phát lại. */
     public void resetSession() {
         thresholdFired = false;

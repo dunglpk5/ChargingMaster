@@ -11,10 +11,12 @@ import com.dung.chargmagagement.common.DateUtils;
 import com.dung.chargmagagement.common.Logger;
 import com.dung.chargmagagement.model.battery.BatteryInfo;
 import com.dung.chargmagagement.model.battery.BatteryMonitor;
+import com.dung.chargmagagement.model.battery.ChargeCounter;
 import com.dung.chargmagagement.model.entity.BatterySampleEntity;
 import com.dung.chargmagagement.model.entity.ChargingSessionEntity;
 import com.dung.chargmagagement.model.entity.ScreenSessionEntity;
 import com.dung.chargmagagement.model.stats.UsageCalculator;
+import com.dung.chargmagagement.service.BatteryLogService;
 
 /**
  * Ghi lịch sử sạc và lịch sử màn hình vào database.
@@ -53,6 +55,7 @@ public final class SessionRecorder implements BatteryMonitor.Listener {
     private final BatteryRepository repository;
     private final PowerManager powerManager;
     private final AppExecutors executors;
+    private final Context appContext;
 
     // ==== Trạng thái nội bộ: chỉ truy cập trên thread disk ====
     private ChargingSessionEntity activeSession;
@@ -73,6 +76,7 @@ public final class SessionRecorder implements BatteryMonitor.Listener {
     private boolean lastHandledCharging;
 
     private SessionRecorder(@NonNull Context context) {
+        this.appContext = context.getApplicationContext();
         this.repository = BatteryRepository.get(context);
         this.powerManager = (PowerManager) context.getApplicationContext()
                 .getSystemService(Context.POWER_SERVICE);
@@ -102,14 +106,24 @@ public final class SessionRecorder implements BatteryMonitor.Listener {
     private void handleSample(@NonNull BatteryInfo info, int smoothedMa) {
         try {
             restoreIfNeeded();
-            recordUnobservedGap(info);
 
             final boolean screenOn = powerManager != null && powerManager.isInteractive();
             final boolean plugged = info.getPlugType().isPlugged();
 
+            // Phiên sạc luôn được ghi: nó là dữ liệu của những thẻ vẫn hoạt động dù
+            // người dùng đã tắt hết các phần ghi nền
             updateChargingSession(info, smoothedMa, plugged);
-            updateScreenSession(info, screenOn, plugged);
-            saveSampleIfNeeded(info, smoothedMa, screenOn);
+
+            if (BatteryLogService.isScreenStatsEnabled(appContext)) {
+                recordUnobservedGap(info);
+                updateScreenSession(info, screenOn, plugged);
+            } else {
+                closeActiveScreenSession(info.getTimestamp(), info.getPercent());
+            }
+
+            if (BatteryLogService.isChartEnabled(appContext)) {
+                saveSampleIfNeeded(info, smoothedMa, screenOn);
+            }
 
             lastHandledTime = info.getTimestamp();
             lastHandledPercent = info.getPercent();
@@ -283,6 +297,7 @@ public final class SessionRecorder implements BatteryMonitor.Listener {
         session.endPercent = info.getPercent();
         session.plugType = info.getPlugType().name();
         session.maxTemperature = info.getTemperatureCelsius();
+        session.chargeCounterStart = ChargeCounter.readUah(appContext);
 
         session.id = repository.insertSessionSync(session);
         activeSession = session;
@@ -322,7 +337,8 @@ public final class SessionRecorder implements BatteryMonitor.Listener {
 
         session.endTime = info.getTimestamp();
         session.endPercent = info.getPercent();
-        session.chargedMah = UsageCalculator.calculateChargedMah(
+        session.chargedMah = UsageCalculator.chargedMah(
+                session.chargeCounterStart, ChargeCounter.readUah(appContext),
                 session.avgCurrentMa, session.getDurationMs());
         repository.updateSessionSync(session);
 
@@ -361,6 +377,23 @@ public final class SessionRecorder implements BatteryMonitor.Listener {
 
         current.endPercent = info.getPercent();
         repository.updateScreenSessionSync(current);
+    }
+
+    /**
+     * Chốt khoảng màn hình đang mở khi người dùng vừa tắt phần thống kê này.
+     *
+     * <p>Để treo thì bản ghi nằm lại với end_time = 0 và bị mọi truy vấn thống kê loại
+     * ra vĩnh viễn.
+     */
+    @WorkerThread
+    private void closeActiveScreenSession(long timestamp, int percent) {
+        final ScreenSessionEntity current = activeScreenSession;
+        if (current == null) return;
+
+        current.endTime = timestamp;
+        current.endPercent = percent;
+        repository.updateScreenSessionSync(current);
+        activeScreenSession = null;
     }
 
     @WorkerThread
@@ -419,7 +452,8 @@ public final class SessionRecorder implements BatteryMonitor.Listener {
 
                 if (activeSession != null && activeSession.endTime == 0) {
                     activeSession.endTime = now;
-                    activeSession.chargedMah = UsageCalculator.calculateChargedMah(
+                    activeSession.chargedMah = UsageCalculator.chargedMah(
+                            activeSession.chargeCounterStart, ChargeCounter.readUah(appContext),
                             activeSession.avgCurrentMa, activeSession.getDurationMs());
                     repository.updateSessionSync(activeSession);
 
