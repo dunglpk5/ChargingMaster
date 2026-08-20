@@ -51,6 +51,14 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <!--
+      Hẹn giờ chính xác cho báo động sạc.
+      Không có quyền này thì hệ thống dồn hẹn giờ theo App Standby: app ít dùng có thể
+      bị hoãn hàng giờ, tức là cảnh báo chỉ nổ khi người dùng mở app. Người dùng tự bật
+      trong Cài đặt (Android 13+ mặc định chưa cấp).
+    -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
     <!-- Android 13+: bắt buộc xin runtime mới hiện được notification -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
@@ -200,6 +208,14 @@
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
 
+        <!-- Màn "Tất cả chức năng", mở từ ô Xem thêm ở tab Công cụ -->
+        <activity
+            android:name=".controller.tools.AllToolsActivity"
+            android:exported="false"
+            android:parentActivityName=".controller.home.HomeActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
         <activity
             android:name=".controller.tools.CpuUsageActivity"
             android:exported="false"
@@ -261,7 +277,15 @@
         -->
         <receiver
             android:name=".service.ChargeAlarmReceiver"
-            android:exported="false" />
+            android:exported="false">
+            <intent-filter>
+                <!--
+                  Người dùng vừa bật quyền hẹn giờ chính xác trong Cài đặt hệ thống:
+                  đặt lại cái hẹn ngay, không đợi tới lúc họ mở app.
+                -->
+                <action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
 
         <receiver
             android:name=".service.ChargingStateReceiver"

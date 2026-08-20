@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_screen">
+    android:background="@color/bg_surface">
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
@@ -17,7 +17,10 @@
 
     <!--
       Thanh điều hướng nổi thành một thẻ bo góc, có lề quanh nên nền phía sau lộ ra.
-      Bỏ đường kẻ phân cách cũ: thẻ đã tách khỏi nội dung bằng khoảng trống rồi.
+      Vì vậy nền của màn này phải trắng như chính thẻ: để màu xám thì phần lộ ra
+      thành một dải xám bao quanh thẻ.
+
+      Tách khỏi nội dung bằng bóng đổ chứ không bằng đường kẻ.
     -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
@@ -27,6 +30,7 @@
         android:layout_marginEnd="@dimen/space_sm"
         android:layout_marginBottom="@dimen/space_sm"
         android:background="@drawable/bg_bottom_nav"
+        android:elevation="@dimen/card_elevation"
         app:itemIconTint="@color/selector_bottom_nav"
         app:itemTextColor="@color/selector_bottom_nav"
         app:labelVisibilityMode="labeled"

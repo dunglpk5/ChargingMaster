@@ -19,18 +19,9 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tvSwitchTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/text_primary"
-            android:textSize="@dimen/text_body"
-            tools:text="Biểu đồ mức pin theo ngày" />
-
-        <TextView
             android:id="@+id/tvSwitchDesc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_xs"
             android:lineSpacingExtra="2dp"
             android:textColor="@color/text_secondary"
             android:textSize="@dimen/text_caption"

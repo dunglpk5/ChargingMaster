@@ -109,6 +109,17 @@ public final class AppExecutors {
         return sampler.scheduleWithFixedDelay(task, initialDelayMs, periodMs, TimeUnit.MILLISECONDS);
     }
 
+    /**
+     * Chạy một tác vụ sau một khoảng chờ, đúng một lần.
+     *
+     * <p>Dùng cho những việc phải hoãn lại ngắn, ví dụ giữ tiến trình sống thêm vài
+     * giây sau khi một BroadcastReceiver xử lý xong để tiếng chuông kêu hết.
+     */
+    public ScheduledFuture<?> schedule(@NonNull Runnable task, long delay,
+                                       @NonNull TimeUnit unit) {
+        return sampler.schedule(task, delay, unit);
+    }
+
     /** Đóng toàn bộ pool khi app kết thúc. */
     public void shutdown() {
         diskIO.shutdown();

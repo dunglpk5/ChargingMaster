@@ -125,12 +125,15 @@ public class BatteryLogService extends Service {
     /**
      * Service có việc để làm hay không.
      *
-     * <p>Chỉ cần một trong hai phần ghi dữ liệu đang bật là service phải sống. Cờ
-     * "thông báo chi tiết" không tính vào đây: nó chỉ đổi nội dung thông báo, tự nó
-     * không sinh ra dữ liệu nào để ghi.
+     * <p>Cả ba cờ đều tính vào đây, kể cả "thông báo chi tiết": thông báo thường trú
+     * <b>là</b> thông báo của chính service này, nên bật nó cũng là một lý do đủ để
+     * service sống. Không tính vào thì công tắc đó bật mà chẳng có gì hiện ra, phải
+     * bật kèm một phần ghi dữ liệu mới thấy - đúng thứ khiến người dùng bối rối.
      */
     public static boolean isEnabled(@NonNull Context context) {
-        return isChartEnabled(context) || isScreenStatsEnabled(context);
+        return isChartEnabled(context)
+                || isScreenStatsEnabled(context)
+                || isDetailedNotification(context);
     }
 
     /** Có ghi mẫu pin cho biểu đồ theo ngày hay không. */
@@ -145,7 +148,7 @@ public class BatteryLogService extends Service {
 
     /** Thông báo thường trú hiện năm dòng số liệu hay chỉ một dòng gọn. */
     public static boolean isDetailedNotification(@NonNull Context context) {
-        return PrefManager.get(context).getBoolean(PrefManager.KEY_LOG_DETAILS, true);
+        return PrefManager.get(context).getBoolean(PrefManager.KEY_LOG_DETAILS, false);
     }
 
     /**

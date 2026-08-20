@@ -43,7 +43,9 @@
     <string name="health_unknown">Unknown</string>
 
     <!-- Màn Công cụ -->
+    <string name="tools_group_tools">Tools</string>
     <string name="tools_group_vip">VIP</string>
+    <string name="tools_all_title">All features</string>
     <string name="tools_group_detect">Detection</string>
     <string name="tools_group_general">General</string>
     <string name="tools_group_other">Other</string>
@@ -233,7 +235,8 @@
     <string name="settings_title">Settings</string>
     <string name="settings_version">Version %1$s</string>
     <string name="settings_battery_logging">Record battery history</string>
-    <string name="settings_battery_logging_desc">Each part below needs a background service while the app is closed. The service does not poll the battery, so the cost is negligible, and it stops as soon as you turn both recording switches off. The charge alarm, charge session count and battery health work without any of this.</string>
+    <string name="settings_battery_logging_desc">Each part below needs a background service while the app is closed. The service does not poll the battery, so the cost is negligible, and it stops as soon as all three switches are off. The charge alarm, charge session count and battery health work without any of this.</string>
+    <string name="alarm_exact_warning">Alarms may be delayed until you open the app. Tap here to allow exact alarms so they fire on time.</string>
     <string name="settings_log_chart">Battery level chart</string>
     <string name="settings_log_chart_desc">Records the battery level all day so the 00:00–24:00 chart is continuous.</string>
     <string name="settings_log_screen">Screen on / off statistics</string>

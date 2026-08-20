@@ -23,7 +23,6 @@ import com.dung.chargmagagement.controller.base.BaseActivity;
 import com.dung.chargmagagement.common.PrefManager;
 import com.dung.chargmagagement.databinding.ActivitySettingsBinding;
 import com.dung.chargmagagement.databinding.ViewSettingsSwitchRowBinding;
-import com.dung.chargmagagement.service.BatteryLogService;
 
 /**
  * Màn Cài đặt, mở từ nút "..." ở Trang chủ và ô "Thêm" ở tab Công cụ.
@@ -53,51 +52,12 @@ public class SettingsActivity extends BaseActivity<ActivitySettingsBinding> {
 
         binding.tvVersion.setText(getString(R.string.settings_version, BuildConfig.VERSION_NAME));
         updateLanguageSummary();
-        setupBatteryLogging();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         updateLanguageSummary();
-    }
-
-    // ==================== Ghi lịch sử pin nền ====================
-
-    /**
-     * Ba công tắc của việc ghi pin dưới nền, bật/tắt độc lập.
-     *
-     * <p>Dịch vụ tự khởi động khi có ít nhất một phần ghi dữ liệu được bật, và tự dừng
-     * khi tắt hết - người dùng không phải nhớ thêm một công tắc tổng nào.
-     */
-    private void setupBatteryLogging() {
-        bindSwitch(binding.rowLogChart,
-                R.string.settings_log_chart, R.string.settings_log_chart_desc,
-                PrefManager.KEY_LOG_CHART, BatteryLogService.isChartEnabled(this));
-
-        bindSwitch(binding.rowLogScreen,
-                R.string.settings_log_screen, R.string.settings_log_screen_desc,
-                PrefManager.KEY_LOG_SCREEN, BatteryLogService.isScreenStatsEnabled(this));
-
-        bindSwitch(binding.rowLogDetails,
-                R.string.settings_log_details, R.string.settings_log_details_desc,
-                PrefManager.KEY_LOG_DETAILS, BatteryLogService.isDetailedNotification(this));
-    }
-
-    /**
-     * Gán nhãn và trạng thái cho một hàng công tắc.
-     *
-     * <p>Gán setChecked <b>trước</b> khi gắn listener: nó cũng kích hoạt callback, làm
-     * ngược thứ tự là vừa mở màn Cài đặt đã tự khởi động service.
-     */
-    private void bindSwitch(@NonNull ViewSettingsSwitchRowBinding row,
-                            int titleRes, int descRes,
-                            @NonNull String prefKey, boolean checked) {
-        row.tvSwitchTitle.setText(titleRes);
-        row.tvSwitchDesc.setText(descRes);
-        row.switchToggle.setChecked(checked);
-        row.switchToggle.setOnCheckedChangeListener(
-                (button, isChecked) -> BatteryLogService.setFlag(this, prefKey, isChecked));
     }
 
     private void updateLanguageSummary() {

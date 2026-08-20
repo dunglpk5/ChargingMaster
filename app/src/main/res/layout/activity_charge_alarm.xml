@@ -34,6 +34,21 @@
                 android:visibility="gone"
                 tools:visibility="visible" />
 
+            <!-- Bấm vào mở trang cấp quyền hẹn giờ chính xác -->
+            <TextView
+                android:id="@+id/tvExactAlarmWarning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/state_warning"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="@dimen/space_md"
+                android:text="@string/alarm_exact_warning"
+                android:textColor="@color/text_on_primary"
+                android:textSize="@dimen/text_caption"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
             <!-- ===== Cảnh báo theo ngưỡng % ===== -->
             <LinearLayout
                 android:layout_width="match_parent"

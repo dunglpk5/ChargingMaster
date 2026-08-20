@@ -37,7 +37,9 @@
     <string name="health_cold">Quá lạnh</string>
     <string name="health_unknown">Không rõ</string>
 
+    <string name="tools_group_tools">Công cụ</string>
     <string name="tools_group_vip">VIP</string>
+    <string name="tools_all_title">Tất cả chức năng</string>
     <string name="tools_group_detect">Phát hiện</string>
     <string name="tools_group_general">Công cụ</string>
     <string name="tools_group_other">Khác</string>
@@ -221,7 +223,8 @@
     <string name="settings_title">Cài đặt</string>
     <string name="settings_version">Phiên bản %1$s</string>
     <string name="settings_battery_logging">Ghi lịch sử pin</string>
-    <string name="settings_battery_logging_desc">Mỗi phần dưới đây cần một dịch vụ nền khi ứng dụng đã đóng. Dịch vụ không lấy mẫu định kỳ nên gần như không hao pin, và tự dừng ngay khi bạn tắt cả hai phần ghi dữ liệu. Báo động sạc, số phiên sạc và độ chai pin không cần gì trong số này.</string>
+    <string name="settings_battery_logging_desc">Mỗi phần dưới đây cần một dịch vụ nền khi ứng dụng đã đóng. Dịch vụ không lấy mẫu định kỳ nên gần như không hao pin, và tự dừng ngay khi bạn tắt cả ba công tắc. Báo động sạc, số phiên sạc và độ chai pin không cần gì trong số này.</string>
+    <string name="alarm_exact_warning">Cảnh báo có thể bị hoãn tới lúc bạn mở ứng dụng. Bấm vào đây để cho phép hẹn giờ chính xác.</string>
     <string name="settings_log_chart">Biểu đồ mức pin</string>
     <string name="settings_log_chart_desc">Ghi mức pin suốt ngày để biểu đồ 00:00–24:00 liền mạch.</string>
     <string name="settings_log_screen">Thống kê màn hình bật / tắt</string>

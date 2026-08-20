@@ -36,15 +36,18 @@ public final class ChargeAlarmNotifier {
      *
      * @param type    loại cảnh báo
      * @param percent mức pin để ghép vào nội dung
+     * @return đã thật sự hiện được thông báo hay chưa. Phía gọi <b>phải</b> xem giá
+     *         trị này: nơi quyết định cảnh báo chỉ được đánh dấu "đã báo rồi" khi
+     *         người dùng thật sự thấy, nếu không thì cảnh báo đó mất vĩnh viễn.
      */
-    public void notifyAlarm(@NonNull ChargeAlarmChecker.AlarmType type, int percent) {
-        if (type == ChargeAlarmChecker.AlarmType.NONE) return;
+    public boolean notifyAlarm(@NonNull ChargeAlarmChecker.AlarmType type, int percent) {
+        if (type == ChargeAlarmChecker.AlarmType.NONE) return false;
 
         // Từ Android 13, không có quyền POST_NOTIFICATIONS thì thông báo bị chặn im lặng
         NotificationManagerCompat manager = NotificationManagerCompat.from(appContext);
         if (!manager.areNotificationsEnabled()) {
             Logger.d(TAG, "Người dùng đã tắt thông báo, bỏ qua cảnh báo");
-            return;
+            return false;
         }
 
         // Bắt đầu kêu chuông ngay, không chờ người dùng chạm vào thông báo
@@ -77,9 +80,11 @@ public final class ChargeAlarmNotifier {
 
         try {
             manager.notify(NOTIFICATION_ID, builder.build());
+            return true;
         } catch (SecurityException e) {
             // Thiếu quyền thông báo trên Android 13+
             Logger.e(TAG, "Không hiện được cảnh báo", e);
+            return false;
         }
     }
 

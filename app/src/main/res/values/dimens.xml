@@ -8,6 +8,15 @@
     <dimen name="space_xl">32dp</dimen>
 
     <dimen name="radius_card">12dp</dimen>
+
+    <!-- Bo nhẹ hai góc dưới của thanh tiêu đề -->
+    <dimen name="radius_toolbar">14dp</dimen>
+
+    <!--
+      Độ nổi của thẻ. Bóng do hệ thống vẽ theo đường viền của background nên thẻ
+      phải có nền đục và bo góc (bg_card_rounded) thì bóng mới đúng hình.
+    -->
+    <dimen name="card_elevation">3dp</dimen>
     <dimen name="radius_pill">28dp</dimen>
 
     <dimen name="text_battery_percent">56sp</dimen>

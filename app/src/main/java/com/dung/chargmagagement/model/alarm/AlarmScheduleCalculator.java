@@ -8,15 +8,32 @@ package com.dung.chargmagagement.model.alarm;
  * một phút thì hẹn 18 phút nữa, chứ không cần thức suốt 18 phút đó.
  *
  * <p>Mỗi lần dậy lại ước tính lại từ đầu, nên sai số của lần trước không cộng dồn.
- * Trần {@link #MAX_DELAY_MS} giữ cho sai số tối đa bằng đúng một chu kỳ chờ, kể cả
- * khi tốc độ sạc đột ngột tăng gấp đôi.
+ * Trần {@link #MAX_DELAY_MS} giữ cho sai số tối đa bằng đúng một chu kỳ chờ, kể cả khi
+ * tốc độ sạc đột ngột tăng gấp đôi. Càng gần ngưỡng thì nhịp càng siết lại
+ * ({@link #CLOSE_DELAY_MS} rồi {@link #NEAR_DELAY_MS}), nên độ trễ cuối cùng của cảnh
+ * báo chỉ còn cỡ hai chục giây.
  *
  * <p>Lớp thuần Java, không đụng Android nên kiểm thử được.
  */
 public final class AlarmScheduleCalculator {
 
-    /** Không hẹn dày hơn mức này, tránh đánh thức máy liên tục lúc gần ngưỡng. */
+    /** Nhịp thường: không hẹn dày hơn mức này khi còn xa ngưỡng. */
     public static final long MIN_DELAY_MS = 60_000L;
+
+    /**
+     * Nhịp ở đoạn cuối, khi chỉ còn vài phần trăm nữa là tới ngưỡng.
+     *
+     * <p>Đây là chỗ quyết định cảnh báo có "đúng lúc" hay không. Còn 1 % mà vẫn chờ
+     * một phút thì máy sạc nhanh đã vượt ngưỡng trước khi ta kịp nhìn. Đang cắm sạc
+     * nên máy không vào Doze, hẹn dưới một phút là hợp lệ; và đoạn này chỉ dài vài
+     * phút mỗi phiên nên tổng số lần đánh thức tăng không đáng kể.
+     */
+    public static final long NEAR_DELAY_MS = 20_000L;
+    public static final long CLOSE_DELAY_MS = 45_000L;
+
+    /** Còn bao nhiêu phần trăm thì coi là đã vào đoạn cuối. */
+    private static final int NEAR_PERCENT = 1;
+    private static final int CLOSE_PERCENT = 3;
 
     /** Không hẹn thưa hơn mức này, để sai số tối đa chỉ bằng một chu kỳ. */
     public static final long MAX_DELAY_MS = 5 * 60_000L;
@@ -54,18 +71,32 @@ public final class AlarmScheduleCalculator {
     public static long nextDelayMs(int percent, int targetPercent,
                                    int lastPercent, long elapsedMs) {
         final int remaining = targetPercent - percent;
-        // Đã tới hoặc vượt ngưỡng: cứ kiểm tra lại sớm nhất có thể, phần quyết định
-        // có báo hay không là việc của ChargeAlarmChecker
-        if (remaining <= 0) return MIN_DELAY_MS;
+        // Đã tới hoặc vượt ngưỡng: kiểm tra lại sớm nhất có thể, phần quyết định có
+        // báo hay không là việc của ChargeAlarmChecker
+        if (remaining <= 0) return NEAR_DELAY_MS;
 
         final int gained = percent - lastPercent;
-        if (lastPercent < 0 || gained <= 0 || elapsedMs <= 0L) return DEFAULT_DELAY_MS;
+        if (lastPercent < 0 || gained <= 0 || elapsedMs <= 0L) {
+            // Chưa đo được tốc độ. Còn xa thì chờ mức mặc định, nhưng đã sát ngưỡng
+            // thì phải theo nhịp đoạn cuối, không được chờ tới hai phút
+            return remaining <= CLOSE_PERCENT ? floorFor(remaining) : DEFAULT_DELAY_MS;
+        }
 
         final long msPerPercent = elapsedMs / gained;
-        return clamp((long) (remaining * msPerPercent * SAFETY_FACTOR));
+        return clamp((long) (remaining * msPerPercent * SAFETY_FACTOR), remaining);
     }
 
-    private static long clamp(long delayMs) {
-        return Math.max(MIN_DELAY_MS, Math.min(MAX_DELAY_MS, delayMs));
+    /**
+     * Sàn thời gian chờ, siết dần khi còn ít phần trăm.
+     * Đây là thứ quyết định độ trễ tối đa của cảnh báo.
+     */
+    private static long floorFor(int remaining) {
+        if (remaining <= NEAR_PERCENT) return NEAR_DELAY_MS;
+        if (remaining <= CLOSE_PERCENT) return CLOSE_DELAY_MS;
+        return MIN_DELAY_MS;
+    }
+
+    private static long clamp(long delayMs, int remaining) {
+        return Math.max(floorFor(remaining), Math.min(MAX_DELAY_MS, delayMs));
     }
 }

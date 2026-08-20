@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Màn "Tất cả chức năng", mở từ ô "Xem thêm" ở tab Công cụ.
+  Ba nhóm, mỗi nhóm một thẻ bo tròn chứa lưới 3 cột: VIP, Phát hiện, Công cụ.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_app"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbarInclude"
+        layout="@layout/view_toolbar" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:paddingStart="@dimen/space_md"
+            android:paddingEnd="@dimen/space_md"
+            android:paddingBottom="@dimen/space_lg">
+
+            <!-- ==================== NHÓM VIP ==================== -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_md"
+                android:background="@drawable/bg_card_rounded"
+                android:elevation="@dimen/card_elevation"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/space_md"
+                android:paddingBottom="@dimen/space_md">
+
+                <TextView
+                    style="@style/ToolGroupTitle"
+                    android:text="@string/tools_group_vip" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvVipTools"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_sm"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="never"
+                    app:spanCount="3"
+                    tools:itemCount="6"
+                    tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    tools:listitem="@layout/item_tool" />
+
+            </LinearLayout>
+
+            <!-- ==================== NHÓM PHÁT HIỆN ==================== -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_md"
+                android:background="@drawable/bg_card_rounded"
+                android:elevation="@dimen/card_elevation"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/space_md"
+                android:paddingBottom="@dimen/space_md">
+
+                <TextView
+                    style="@style/ToolGroupTitle"
+                    android:text="@string/tools_group_detect" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvDetectTools"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_sm"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="never"
+                    app:spanCount="3"
+                    tools:itemCount="6"
+                    tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    tools:listitem="@layout/item_tool" />
+
+            </LinearLayout>
+
+            <!-- ==================== NHÓM CÔNG CỤ ==================== -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_md"
+                android:background="@drawable/bg_card_rounded"
+                android:elevation="@dimen/card_elevation"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/space_md"
+                android:paddingBottom="@dimen/space_md">
+
+                <TextView
+                    style="@style/ToolGroupTitle"
+                    android:text="@string/tools_group_general" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvGeneralTools"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_sm"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="never"
+                    app:spanCount="3"
+                    tools:itemCount="3"
+                    tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    tools:listitem="@layout/item_tool" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

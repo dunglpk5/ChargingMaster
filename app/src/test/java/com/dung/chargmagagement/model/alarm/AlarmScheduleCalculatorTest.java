@@ -45,17 +45,41 @@ public class AlarmScheduleCalculatorTest {
                 AlarmScheduleCalculator.nextDelayMs(20, 80, 19, 10 * MINUTE));
     }
 
-    /** Sát ngưỡng và sạc nhanh cũng không được hẹn dày hơn một phút. */
+    /**
+     * Còn đúng 1 %: sàn siết xuống 20 giây, đây là thứ quyết định cảnh báo đúng lúc.
+     * Sạc nhanh 5 %/phút thì ước tính chỉ 10 giây, vẫn không hẹn dày hơn sàn.
+     */
     @Test
-    public void sacNhanh_chanSanMotPhut() {
-        assertEquals(AlarmScheduleCalculator.MIN_DELAY_MS,
+    public void satNguong_sanHaiChucGiay() {
+        assertEquals(AlarmScheduleCalculator.NEAR_DELAY_MS,
                 AlarmScheduleCalculator.nextDelayMs(79, 80, 74, MINUTE));
+    }
+
+    /** Còn 2-3 %: sàn 45 giây, chưa cần dày như đoạn cuối. */
+    @Test
+    public void ganNguong_sanBonMuoiLamGiay() {
+        assertEquals(AlarmScheduleCalculator.CLOSE_DELAY_MS,
+                AlarmScheduleCalculator.nextDelayMs(77, 80, 72, MINUTE));
+    }
+
+    /** Còn xa ngưỡng thì giữ sàn một phút, khỏi đánh thức máy vô ích. */
+    @Test
+    public void conXaNguong_sanMotPhut() {
+        assertEquals(AlarmScheduleCalculator.MIN_DELAY_MS,
+                AlarmScheduleCalculator.nextDelayMs(70, 80, 60, MINUTE));
+    }
+
+    /** Sát ngưỡng mà chưa đo được tốc độ cũng phải theo nhịp đoạn cuối. */
+    @Test
+    public void satNguongChuaBietTocDo_vanTheoNhipCuoi() {
+        assertEquals(AlarmScheduleCalculator.NEAR_DELAY_MS,
+                AlarmScheduleCalculator.nextDelayMs(79, 80, -1, 0L));
     }
 
     /** Đã vượt ngưỡng: kiểm tra lại sớm nhất có thể. */
     @Test
     public void daVuotNguong_kiemTraLaiNgay() {
-        assertEquals(AlarmScheduleCalculator.MIN_DELAY_MS,
+        assertEquals(AlarmScheduleCalculator.NEAR_DELAY_MS,
                 AlarmScheduleCalculator.nextDelayMs(85, 80, 80, MINUTE));
     }
 }

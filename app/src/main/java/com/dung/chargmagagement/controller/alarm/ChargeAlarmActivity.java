@@ -4,10 +4,13 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -16,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import com.dung.chargmagagement.R;
+import com.dung.chargmagagement.common.Logger;
 import com.dung.chargmagagement.controller.base.BaseActivity;
 import com.dung.chargmagagement.databinding.ActivityChargeAlarmBinding;
 import com.dung.chargmagagement.model.alarm.AlarmSettings;
@@ -39,7 +43,12 @@ public class ChargeAlarmActivity extends BaseActivity<ActivityChargeAlarmBinding
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
                 if (!granted) {
                     binding.tvPermissionWarning.setVisibility(View.VISIBLE);
+                    return;
                 }
+                // Vừa được cấp quyền: kiểm tra lại ngay. Lần kiểm tra lúc bật cảnh báo
+                // chạy trong khi hộp thoại xin quyền còn trên màn hình, nên nếu pin đã
+                // vượt ngưỡng từ trước thì lần đó không hiện được gì.
+                ChargeAlarmScheduler.check(this);
             });
 
     public static void start(@NonNull Context context) {
@@ -56,6 +65,7 @@ public class ChargeAlarmActivity extends BaseActivity<ActivityChargeAlarmBinding
     protected void onViewReady(@Nullable Bundle savedInstanceState) {
         binding.toolbarInclude.tvToolbarTitle.setText(R.string.tools_charge_alarm);
         binding.toolbarInclude.btnBack.setOnClickListener(v -> finish());
+        binding.tvExactAlarmWarning.setOnClickListener(v -> openExactAlarmSettings());
 
         settings = AlarmSettings.load(prefs);
         bindSettings();
@@ -67,6 +77,9 @@ public class ChargeAlarmActivity extends BaseActivity<ActivityChargeAlarmBinding
         super.onResume();
         // Người dùng có thể vừa cấp quyền ở Cài đặt rồi quay lại
         updatePermissionWarning();
+        // Đặt lại hẹn giờ: nếu quyền hẹn chính xác vừa được bật thì từ giờ mới nổ đúng
+        // mốc, còn cái hẹn cũ vẫn là loại bị hệ thống dồn
+        ChargeAlarmScheduler.check(this);
     }
 
     /** Đổ thiết lập đang lưu ra giao diện. */
@@ -159,8 +172,8 @@ public class ChargeAlarmActivity extends BaseActivity<ActivityChargeAlarmBinding
 
         // Kiểm tra ngay một lần rồi hẹn lần kế tiếp: bật cảnh báo trong lúc pin đã
         // vượt ngưỡng thì phải báo luôn, không chờ tới cái hẹn đầu tiên. Tắt hết
-        // cảnh báo thì check() cũng lo việc huỷ hẹn.
-        ChargeAlarmScheduler.check(this);
+        // cảnh báo thì bên trong cũng lo việc huỷ hẹn.
+        ChargeAlarmScheduler.onSettingsChanged(this);
     }
 
     /** Thanh trượt chỉ dùng được khi cảnh báo tương ứng đang bật. */
@@ -193,6 +206,26 @@ public class ChargeAlarmActivity extends BaseActivity<ActivityChargeAlarmBinding
     private void updatePermissionWarning() {
         final boolean needWarning = settings.hasAnyEnabled() && !hasNotificationPermission();
         binding.tvPermissionWarning.setVisibility(needWarning ? View.VISIBLE : View.GONE);
+
+        // Thiếu quyền hẹn giờ chính xác thì cảnh báo vẫn chạy, nhưng bị hệ thống dồn
+        // lại và thường chỉ nổ khi người dùng mở app - phải nói rõ cho người dùng biết
+        final boolean needExact = settings.hasAnyEnabled()
+                && !ChargeAlarmScheduler.canScheduleExact(this);
+        binding.tvExactAlarmWarning.setVisibility(needExact ? View.VISIBLE : View.GONE);
+    }
+
+    /** Mở trang "Chuông báo và lời nhắc" để người dùng bật hẹn giờ chính xác. */
+    private void openExactAlarmSettings() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return;
+
+        Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+                .setData(Uri.fromParts("package", getPackageName(), null));
+        try {
+            startActivity(intent);
+        } catch (Exception e) {
+            Logger.e("ChargeAlarm", "Không mở được trang hẹn giờ chính xác", e);
+            Toast.makeText(this, R.string.check_settings_unavailable, Toast.LENGTH_SHORT).show();
+        }
     }
 
     /** Rút gọn SeekBar.OnSeekBarChangeListener để khỏi phải viết hàm rỗng mọi nơi. */

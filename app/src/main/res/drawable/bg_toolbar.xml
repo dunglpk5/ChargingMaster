@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Thanh tiêu đề: nền teal, bo nhẹ hai góc dưới.
+  Hai góc trên để vuông vì thanh nằm sát mép trên màn hình.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/teal_primary" />
+    <corners
+        android:bottomLeftRadius="@dimen/radius_toolbar"
+        android:bottomRightRadius="@dimen/radius_toolbar" />
+</shape>
