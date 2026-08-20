@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- العربية تحتاج ست صيغ للعدد -->
+<resources>
+    <plurals name="usage_sessions">
+        <item quantity="zero">%1$d جلسة</item>
+        <item quantity="one">جلسة واحدة</item>
+        <item quantity="two">جلستان</item>
+        <item quantity="few">%1$d جلسات</item>
+        <item quantity="many">%1$d جلسة</item>
+        <item quantity="other">%1$d جلسة</item>
+    </plurals>
+
+    <plurals name="clean_found">
+        <item quantity="zero">لا توجد إشعارات للتنظيف</item>
+        <item quantity="one">يمكن تنظيف إشعار واحد</item>
+        <item quantity="two">يمكن تنظيف إشعارين</item>
+        <item quantity="few">يمكن تنظيف %1$d إشعارات</item>
+        <item quantity="many">يمكن تنظيف %1$d إشعارًا</item>
+        <item quantity="other">يمكن تنظيف %1$d إشعار</item>
+    </plurals>
+</resources>

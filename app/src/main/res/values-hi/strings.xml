@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- हिन्दी -->
+<resources>
+    <string name="app_name">Charging Master</string>
+
+    <string name="tab_home">होम</string>
+    <string name="tab_tools">टूल</string>
+    <string name="tab_battery_usage">बैटरी उपयोग</string>
+
+    <string name="home_detect">जाँचें</string>
+    <string name="home_ad_badge">AD</string>
+    <string name="home_battery_word">बैटरी</string>
+    <string name="home_battery_life">अनुमानित बैटरी अवधि</string>
+    <string name="home_health_label">स्थिति</string>
+    <string name="home_time_to_full">पूरा चार्ज होने में समय</string>
+    <string name="home_charge_status">चार्जिंग स्थिति</string>
+    <string name="home_battery_status">बैटरी स्थिति</string>
+    <string name="home_charge_speed_avg">चार्जिंग गति</string>
+    <string name="msg_coming_soon">जल्द आ रहा है</string>
+    <string name="home_plugged">प्लग किया हुआ</string>
+    <string name="home_temperature">तापमान</string>
+    <string name="home_health">सेहत</string>
+    <string name="home_current">चार्जिंग करंट</string>
+    <string name="home_voltage">वोल्टेज</string>
+    <string name="home_capacity">क्षमता</string>
+    <string name="home_technology">तकनीक</string>
+    <string name="home_model">मॉडल</string>
+
+    <string name="plug_ac">एसी चार्जर</string>
+    <string name="plug_usb">USB</string>
+    <string name="plug_wireless">वायरलेस</string>
+    <string name="plug_none">बैटरी पर</string>
+
+    <string name="health_good">अच्छी</string>
+    <string name="health_overheat">ज़्यादा गरम</string>
+    <string name="health_dead">खराब</string>
+    <string name="health_over_voltage">अधिक वोल्टेज</string>
+    <string name="health_cold">बहुत ठंडी</string>
+    <string name="health_unknown">अज्ञात</string>
+
+    <string name="tools_group_tools">टूल</string>
+    <string name="tools_group_vip">VIP</string>
+    <string name="tools_all_title">सभी सुविधाएँ</string>
+    <string name="tools_group_detect">जाँच</string>
+    <string name="tools_group_general">सामान्य</string>
+    <string name="tools_group_other">अन्य</string>
+    <string name="tools_manage_apps">ऐप प्रबंधन</string>
+    <string name="tools_shortcut">शॉर्टकट</string>
+    <string name="tools_clear_cache">कैश साफ़ करें</string>
+    <string name="tools_feedback">प्रतिक्रिया</string>
+    <string name="tools_privacy_policy">गोपनीयता नीति</string>
+    <string name="tools_about_us">हमारे बारे में</string>
+    <string name="tools_no_ads">बिना विज्ञापन</string>
+    <string name="tools_charge_alarm">चार्ज अलार्म</string>
+    <string name="tools_priority_support">प्राथमिक सहायता</string>
+    <string name="tools_charge_history">चार्ज इतिहास</string>
+    <string name="tools_x_charge">X-Charge</string>
+    <string name="tools_more">और</string>
+    <string name="tools_device_info">डिवाइस जानकारी</string>
+    <string name="tools_clean_notification">सूचनाएँ साफ़ करें</string>
+    <string name="tools_clean_clipboard">क्लिपबोर्ड साफ़ करें</string>
+    <string name="tools_phone_temperature">फ़ोन का तापमान</string>
+    <string name="tools_charge_detect">चार्जिंग जाँच</string>
+    <string name="tools_cpu_usage">CPU उपयोग</string>
+    <string name="tools_stat_storage">स्टोरेज</string>
+    <string name="tools_stat_ram">RAM</string>
+    <string name="tools_stat_battery">बैटरी</string>
+    <string name="tools_action_scan">स्कैन</string>
+    <string name="tools_action_details">विवरण</string>
+    <string name="tools_action_monitor">निगरानी</string>
+
+    <string name="monitor_title">बैटरी</string>
+    <string name="monitor_recent_days">पिछले 3 दिन</string>
+    <string name="monitor_chart_title">बैटरी इतिहास</string>
+    <string name="monitor_last_charge">पिछली चार्जिंग</string>
+    <string name="monitor_last_speed">पिछली चार्जिंग</string>
+    <string name="monitor_last_source">चार्जिंग तरीका</string>
+    <string name="monitor_last_duration">चार्जिंग समय</string>
+    <string name="monitor_last_quality">चार्ज सीमा</string>
+    <string name="monitor_since_full">पिछली पूरी चार्जिंग के बाद से</string>
+    <string name="monitor_range">%1$d%% से %2$d%% तक</string>
+    <string name="monitor_no_result">कोई डेटा नहीं</string>
+
+    <string name="usage_battery_health">बैटरी की सेहत</string>
+    <string name="usage_health_desc">अनुमानित क्षमता की तुलना मूल क्षमता से करने पर पता चलता है कि बैटरी कितनी घिस चुकी है। लंबे चार्ज चक्र अनुमान को ज़्यादा सटीक बनाते हैं।</string>
+    <string name="usage_estimated_capacity">अनुमानित क्षमता</string>
+    <string name="usage_design_capacity">मूल क्षमता</string>
+    <string name="usage_set_design_capacity">मूल क्षमता सेट करें</string>
+    <string name="usage_average">औसत बैटरी खपत</string>
+    <string name="usage_combined">कुल उपयोग</string>
+    <string name="usage_based_on">आधार</string>
+    <string name="usage_screen_on">स्क्रीन चालू</string>
+    <string name="usage_screen_off">स्क्रीन बंद</string>
+    <string name="usage_last_7_days">पिछले 7 दिनों में</string>
+    <string name="usage_rate_detail">%2$.1f घंटे में %1$.1f %%</string>
+    <string name="usage_health_basis">%1$d चार्जिंग सत्रों पर आधारित, कुल %2$d %% यानी %3$d mAh।</string>
+    <string name="usage_charge_since">%1$s से</string>
+    <string name="usage_charge_daily">रोज़ाना औसत चार्ज</string>
+    <string name="usage_charge_rate_detail">पिछले 7 दिनों में • %1$.1f %%/घंटा</string>
+    <string name="usage_charging_now">मौजूदा चार्जिंग सत्र</string>
+    <string name="usage_charging_since">चार्जिंग शुरू</string>
+
+    <string name="usage_apps">ऐप के हिसाब से खपत</string>
+    <string name="usage_apps_desc">Android ऐप्स को यह पढ़ने नहीं देता कि किस ऐप ने कितनी बिजली खर्च की — यह आँकड़ा सिर्फ़ सिस्टम सेटिंग्स के पास होता है। नीचे हर ऐप का फ़ोरग्राउंड समय दिखाया गया है, जो खपत के काफ़ी करीब चलता है पर बैकग्राउंड में बिजली खींचने वाले ऐप्स को नहीं गिनता।</string>
+    <string name="usage_apps_permission_title">उपयोग एक्सेस चाहिए</string>
+    <string name="usage_apps_permission_desc">उपयोग के हिसाब से ऐप्स की सूची बनाने के लिए “उपयोग एक्सेस” अनुमति चाहिए, जो अभी नहीं दी गई है।</string>
+    <string name="usage_apps_grant">अनुमति दें</string>
+    <string name="usage_apps_empty">अभी पर्याप्त डेटा नहीं है।</string>
+    <string name="usage_full_estimate">पूरी बैटरी पर अनुमानित समय</string>
+    <string name="usage_charged">चार्ज हुई बैटरी</string>
+    <string name="usage_measuring">माप जारी…</string>
+    <string name="usage_chart_legend">स्तर</string>
+    <string name="usage_no_data">इस दिन का कोई डेटा नहीं है</string>
+    <string name="usage_full_estimate_desc">यह अनुमान आपके चार्जिंग इतिहास के आधार पर बताता है कि 100%% चार्ज बैटरी कितनी देर चल सकती है।</string>
+    <string name="usage_charge_count">कुल चार्जिंग</string>
+    <string name="usage_charge_average">हर चार्ज का औसत</string>
+    <string name="usage_capacity_dialog_title">मूल क्षमता (mAh)</string>
+    <string name="usage_health_note">मूल क्षमता से %1$d mAh कम</string>
+    <string name="usage_capacity_invalid">500 से 30000 mAh के बीच का मान डालें</string>
+
+    <string name="value_placeholder">-</string>
+    <string name="action_ok">ठीक है</string>
+    <string name="action_cancel">रद्द करें</string>
+
+    <string name="check_title">पावर जाँच</string>
+    <string name="check_average">औसत</string>
+    <string name="check_max">अधिकतम</string>
+    <string name="check_turn_off">सेटिंग्स</string>
+    <string name="check_settings_unavailable">इस डिवाइस में वह सेटिंग स्क्रीन नहीं है</string>
+
+    <string name="speed_unknown">माप जारी</string>
+    <string name="speed_not_charging">चार्ज नहीं हो रही</string>
+    <string name="speed_slow">धीमी</string>
+    <string name="speed_normal">सामान्य</string>
+    <string name="speed_fast">तेज़</string>
+    <string name="speed_very_fast">बहुत तेज़</string>
+
+    <string name="feature_power_source">पावर स्रोत जाँचें</string>
+    <string name="feature_power_source_desc">एसी चार्जर से चार्जिंग करंट बढ़ता है</string>
+    <string name="feature_location">GPS जाँचें</string>
+    <string name="feature_location_desc">GPS बंद करने से खपत घटती है</string>
+    <string name="feature_brightness">ब्राइटनेस जाँचें</string>
+    <string name="feature_brightness_desc">ऑटो ब्राइटनेस चालू करने से स्क्रीन कम बिजली लेती है</string>
+    <string name="feature_bluetooth">ब्लूटूथ जाँचें</string>
+    <string name="feature_bluetooth_desc">ब्लूटूथ बंद करने से खपत घटती है</string>
+    <string name="feature_auto_sync">सिंक जाँचें</string>
+    <string name="feature_auto_sync_desc">सिस्टम सिंक बंद करने से खपत घटती है</string>
+    <string name="feature_temperature">तापमान जाँचें</string>
+    <string name="feature_temperature_desc">फ़ोन का तापमान</string>
+
+    <string name="check_current_in">इनपुट करंट: %1$s</string>
+    <string name="check_current_idle">निष्क्रिय करंट: %1$s</string>
+    <string name="check_power_source">पावर स्रोत जाँचें</string>
+    <string name="check_x_charge">X-CHARGE</string>
+    <string name="check_detect">जाँचें</string>
+    <string name="check_ok">ठीक है</string>
+
+    <string name="source_rated_power">अनुमानित रेटेड पावर:</string>
+    <string name="source_actual_power">अनुमानित वास्तविक पावर:</string>
+    <string name="source_verdict_low">चार्जिंग गति इस समय कम है</string>
+    <string name="source_verdict_normal">चार्जिंग गति सामान्य है</string>
+    <string name="source_verdict_high">चार्जिंग गति ज़्यादा है</string>
+    <string name="source_verdict_unplugged">कोई चार्जर नहीं जुड़ा है</string>
+    <string name="action_ok_short">ठीक है</string>
+
+    <string name="xcharge_optimizing">लागू ऑप्टिमाइज़ेशन</string>
+    <string name="xcharge_line_done">✓  %1$s</string>
+    <string name="xcharge_line_manual">!  %1$s — खुद बंद करें</string>
+    <string name="xcharge_line_warn">!  %1$s</string>
+    <string name="xcharge_done_screen">इस पेज पर स्क्रीन मंद की गई</string>
+    <string name="xcharge_done_sync">ऑटो सिंक बंद किया गया</string>
+    <string name="xcharge_done_brightness">सिस्टम ब्राइटनेस घटाई गई</string>
+    <string name="xcharge_grant_brightness">ऐप को सिस्टम ब्राइटनेस घटाने की अनुमति दें</string>
+    <string name="xcharge_manual_off">बाकी चीज़ें बंद करें</string>
+    <string name="xcharge_elapsed">बीता समय</string>
+    <string name="xcharge_exit">बाहर निकलें</string>
+    <string name="xcharge_all_good">चार्जिंग के लिए सब ठीक है</string>
+    <string name="warn_overheat">बैटरी गरम है — कवर हटाएँ और फ़ोन इस्तेमाल करना बंद करें</string>
+    <string name="warn_draining">बैटरी अब भी घट रही है — पावर स्रोत पर्याप्त नहीं है</string>
+    <string name="warn_low_current">चार्जिंग करंट कम है — केबल और अडैप्टर जाँचें</string>
+    <string name="warn_usb_source">USB पोर्ट से चार्ज हो रहा है — एसी अडैप्टर कहीं ज़्यादा तेज़ है</string>
+    <string name="warn_nearly_full">90%% से ऊपर — जल्दी अनप्लग करने से बैटरी ज़्यादा टिकती है</string>
+    <string name="stage_fast">तेज़</string>
+    <string name="stage_cycle">चक्र</string>
+    <string name="stage_trickle">धीमी</string>
+    <string name="xcharge_remaining">पूरा होने में लगभग %1$s</string>
+    <string name="xcharge_calculating">बचा समय गिना जा रहा है…</string>
+    <string name="xcharge_not_charging">चार्ज नहीं हो रही</string>
+    <string name="xcharge_plug_in">शुरू करने के लिए चार्जर लगाएँ</string>
+    <string name="xcharge_warn_hot">बैटरी असामान्य रूप से गरम है। चार्जर हटाएँ और ठंडा होने दें।</string>
+    <string name="xcharge_warn_slow">चार्जिंग करंट असामान्य रूप से कम है। चार्जर और केबल जाँचें।</string>
+    <string name="xcharge_actions">इस मोड में ऐप स्क्रीन चालू रखता है, बैटरी का तापमान और करंट रियल टाइम में देखता है, और कुछ गड़बड़ लगने पर आपको चेतावनी देता है।</string>
+
+    <string name="alarm_dismiss">अलार्म बंद करें</string>
+
+    <string name="vip_subtitle">अपग्रेड करें और सभी विज्ञापन हटाएँ</string>
+    <string name="vip_active">आप VIP सदस्य हैं</string>
+    <string name="vip_purchase">VIP बनें</string>
+    <string name="vip_purchase_price">VIP बनें · %1$s</string>
+    <string name="vip_benefit_format">✓  %1$s</string>
+    <string name="vip_thanks">धन्यवाद! सभी विज्ञापन हटा दिए गए हैं।</string>
+    <string name="vip_unavailable">अभी खरीद उपलब्ध नहीं है। बाद में फिर कोशिश करें।</string>
+    <string name="vip_note">एक बार का भुगतान। आपकी खरीद आपके Google खाते से जुड़ी रहती है और ऐप दोबारा इंस्टॉल करने पर वापस पाई जा सकती है।</string>
+
+    <string name="temp_detect">जाँचें</string>
+    <string name="temp_state_normal">तापमान सामान्य है</string>
+    <string name="temp_state_warm">बैटरी गरम हो रही है</string>
+    <string name="temp_state_hot">बैटरी बहुत गरम है, ठंडा होने दें</string>
+    <string name="temp_advice_normal">आपके फ़ोन का तापमान सामान्य है। फ़िलहाल चिंता की कोई बात नहीं।</string>
+    <string name="temp_advice_warm">आपका फ़ोन सामान्य से ज़्यादा गरम है, शायद CPU लोड या चार्जिंग करंट की वजह से। ठंडा करने के लिए ये आज़माएँ:\n1. चार्जर हटाएँ और चार्जिंग रोकें।\n2. बैकग्राउंड में चल रहे भारी ऐप्स बंद करें।\n3. फ़ोन को कुछ देर हवादार जगह पर रखें।</string>
+    <string name="temp_advice_hot">आपका फ़ोन इस समय बहुत गरम है, शायद ज़्यादा CPU लोड या तेज़ चार्जिंग करंट की वजह से। ठंडा करने के लिए ये आज़माएँ:\n1. चार्जर हटाएँ और चार्जिंग रोकें।\n2. बैकग्राउंड में चल रहे भारी ऐप्स बंद करें।\n3. फ़ोन को कुछ देर हवादार जगह पर रखें।</string>
+
+    <string name="settings_title">सेटिंग्स</string>
+    <string name="settings_version">संस्करण %1$s</string>
+    <string name="settings_battery_logging">बैटरी इतिहास रिकॉर्ड करें</string>
+    <string name="settings_battery_logging_desc">नीचे दिए हर हिस्से को ऐप बंद होने पर एक बैकग्राउंड सेवा चाहिए। यह सेवा बैटरी को बार-बार नहीं पढ़ती, इसलिए खर्च नगण्य है, और तीनों स्विच बंद होते ही अपने आप रुक जाती है। चार्ज अलार्म, चार्जिंग की गिनती और बैटरी की सेहत इनके बिना भी काम करते हैं।</string>
+    <string name="alarm_exact_warning">ऐप खोलने तक अलर्ट में देरी हो सकती है। सटीक अलार्म की अनुमति देने के लिए यहाँ टैप करें।</string>
+    <string name="settings_log_chart">बैटरी स्तर का ग्राफ़</string>
+    <string name="settings_log_chart_desc">पूरे दिन बैटरी स्तर रिकॉर्ड करता है ताकि 00:00–24:00 का ग्राफ़ बिना टूटे बने।</string>
+    <string name="settings_log_screen">स्क्रीन चालू/बंद आँकड़े</string>
+    <string name="settings_log_screen_desc">खपत को स्क्रीन की स्थिति के हिसाब से बाँटता है — %/घंटा के आँकड़ों और बैटरी अवधि के अनुमान के लिए।</string>
+    <string name="settings_log_details">सूचना में लाइव आँकड़े</string>
+    <string name="settings_log_details_desc">स्थायी सूचना में मौजूदा करंट, औसत करंट और स्क्रीन समय दिखाता है। बंद करने पर सिर्फ़ बैटरी स्तर रहता है।</string>
+    <string name="settings_notification_access">सूचना एक्सेस</string>
+    <string name="settings_app_info">ऐप जानकारी</string>
+    <string name="about_us_message">%1$s आपको सुरक्षित चार्ज करने और अपनी बैटरी को बेहतर समझने में मदद करता है।\n\nसंस्करण %2$s</string>
+    <string name="feedback_no_email_app">कोई ईमेल ऐप नहीं मिला</string>
+    <string name="cache_cleared">कैश साफ़ हो गया</string>
+    <string name="cache_clear_confirm">ऐप का अस्थायी कैश साफ़ करें?</string>
+    <string name="settings_clipboard_confirm">क्लिपबोर्ड की सामग्री हटाएँ?</string>
+    <string name="settings_clipboard_cleared">क्लिपबोर्ड साफ़ हो गया</string>
+    <string name="settings_clipboard_failed">क्लिपबोर्ड साफ़ नहीं हो सका</string>
+    <string name="language_system">सिस्टम की भाषा</string>
+
+    <string name="cpu_unavailable">यह डिवाइस CPU उपयोग पढ़ने नहीं देता</string>
+    <string name="cpu_estimated_note">यह डिवाइस सटीक CPU आँकड़े रोकता है, इसलिए नीचे का लोड फ़्रीक्वेंसी से अनुमानित है और आमतौर पर असली से ज़्यादा दिखता है।</string>
+
+    <string name="cpu_core_label">CPU %1$d</string>
+    <string name="cpu_freq_range">%1$s - %2$s</string>
+    <string name="cpu_spec_name">नाम</string>
+    <string name="cpu_spec_vendor">निर्माता</string>
+    <string name="cpu_spec_speed">गति</string>
+    <string name="cpu_spec_cores">कोर</string>
+    <string name="cpu_spec_arch">आर्किटेक्चर</string>
+    <string name="cpu_current_clock">मौजूदा गति</string>
+    <string name="cpu_core_min">न्यूनतम</string>
+    <string name="cpu_core_max">अधिकतम</string>
+
+    <string name="charging_screen_charging">चार्ज हो रहा है</string>
+    <string name="charging_screen_charging_left">चार्ज हो रहा है\n(%1$s बाकी)</string>
+    <string name="charging_screen_full">पूरा चार्ज</string>
+    <string name="charging_screen_unplugged">अनप्लग किया गया</string>
+    <string name="charging_screen_source">%1$s, %2$s</string>
+    <string name="charging_screen_detect">चार्जिंग गति देखें &gt;&gt;</string>
+    <string name="charging_screen_swipe">अनलॉक करने के लिए ऊपर स्वाइप करें</string>
+    <string name="charging_screen_open_app">ऐप खोलें</string>
+
+    <string name="clean_title">सफ़ाई</string>
+    <string name="clean_junk_cache">जंक फ़ाइलें</string>
+    <string name="clean_app_cache">ऐप कैश</string>
+    <string name="clean_obsolete_apk">पुरानी APK</string>
+    <string name="clean_ad_cache">विज्ञापन कैश</string>
+    <string name="clean_downloads">डाउनलोड की फ़ाइलें</string>
+    <string name="clean_large_files">बड़ी फ़ाइलें</string>
+    <string name="clean_scanning">स्कैन हो रहा है…</string>
+    <string name="clean_scan_done">स्कैन पूरा</string>
+    <string name="clean_cleaning">साफ़ किया जा रहा है…</string>
+    <string name="clean_action">साफ़ करें</string>
+    <string name="clean_selected">चुना गया: %1$s</string>
+    <string name="clean_select_group">यह समूह चुनें</string>
+    <string name="clean_pick_files">%1$s (%2$d फ़ाइलें)</string>
+    <string name="clean_file_entry">%1$s — %2$s</string>
+    <string name="clean_file_count">%1$d/%2$d फ़ाइलें</string>
+    <string name="clean_freed">%1$s खाली हुआ</string>
+    <string name="clean_confirm_title">ये फ़ाइलें हटाएँ?</string>
+    <string name="clean_confirm_message">%1$s यहाँ से हटाया जाएगा: %2$s.\n\nयह वापस नहीं लिया जा सकता।</string>
+    <string name="clean_grant_permission">अनुमति दें</string>
+    <string name="clean_stale_files">लंबे समय से अनुपयोगी फ़ाइलें</string>
+    <string name="clean_permission_required">स्टोरेज एक्सेस चाहिए</string>
+    <string name="clean_permission_message">स्कैन के लिए पूरी फ़ाइल एक्सेस चाहिए। इसके बिना Android दूसरे ऐप्स की फ़ाइलें छिपा देता है, इसलिए स्कैन न कुछ देख पाता है न हटा पाता है। जारी रखने के लिए अनुमति दें।</string>
+    <string name="clean_permission_unavailable">इस डिवाइस में वह अनुमति देने की स्क्रीन नहीं है</string>
+    <string name="clean_permission_notification">सूचनाएँ साफ़ करने के लिए सूचना एक्सेस चाहिए। Android इसे सिर्फ़ सिस्टम सेटिंग्स से देने देता है, और इसके बिना यह स्क्रीन एक भी सूचना नहीं देख सकती।</string>
+    <string name="clean_title_count">सूचनाएँ साफ़ करें (%1$d)</string>
+    <string name="clean_action_all">सब साफ़ करें</string>
+    <string name="clean_time_today">%1$s आज</string>
+    <string name="clean_time_other">%1$s %2$s</string>
+    <string name="clean_card_title">चार्जिंग जाँच</string>
+    <string name="clean_card_desc">चार्जिंग गति और पावर स्थिति देखें</string>
+    <string name="notif_stat_now">अभी: %1$d mA (%2$.1f W) • %3$.1f%%/घंटा • %4$s</string>
+    <string name="notif_stat_avg">औसत: %1$d mA • %2$.1f%%/घंटा • %3$.0f mAh (%4$.0f%%)</string>
+    <string name="notif_stat_screen_on">स्क्रीन चालू: %1$s • %2$.0f mAh (%3$.1f%%)</string>
+    <string name="notif_stat_screen_off">स्क्रीन बंद: %1$s • %2$.0f mAh (%3$.1f%%)</string>
+    <string name="notif_stat_sleep">जागृत: %1$s (%2$.0f%%) • गहरी नींद: %3$s (%4$.0f%%)</string>
+
+    <string name="clipboard_title_count">क्लिपबोर्ड साफ़ करें (%1$d)</string>
+    <string name="clipboard_item_label">कॉपी की गई सामग्री</string>
+    <string name="clipboard_cleared">क्लिपबोर्ड साफ़ हो गया</string>
+    <string name="clean_permission_restricted">“प्रतिबंधित सेटिंग” दिख रही है? APK फ़ाइल से इंस्टॉल किए गए ऐप्स के लिए Android यह अनुमति रोक देता है। सेटिंग्स › ऐप्स › Charging Master खोलें, ऊपर कोने में ⋮ दबाएँ और “प्रतिबंधित सेटिंग्स की अनुमति दें” चुनें, फिर यहाँ लौटें।</string>
+
+    <string name="clean_nothing">साफ़ करने के लिए कुछ नहीं है</string>
+    <string name="clean_done">सूचनाएँ साफ़ हो गईं</string>
+
+    <string name="cd_back">वापस</string>
+
+    <string name="history_empty">अभी तक कोई चार्जिंग दर्ज नहीं हुई</string>
+    <string name="history_detail_title">सत्र का विवरण</string>
+    <string name="history_gain_format">+%1$d%% (%2$d→%3$d)</string>
+    <string name="history_start_time">शुरू</string>
+    <string name="history_end_time">समाप्त</string>
+    <string name="history_ongoing">जारी है</string>
+    <string name="history_duration">अवधि</string>
+    <string name="history_gain">चार्ज हुआ</string>
+    <string name="history_plug_type">पावर स्रोत</string>
+    <string name="history_max_temp">अधिकतम तापमान</string>
+    <string name="history_charged_mah">चार्ज हुई ऊर्जा</string>
+
+    <string name="alarm_threshold_setting">चार्ज स्तर अलर्ट</string>
+    <string name="alarm_threshold_desc">बैटरी आपके तय स्तर पर पहुँचते ही चेतावनी देता है। 80%% से नीचे रखने पर बैटरी ज़्यादा समय स्वस्थ रहती है।</string>
+    <string name="alarm_full_setting">पूरा चार्ज अलर्ट</string>
+    <string name="alarm_full_desc">बैटरी पूरी चार्ज होने पर चेतावनी देता है।</string>
+    <string name="alarm_overheat_setting">ज़्यादा गरम होने का अलर्ट</string>
+    <string name="alarm_overheat_desc">बैटरी बहुत गरम होने पर चेतावनी देता है, चार्ज न होने पर भी।</string>
+    <string name="alarm_permission_warning">सूचनाएँ बंद हैं, इसलिए अलर्ट नहीं दिख सकते। सिस्टम सेटिंग्स में इन्हें चालू करें।</string>
+    <string name="alarm_threshold_title">तय चार्ज स्तर पहुँच गया</string>
+    <string name="alarm_threshold_message">बैटरी %1$d%% पर है। बैटरी की उम्र बचाने के लिए चार्जर हटाएँ।</string>
+    <string name="alarm_full_title">बैटरी पूरी</string>
+    <string name="alarm_full_message">बैटरी %1$d%% पर है। अब चार्जर हटा सकते हैं।</string>
+    <string name="alarm_overheat_title">बैटरी बहुत गरम</string>
+    <string name="alarm_overheat_message">%1$d%% पर बैटरी ज़्यादा गरम हो रही है। चार्जर हटाएँ और ठंडा होने दें।</string>
+    <string name="notif_channel_alarm">चार्जिंग अलर्ट</string>
+    <string name="notif_channel_alarm_desc">चार्ज स्तर, पूरी चार्जिंग और ज़्यादा गरम होने के अलर्ट</string>
+
+    <string name="detail_tab_device">डिवाइस</string>
+    <string name="detail_tab_system">सिस्टम</string>
+    <string name="detail_tab_cpu">CPU</string>
+    <string name="detail_tab_display">डिस्प्ले</string>
+    <string name="detail_tab_network">नेटवर्क</string>
+    <string name="detail_tab_sensor">सेंसर</string>
+    <string name="detail_empty">कोई जानकारी उपलब्ध नहीं</string>
+    <string name="detail_yes">हाँ</string>
+    <string name="detail_no">नहीं</string>
+
+    <string name="detail_device_name">डिवाइस का नाम</string>
+    <string name="detail_bluetooth_le">Bluetooth LE</string>
+    <string name="detail_nfc_present">NFC मौजूद</string>
+    <string name="detail_nfc_enabled">NFC चालू</string>
+    <string name="detail_ring_mode">रिंग मोड</string>
+    <string name="detail_ring_silent">साइलेंट</string>
+    <string name="detail_ring_vibrate">वाइब्रेट</string>
+    <string name="detail_ring_normal">सामान्य</string>
+    <string name="detail_system_time">सिस्टम समय</string>
+    <string name="detail_brightness_level">ब्राइटनेस स्तर</string>
+    <string name="detail_orientation">दिशा</string>
+    <string name="detail_portrait">पोर्ट्रेट</string>
+    <string name="detail_landscape">लैंडस्केप</string>
+    <string name="detail_sdcard">SD कार्ड</string>
+    <string name="detail_emulator">एमुलेटर</string>
+
+    <string name="detail_host">होस्ट</string>
+    <string name="detail_user">उपयोगकर्ता</string>
+    <string name="detail_build_tags">बिल्ड टैग</string>
+    <string name="detail_language">भाषा</string>
+    <string name="detail_code_name">कोड नाम</string>
+    <string name="detail_released_time">रिलीज़ समय</string>
+    <string name="detail_device_type">डिवाइस प्रकार</string>
+    <string name="detail_root_access">रूट एक्सेस</string>
+
+    <string name="detail_processor_name">प्रोसेसर का नाम</string>
+    <string name="detail_cpu_hardware">CPU हार्डवेयर</string>
+    <string name="detail_processor">प्रोसेसर</string>
+    <string name="detail_running_cpus">चालू CPU</string>
+    <string name="detail_cpu_temperature">CPU तापमान</string>
+
+    <string name="detail_physical_size">भौतिक आकार</string>
+
+    <string name="detail_network_available">नेटवर्क उपलब्ध</string>
+    <string name="detail_wifi_enabled">वाई-फ़ाई चालू</string>
+    <string name="detail_wifi_bssid">वाई-फ़ाई BSSID</string>
+    <string name="detail_wifi_link_speed">लिंक गति</string>
+    <string name="detail_wifi_ssid">वाई-फ़ाई SSID</string>
+    <string name="detail_wifi_mac">वाई-फ़ाई MAC पता</string>
+    <string name="detail_ipv6_address">IPv6 पता</string>
+    <string name="detail_sim_carrier">सिम ऑपरेटर</string>
+
+    <string name="detail_model">मॉडल</string>
+    <string name="detail_brand">ब्रांड</string>
+    <string name="detail_manufacturer">निर्माता</string>
+    <string name="detail_device">डिवाइस</string>
+    <string name="detail_product">उत्पाद</string>
+    <string name="detail_board">बोर्ड</string>
+    <string name="detail_hardware">हार्डवेयर</string>
+    <string name="detail_bootloader">बूटलोडर</string>
+    <string name="detail_abi">समर्थित ABI</string>
+
+    <string name="detail_android_version">Android संस्करण</string>
+    <string name="detail_api_level">API स्तर</string>
+    <string name="detail_security_patch">सुरक्षा पैच</string>
+    <string name="detail_fingerprint">फ़िंगरप्रिंट</string>
+    <string name="detail_kernel">कर्नेल</string>
+
+    <string name="detail_cores">कोर</string>
+    <string name="detail_core_idle">निष्क्रिय</string>
+
+    <string name="detail_resolution">रिज़ॉल्यूशन</string>
+    <string name="detail_density">घनत्व</string>
+    <string name="detail_refresh_rate">रिफ़्रेश दर</string>
+    <string name="detail_brightness_mode">ब्राइटनेस मोड</string>
+    <string name="detail_brightness_auto">स्वचालित</string>
+    <string name="detail_brightness_manual">मैनुअल</string>
+
+    <string name="detail_network_type">कनेक्शन</string>
+    <string name="detail_ip_address">IPv4 पता</string>
+    <string name="detail_sim_country">सिम का देश</string>
+    <string name="detail_network_none">कोई नहीं</string>
+
+    <string name="language_title">भाषा</string>
+
+    <string name="notif_log_title">बैटरी रिकॉर्डिंग</string>
+    <string name="notif_log_content">बैटरी स्तर रिकॉर्ड हो रहा है • %1$d%%</string>
+    <string name="notif_log_starting">शुरू हो रहा है…</string>
+    <string name="notif_channel_monitor">बैटरी रिकॉर्डिंग</string>
+    <string name="notif_channel_monitor_desc">इतिहास ग्राफ़ बनाने के लिए समय के साथ बैटरी स्तर रिकॉर्ड करता है</string>
+
+    <string name="cd_battery_icon">बैटरी आइकन</string>
+    <string name="cd_remove_ads">विज्ञापन हटाएँ</string>
+    <string name="cd_menu">मेन्यू</string>
+</resources>

@@ -35,8 +35,17 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // Giữ lại đủ bộ ngôn ngữ app hỗ trợ khi build release
-        resourceConfigurations += listOf("en", "vi")
+        // Lọc tài nguyên ngôn ngữ: chỉ những mã liệt kê ở đây mới được đóng gói vào
+        // APK, phần còn lại bị loại bỏ dù thư mục values-<mã> vẫn nằm trong mã nguồn.
+        // Danh sách này phải khớp với res/xml/locales_config.xml, thiếu một mã là
+        // người dùng chọn ngôn ngữ đó xong lại thấy giao diện quay về mặc định.
+        //
+        // Lưu ý cách viết mã ở đây là kiểu thư mục tài nguyên: "in" cho tiếng
+        // Indonesia và "zh-rCN" cho tiếng Trung giản thể.
+        resourceConfigurations += listOf(
+            "en", "vi", "es", "pt-rBR", "fr", "de", "ru",
+            "in", "hi", "zh-rCN", "ja", "ko", "tr", "ar"
+        )
 
         javaCompileOptions {
             annotationProcessorOptions {

@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Danh sách ngôn ngữ app hỗ trợ (Android 13+ đọc file này cho per-app language) -->
+<!--
+  Danh sách ngôn ngữ app hỗ trợ (Android 13+ đọc file này cho per-app language).
+  Mỗi mục ở đây phải có đúng một thư mục values-<mã> kèm bản dịch, nếu không người
+  dùng chọn xong sẽ thấy toàn tiếng Anh.
+
+  Lưu ý mã thư mục: tiếng Indonesia dùng "in" chứ không phải "id" (mã cũ ISO mà
+  Android giữ lại), và tiếng Trung giản thể là "zh-rCN" trong tên thư mục.
+-->
 <locale-config xmlns:android="http://schemas.android.com/apk/res/android">
     <locale android:name="en" />
     <locale android:name="vi" />
+    <locale android:name="es" />
+    <locale android:name="pt-BR" />
+    <locale android:name="fr" />
+    <locale android:name="de" />
+    <locale android:name="ru" />
+    <locale android:name="in" />
+    <locale android:name="hi" />
+    <locale android:name="zh-CN" />
+    <locale android:name="ja" />
+    <locale android:name="ko" />
+    <locale android:name="tr" />
+    <locale android:name="ar" />
 </locale-config>

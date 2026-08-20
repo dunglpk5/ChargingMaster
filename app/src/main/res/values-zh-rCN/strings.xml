@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 简体中文 -->
+<resources>
+    <string name="app_name">Charging Master</string>
+
+    <string name="tab_home">首页</string>
+    <string name="tab_tools">工具</string>
+    <string name="tab_battery_usage">电池用量</string>
+
+    <string name="home_detect">检测</string>
+    <string name="home_ad_badge">AD</string>
+    <string name="home_battery_word">电池</string>
+    <string name="home_battery_life">预计续航</string>
+    <string name="home_health_label">状态</string>
+    <string name="home_time_to_full">距离充满还需</string>
+    <string name="home_charge_status">充电状态</string>
+    <string name="home_battery_status">电池状态</string>
+    <string name="home_charge_speed_avg">充电速度</string>
+    <string name="msg_coming_soon">敬请期待</string>
+    <string name="home_plugged">已接通电源</string>
+    <string name="home_temperature">温度</string>
+    <string name="home_health">健康度</string>
+    <string name="home_current">充电电流</string>
+    <string name="home_voltage">电压</string>
+    <string name="home_capacity">容量</string>
+    <string name="home_technology">电池类型</string>
+    <string name="home_model">型号</string>
+
+    <string name="plug_ac">电源适配器</string>
+    <string name="plug_usb">USB</string>
+    <string name="plug_wireless">无线充电</string>
+    <string name="plug_none">使用电池</string>
+
+    <string name="health_good">良好</string>
+    <string name="health_overheat">过热</string>
+    <string name="health_dead">已损坏</string>
+    <string name="health_over_voltage">电压过高</string>
+    <string name="health_cold">温度过低</string>
+    <string name="health_unknown">未知</string>
+
+    <string name="tools_group_tools">工具</string>
+    <string name="tools_group_vip">VIP</string>
+    <string name="tools_all_title">全部功能</string>
+    <string name="tools_group_detect">检测</string>
+    <string name="tools_group_general">常用</string>
+    <string name="tools_group_other">其他</string>
+    <string name="tools_manage_apps">应用管理</string>
+    <string name="tools_shortcut">快捷方式</string>
+    <string name="tools_clear_cache">清理缓存</string>
+    <string name="tools_feedback">意见反馈</string>
+    <string name="tools_privacy_policy">隐私政策</string>
+    <string name="tools_about_us">关于我们</string>
+    <string name="tools_no_ads">去广告</string>
+    <string name="tools_charge_alarm">充电提醒</string>
+    <string name="tools_priority_support">优先客服</string>
+    <string name="tools_charge_history">充电记录</string>
+    <string name="tools_x_charge">X-Charge</string>
+    <string name="tools_more">更多</string>
+    <string name="tools_device_info">设备信息</string>
+    <string name="tools_clean_notification">清理通知</string>
+    <string name="tools_clean_clipboard">清理剪贴板</string>
+    <string name="tools_phone_temperature">手机温度</string>
+    <string name="tools_charge_detect">充电检测</string>
+    <string name="tools_cpu_usage">CPU 占用</string>
+    <string name="tools_stat_storage">存储</string>
+    <string name="tools_stat_ram">内存</string>
+    <string name="tools_stat_battery">电池</string>
+    <string name="tools_action_scan">扫描</string>
+    <string name="tools_action_details">详情</string>
+    <string name="tools_action_monitor">监测</string>
+
+    <string name="monitor_title">电池</string>
+    <string name="monitor_recent_days">最近 3 天</string>
+    <string name="monitor_chart_title">电量曲线</string>
+    <string name="monitor_last_charge">上次充电</string>
+    <string name="monitor_last_speed">上次充电</string>
+    <string name="monitor_last_source">充电方式</string>
+    <string name="monitor_last_duration">充电时长</string>
+    <string name="monitor_last_quality">充电区间</string>
+    <string name="monitor_since_full">距上次充满</string>
+    <string name="monitor_range">从 %1$d%% 到 %2$d%%</string>
+    <string name="monitor_no_result">暂无数据</string>
+
+    <string name="usage_battery_health">电池健康度</string>
+    <string name="usage_health_desc">把估算容量与设计容量对比，就能看出电池衰减了多少。充电周期越长，估算越准确。</string>
+    <string name="usage_estimated_capacity">估算容量</string>
+    <string name="usage_design_capacity">设计容量</string>
+    <string name="usage_set_design_capacity">设置设计容量</string>
+    <string name="usage_average">平均耗电</string>
+    <string name="usage_combined">综合使用</string>
+    <string name="usage_based_on">数据来源</string>
+    <string name="usage_screen_on">亮屏</string>
+    <string name="usage_screen_off">息屏</string>
+    <string name="usage_last_7_days">最近 7 天</string>
+    <string name="usage_rate_detail">%2$.1f 小时内 %1$.1f %%</string>
+    <string name="usage_health_basis">依据 %1$d 次充电，共充入 %2$d %%，约 %3$d mAh。</string>
+    <string name="usage_charge_since">自 %1$s 起</string>
+    <string name="usage_charge_daily">日均充入</string>
+    <string name="usage_charge_rate_detail">最近 7 天 • %1$.1f %%/小时</string>
+    <string name="usage_charging_now">本次充电已充入</string>
+    <string name="usage_charging_since">开始充电于</string>
+
+    <string name="usage_apps">应用耗电</string>
+    <string name="usage_apps_desc">Android 不允许应用读取每个程序的具体耗电量，只有系统设置里才有这个数字。下面显示的是各应用的前台使用时长占比，它与耗电高度相关，但不计入后台偷偷耗电的应用。</string>
+    <string name="usage_apps_permission_title">需要使用情况访问权限</string>
+    <string name="usage_apps_permission_desc">按使用时长排序需要「使用情况访问」权限，目前尚未授予。</string>
+    <string name="usage_apps_grant">去授权</string>
+    <string name="usage_apps_empty">使用数据还不够。</string>
+    <string name="usage_full_estimate">满电可用时长</string>
+    <string name="usage_charged">已充电量</string>
+    <string name="usage_measuring">测量中…</string>
+    <string name="usage_chart_legend">电量</string>
+    <string name="usage_no_data">这一天还没有数据</string>
+    <string name="usage_full_estimate_desc">该预估依据你的充电记录，显示电量充至 100%% 后大约能用多久。</string>
+    <string name="usage_charge_count">充电次数</string>
+    <string name="usage_charge_average">每次平均</string>
+    <string name="usage_capacity_dialog_title">设计容量（mAh）</string>
+    <string name="usage_health_note">比设计容量少了 %1$d mAh</string>
+    <string name="usage_capacity_invalid">请输入 500 至 30000 之间的数值（mAh）</string>
+
+    <string name="value_placeholder">-</string>
+    <string name="action_ok">确定</string>
+    <string name="action_cancel">取消</string>
+
+    <string name="check_title">电源检测</string>
+    <string name="check_average">平均</string>
+    <string name="check_max">最高</string>
+    <string name="check_turn_off">设置</string>
+    <string name="check_settings_unavailable">该设备没有对应的设置页面</string>
+
+    <string name="speed_unknown">测量中</string>
+    <string name="speed_not_charging">未充电</string>
+    <string name="speed_slow">较慢</string>
+    <string name="speed_normal">正常</string>
+    <string name="speed_fast">较快</string>
+    <string name="speed_very_fast">非常快</string>
+
+    <string name="feature_power_source">电源检测</string>
+    <string name="feature_power_source_desc">使用电源适配器可以提高充电电流</string>
+    <string name="feature_location">GPS 检测</string>
+    <string name="feature_location_desc">关闭 GPS 可以降低耗电</string>
+    <string name="feature_brightness">亮度检测</string>
+    <string name="feature_brightness_desc">开启自动亮度可以减少屏幕耗电</string>
+    <string name="feature_bluetooth">蓝牙检测</string>
+    <string name="feature_bluetooth_desc">关闭蓝牙可以降低耗电</string>
+    <string name="feature_auto_sync">同步检测</string>
+    <string name="feature_auto_sync_desc">关闭系统同步可以降低耗电</string>
+    <string name="feature_temperature">温度检测</string>
+    <string name="feature_temperature_desc">手机温度</string>
+
+    <string name="check_current_in">输入电流：%1$s</string>
+    <string name="check_current_idle">待机电流：%1$s</string>
+    <string name="check_power_source">检测电源</string>
+    <string name="check_x_charge">X-CHARGE</string>
+    <string name="check_detect">检测</string>
+    <string name="check_ok">确定</string>
+
+    <string name="source_rated_power">估算额定功率：</string>
+    <string name="source_actual_power">估算实际功率：</string>
+    <string name="source_verdict_low">当前充电速度偏低</string>
+    <string name="source_verdict_normal">当前充电速度正常</string>
+    <string name="source_verdict_high">当前充电速度很高</string>
+    <string name="source_verdict_unplugged">未连接充电器</string>
+    <string name="action_ok_short">确定</string>
+
+    <string name="xcharge_optimizing">已启用的优化</string>
+    <string name="xcharge_line_done">✓  %1$s</string>
+    <string name="xcharge_line_manual">!  %1$s — 请手动关闭</string>
+    <string name="xcharge_line_warn">!  %1$s</string>
+    <string name="xcharge_done_screen">本页面已调暗屏幕</string>
+    <string name="xcharge_done_sync">已关闭自动同步</string>
+    <string name="xcharge_done_brightness">已降低系统亮度</string>
+    <string name="xcharge_grant_brightness">允许应用调低系统亮度</string>
+    <string name="xcharge_manual_off">请关闭其余项目</string>
+    <string name="xcharge_elapsed">已用时</string>
+    <string name="xcharge_exit">退出</string>
+    <string name="xcharge_all_good">一切正常，可以放心充电</string>
+    <string name="warn_overheat">电池发烫，请取下手机壳并暂停使用</string>
+    <string name="warn_draining">电量仍在下降，电源功率跟不上</string>
+    <string name="warn_low_current">充电电流偏低，请检查数据线和充电头</string>
+    <string name="warn_usb_source">正在通过 USB 接口充电，用充电头会快得多</string>
+    <string name="warn_nearly_full">已超过 90%%，尽快拔掉更有利于电池寿命</string>
+    <string name="stage_fast">快充</string>
+    <string name="stage_cycle">恒压</string>
+    <string name="stage_trickle">涓流</string>
+    <string name="xcharge_remaining">约 %1$s 后充满</string>
+    <string name="xcharge_calculating">正在计算剩余时间…</string>
+    <string name="xcharge_not_charging">未在充电</string>
+    <string name="xcharge_plug_in">请连接充电器后开始</string>
+    <string name="xcharge_warn_hot">电池温度异常偏高。请拔掉充电器并等待降温。</string>
+    <string name="xcharge_warn_slow">充电电流异常偏低。请检查充电器和数据线。</string>
+    <string name="xcharge_actions">在此模式下，应用会保持屏幕常亮，实时监测电池温度与电流，出现异常时提醒你。</string>
+
+    <string name="alarm_dismiss">停止提醒</string>
+
+    <string name="vip_subtitle">升级后可去除全部广告</string>
+    <string name="vip_active">你已是 VIP 会员</string>
+    <string name="vip_purchase">升级 VIP</string>
+    <string name="vip_purchase_price">升级 VIP · %1$s</string>
+    <string name="vip_benefit_format">✓  %1$s</string>
+    <string name="vip_thanks">感谢支持！所有广告已去除。</string>
+    <string name="vip_unavailable">当前无法购买，请稍后再试。</string>
+    <string name="vip_note">一次性付费。购买记录绑定你的 Google 账号，重装应用后可恢复。</string>
+
+    <string name="temp_detect">检测</string>
+    <string name="temp_state_normal">温度正常</string>
+    <string name="temp_state_warm">电池开始发热</string>
+    <string name="temp_state_hot">电池过热，请等待降温</string>
+    <string name="temp_advice_normal">手机温度正常，目前无需担心。</string>
+    <string name="temp_advice_warm">手机比平时热，多半是 CPU 负载或充电电流造成的。可以试试下面的方法降温：\n1. 拔掉充电器，暂停充电。\n2. 关闭后台运行的大型应用。\n3. 把手机放在通风处静置一会儿。</string>
+    <string name="temp_advice_hot">手机目前过热，可能是 CPU 负载过高或充电电流过大。请试试下面的方法降温：\n1. 拔掉充电器，暂停充电。\n2. 关闭后台运行的大型应用。\n3. 把手机放在通风处静置一会儿。</string>
+
+    <string name="settings_title">设置</string>
+    <string name="settings_version">版本 %1$s</string>
+    <string name="settings_battery_logging">记录电池历史</string>
+    <string name="settings_battery_logging_desc">下面每一项在应用关闭时都需要一个后台服务。该服务不会定时轮询电池，开销极小；三个开关全部关闭后它会自动停止。充电提醒、充电次数和电池健康度不依赖这些功能。</string>
+    <string name="alarm_exact_warning">提醒可能会延迟到你打开应用才响。点这里允许精确闹钟，让它准时触发。</string>
+    <string name="settings_log_chart">电量曲线图</string>
+    <string name="settings_log_chart_desc">全天记录电量，让 00:00–24:00 的曲线保持连续。</string>
+    <string name="settings_log_screen">亮屏／息屏统计</string>
+    <string name="settings_log_screen_desc">按屏幕状态拆分耗电，用于 %/小时 数值和续航预估。</string>
+    <string name="settings_log_details">通知栏实时数据</string>
+    <string name="settings_log_details_desc">在常驻通知中显示当前电流、平均电流和亮屏时长。关闭后只保留电量。</string>
+    <string name="settings_notification_access">通知使用权</string>
+    <string name="settings_app_info">应用信息</string>
+    <string name="about_us_message">%1$s 帮你更安全地充电，也更懂自己的电池。\n\n版本 %2$s</string>
+    <string name="feedback_no_email_app">未找到邮件应用</string>
+    <string name="cache_cleared">缓存已清理</string>
+    <string name="cache_clear_confirm">要清理应用的临时缓存吗？</string>
+    <string name="settings_clipboard_confirm">要清空剪贴板内容吗？</string>
+    <string name="settings_clipboard_cleared">剪贴板已清空</string>
+    <string name="settings_clipboard_failed">无法清空剪贴板</string>
+    <string name="language_system">跟随系统</string>
+
+    <string name="cpu_unavailable">该设备不允许读取 CPU 占用率</string>
+    <string name="cpu_estimated_note">该设备屏蔽了精确的 CPU 数据，下面的占用率是根据频率估算的，通常会比真实值偏高。</string>
+
+    <string name="cpu_core_label">CPU %1$d</string>
+    <string name="cpu_freq_range">%1$s - %2$s</string>
+    <string name="cpu_spec_name">名称</string>
+    <string name="cpu_spec_vendor">厂商</string>
+    <string name="cpu_spec_speed">频率</string>
+    <string name="cpu_spec_cores">核心数</string>
+    <string name="cpu_spec_arch">架构</string>
+    <string name="cpu_current_clock">当前频率</string>
+    <string name="cpu_core_min">最低</string>
+    <string name="cpu_core_max">最高</string>
+
+    <string name="charging_screen_charging">充电中</string>
+    <string name="charging_screen_charging_left">充电中\n（还需 %1$s）</string>
+    <string name="charging_screen_full">已充满</string>
+    <string name="charging_screen_unplugged">已断开电源</string>
+    <string name="charging_screen_source">%1$s，%2$s</string>
+    <string name="charging_screen_detect">查看充电速度 &gt;&gt;</string>
+    <string name="charging_screen_swipe">上滑解锁</string>
+    <string name="charging_screen_open_app">打开应用</string>
+
+    <string name="clean_title">清理</string>
+    <string name="clean_junk_cache">垃圾文件</string>
+    <string name="clean_app_cache">应用缓存</string>
+    <string name="clean_obsolete_apk">过期安装包</string>
+    <string name="clean_ad_cache">广告缓存</string>
+    <string name="clean_downloads">下载的文件</string>
+    <string name="clean_large_files">大文件</string>
+    <string name="clean_scanning">扫描中…</string>
+    <string name="clean_scan_done">扫描完成</string>
+    <string name="clean_cleaning">清理中…</string>
+    <string name="clean_action">清理</string>
+    <string name="clean_selected">已选：%1$s</string>
+    <string name="clean_select_group">选择该分组</string>
+    <string name="clean_pick_files">%1$s（%2$d 个文件）</string>
+    <string name="clean_file_entry">%1$s — %2$s</string>
+    <string name="clean_file_count">%1$d/%2$d 个文件</string>
+    <string name="clean_freed">已释放 %1$s</string>
+    <string name="clean_confirm_title">要删除这些文件吗？</string>
+    <string name="clean_confirm_message">将从以下位置删除 %1$s：%2$s。\n\n此操作无法撤销。</string>
+    <string name="clean_grant_permission">去授权</string>
+    <string name="clean_stale_files">长期未使用的文件</string>
+    <string name="clean_permission_required">需要存储访问权限</string>
+    <string name="clean_permission_message">扫描需要完整的文件访问权限。没有它，Android 会隐藏其他应用的文件，扫描既看不到也删不掉任何垃圾。请授予权限后继续。</string>
+    <string name="clean_permission_unavailable">该设备没有授予此权限的页面</string>
+    <string name="clean_permission_notification">清理通知需要「通知使用权」。Android 只允许在系统设置中授予，没有它，此页面看不到任何通知。</string>
+    <string name="clean_title_count">清理通知（%1$d）</string>
+    <string name="clean_action_all">全部清理</string>
+    <string name="clean_time_today">%1$s 今天</string>
+    <string name="clean_time_other">%1$s %2$s</string>
+    <string name="clean_card_title">充电检测</string>
+    <string name="clean_card_desc">查看充电速度与电源状态</string>
+    <string name="notif_stat_now">当前：%1$d mA（%2$.1f W）• %3$.1f%%/小时 • %4$s</string>
+    <string name="notif_stat_avg">平均：%1$d mA • %2$.1f%%/小时 • %3$.0f mAh（%4$.0f%%）</string>
+    <string name="notif_stat_screen_on">亮屏：%1$s • %2$.0f mAh（%3$.1f%%）</string>
+    <string name="notif_stat_screen_off">息屏：%1$s • %2$.0f mAh（%3$.1f%%）</string>
+    <string name="notif_stat_sleep">唤醒：%1$s（%2$.0f%%）• 深度休眠：%3$s（%4$.0f%%）</string>
+
+    <string name="clipboard_title_count">清理剪贴板（%1$d）</string>
+    <string name="clipboard_item_label">已复制的内容</string>
+    <string name="clipboard_cleared">剪贴板已清空</string>
+    <string name="clean_permission_restricted">看到「受限设置」了吗？对于通过 APK 文件安装的应用，Android 会拦截这个权限。请打开 设置 › 应用 › Charging Master，点右上角 ⋮ 并选择「允许受限设置」，然后回到这里。</string>
+
+    <string name="clean_nothing">没有需要清理的内容</string>
+    <string name="clean_done">通知已清理</string>
+
+    <string name="cd_back">返回</string>
+
+    <string name="history_empty">还没有记录到充电</string>
+    <string name="history_detail_title">充电详情</string>
+    <string name="history_gain_format">+%1$d%%（%2$d→%3$d）</string>
+    <string name="history_start_time">开始</string>
+    <string name="history_end_time">结束</string>
+    <string name="history_ongoing">进行中</string>
+    <string name="history_duration">时长</string>
+    <string name="history_gain">充入</string>
+    <string name="history_plug_type">电源类型</string>
+    <string name="history_max_temp">最高温度</string>
+    <string name="history_charged_mah">充入电量</string>
+
+    <string name="alarm_threshold_setting">电量提醒</string>
+    <string name="alarm_threshold_desc">电量达到你设定的数值时提醒。保持在 80%% 以下更有利于电池寿命。</string>
+    <string name="alarm_full_setting">充满提醒</string>
+    <string name="alarm_full_desc">电池充满时提醒你。</string>
+    <string name="alarm_overheat_setting">过热提醒</string>
+    <string name="alarm_overheat_desc">电池过热时提醒你，未在充电时同样有效。</string>
+    <string name="alarm_permission_warning">通知已被关闭，无法弹出提醒。请在系统设置中开启。</string>
+    <string name="alarm_threshold_title">已达到设定电量</string>
+    <string name="alarm_threshold_message">电量已到 %1$d%%，拔掉充电器更护电池。</string>
+    <string name="alarm_full_title">电池已充满</string>
+    <string name="alarm_full_message">电量已到 %1$d%%，可以拔掉充电器了。</string>
+    <string name="alarm_overheat_title">电池过热</string>
+    <string name="alarm_overheat_message">电量 %1$d%% 时电池过热。请拔掉充电器并等待降温。</string>
+    <string name="notif_channel_alarm">充电提醒</string>
+    <string name="notif_channel_alarm_desc">电量、充满与过热提醒</string>
+
+    <string name="detail_tab_device">设备</string>
+    <string name="detail_tab_system">系统</string>
+    <string name="detail_tab_cpu">CPU</string>
+    <string name="detail_tab_display">屏幕</string>
+    <string name="detail_tab_network">网络</string>
+    <string name="detail_tab_sensor">传感器</string>
+    <string name="detail_empty">暂无信息</string>
+    <string name="detail_yes">是</string>
+    <string name="detail_no">否</string>
+
+    <string name="detail_device_name">设备名称</string>
+    <string name="detail_bluetooth_le">低功耗蓝牙</string>
+    <string name="detail_nfc_present">支持 NFC</string>
+    <string name="detail_nfc_enabled">NFC 已开启</string>
+    <string name="detail_ring_mode">响铃模式</string>
+    <string name="detail_ring_silent">静音</string>
+    <string name="detail_ring_vibrate">振动</string>
+    <string name="detail_ring_normal">正常</string>
+    <string name="detail_system_time">系统时间</string>
+    <string name="detail_brightness_level">亮度等级</string>
+    <string name="detail_orientation">屏幕方向</string>
+    <string name="detail_portrait">竖屏</string>
+    <string name="detail_landscape">横屏</string>
+    <string name="detail_sdcard">存在 SD 卡</string>
+    <string name="detail_emulator">模拟器</string>
+
+    <string name="detail_host">编译主机</string>
+    <string name="detail_user">编译用户</string>
+    <string name="detail_build_tags">Build Tags</string>
+    <string name="detail_language">语言</string>
+    <string name="detail_code_name">代号</string>
+    <string name="detail_released_time">发布时间</string>
+    <string name="detail_device_type">设备类型</string>
+    <string name="detail_root_access">Root 权限</string>
+
+    <string name="detail_processor_name">处理器名称</string>
+    <string name="detail_cpu_hardware">CPU 硬件</string>
+    <string name="detail_processor">处理器</string>
+    <string name="detail_running_cpus">运行中的核心</string>
+    <string name="detail_cpu_temperature">CPU 温度</string>
+
+    <string name="detail_physical_size">物理尺寸</string>
+
+    <string name="detail_network_available">网络可用</string>
+    <string name="detail_wifi_enabled">Wi-Fi 已开启</string>
+    <string name="detail_wifi_bssid">Wi-Fi BSSID</string>
+    <string name="detail_wifi_link_speed">连接速率</string>
+    <string name="detail_wifi_ssid">Wi-Fi SSID</string>
+    <string name="detail_wifi_mac">Wi-Fi MAC 地址</string>
+    <string name="detail_ipv6_address">IPv6 地址</string>
+    <string name="detail_sim_carrier">SIM 运营商</string>
+
+    <string name="detail_model">型号</string>
+    <string name="detail_brand">品牌</string>
+    <string name="detail_manufacturer">制造商</string>
+    <string name="detail_device">设备</string>
+    <string name="detail_product">产品</string>
+    <string name="detail_board">主板</string>
+    <string name="detail_hardware">硬件</string>
+    <string name="detail_bootloader">Bootloader</string>
+    <string name="detail_abi">支持的 ABI</string>
+
+    <string name="detail_android_version">Android 版本</string>
+    <string name="detail_api_level">API 级别</string>
+    <string name="detail_security_patch">安全补丁</string>
+    <string name="detail_fingerprint">系统指纹</string>
+    <string name="detail_kernel">内核</string>
+
+    <string name="detail_cores">核心数</string>
+    <string name="detail_core_idle">空闲</string>
+
+    <string name="detail_resolution">分辨率</string>
+    <string name="detail_density">像素密度</string>
+    <string name="detail_refresh_rate">刷新率</string>
+    <string name="detail_brightness_mode">亮度模式</string>
+    <string name="detail_brightness_auto">自动</string>
+    <string name="detail_brightness_manual">手动</string>
+
+    <string name="detail_network_type">连接方式</string>
+    <string name="detail_ip_address">IPv4 地址</string>
+    <string name="detail_sim_country">SIM 国家/地区</string>
+    <string name="detail_network_none">无</string>
+
+    <string name="language_title">语言</string>
+
+    <string name="notif_log_title">电池记录</string>
+    <string name="notif_log_content">正在记录电量 • %1$d%%</string>
+    <string name="notif_log_starting">正在启动…</string>
+    <string name="notif_channel_monitor">电池记录</string>
+    <string name="notif_channel_monitor_desc">持续记录电量，用于生成历史曲线</string>
+
+    <string name="cd_battery_icon">电池图标</string>
+    <string name="cd_remove_ads">去除广告</string>
+    <string name="cd_menu">菜单</string>
+</resources>

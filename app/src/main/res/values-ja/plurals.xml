@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 日本語は単数・複数を区別しない -->
+<resources>
+    <plurals name="usage_sessions">
+        <item quantity="other">%1$d 区間</item>
+    </plurals>
+
+    <plurals name="clean_found">
+        <item quantity="other">%1$d 件の通知を削除できます</item>
+    </plurals>
+</resources>

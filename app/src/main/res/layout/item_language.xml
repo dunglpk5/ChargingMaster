@@ -12,6 +12,15 @@
     android:paddingStart="@dimen/space_md"
     android:paddingEnd="@dimen/space_md">
 
+    <!-- Cỡ chữ lớn hơn phần tên một chút để lá cờ không bị lọt thỏm -->
+    <TextView
+        android:id="@+id/tvFlag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/space_md"
+        android:textSize="22sp"
+        tools:text="🇻🇳" />
+
     <TextView
         android:id="@+id/tvLanguage"
         android:layout_width="0dp"

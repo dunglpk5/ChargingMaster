@@ -9,12 +9,25 @@
         android:id="@+id/toolbarInclude"
         layout="@layout/view_toolbar" />
 
-    <!-- Các lựa chọn ngôn ngữ được thêm bằng code để dễ bổ sung ngôn ngữ mới -->
-    <LinearLayout
-        android:id="@+id/container"
+    <!--
+      Danh sách dài hơn màn hình khi có nhiều ngôn ngữ nên phải cuộn được; không có
+      khối cuộn thì mấy lựa chọn cuối bị đẩy khuất, người dùng không tài nào chọn.
+    -->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="@dimen/space_sm" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:overScrollMode="never">
+
+        <!-- Các lựa chọn ngôn ngữ được thêm bằng code để dễ bổ sung ngôn ngữ mới -->
+        <LinearLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/space_sm"
+            android:paddingBottom="@dimen/space_md" />
+
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

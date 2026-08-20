@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Bahasa Indonesia -->
+<resources>
+    <string name="app_name">Charging Master</string>
+
+    <string name="tab_home">Beranda</string>
+    <string name="tab_tools">Alat</string>
+    <string name="tab_battery_usage">Pemakaian baterai</string>
+
+    <string name="home_detect">Deteksi</string>
+    <string name="home_ad_badge">AD</string>
+    <string name="home_battery_word">Baterai</string>
+    <string name="home_battery_life">Perkiraan daya tahan</string>
+    <string name="home_health_label">Status</string>
+    <string name="home_time_to_full">Waktu sampai penuh</string>
+    <string name="home_charge_status">Status pengisian</string>
+    <string name="home_battery_status">Status baterai</string>
+    <string name="home_charge_speed_avg">Kecepatan pengisian</string>
+    <string name="msg_coming_soon">Segera hadir</string>
+    <string name="home_plugged">Tersambung</string>
+    <string name="home_temperature">Suhu</string>
+    <string name="home_health">Kesehatan</string>
+    <string name="home_current">Arus pengisian</string>
+    <string name="home_voltage">Tegangan</string>
+    <string name="home_capacity">Kapasitas</string>
+    <string name="home_technology">Teknologi</string>
+    <string name="home_model">Model</string>
+
+    <string name="plug_ac">Charger listrik</string>
+    <string name="plug_usb">USB</string>
+    <string name="plug_wireless">Nirkabel</string>
+    <string name="plug_none">Pakai baterai</string>
+
+    <string name="health_good">Baik</string>
+    <string name="health_overheat">Terlalu panas</string>
+    <string name="health_dead">Rusak</string>
+    <string name="health_over_voltage">Tegangan berlebih</string>
+    <string name="health_cold">Terlalu dingin</string>
+    <string name="health_unknown">Tidak diketahui</string>
+
+    <string name="tools_group_tools">Alat</string>
+    <string name="tools_group_vip">VIP</string>
+    <string name="tools_all_title">Semua fitur</string>
+    <string name="tools_group_detect">Deteksi</string>
+    <string name="tools_group_general">Umum</string>
+    <string name="tools_group_other">Lainnya</string>
+    <string name="tools_manage_apps">Kelola aplikasi</string>
+    <string name="tools_shortcut">Pintasan</string>
+    <string name="tools_clear_cache">Bersihkan cache</string>
+    <string name="tools_feedback">Masukan</string>
+    <string name="tools_privacy_policy">Kebijakan privasi</string>
+    <string name="tools_about_us">Tentang kami</string>
+    <string name="tools_no_ads">Tanpa iklan</string>
+    <string name="tools_charge_alarm">Alarm pengisian</string>
+    <string name="tools_priority_support">Dukungan prioritas</string>
+    <string name="tools_charge_history">Riwayat pengisian</string>
+    <string name="tools_x_charge">X-Charge</string>
+    <string name="tools_more">Lainnya</string>
+    <string name="tools_device_info">Info perangkat</string>
+    <string name="tools_clean_notification">Bersihkan notifikasi</string>
+    <string name="tools_clean_clipboard">Bersihkan papan klip</string>
+    <string name="tools_phone_temperature">Suhu ponsel</string>
+    <string name="tools_charge_detect">Deteksi pengisian</string>
+    <string name="tools_cpu_usage">Penggunaan CPU</string>
+    <string name="tools_stat_storage">Penyimpanan</string>
+    <string name="tools_stat_ram">RAM</string>
+    <string name="tools_stat_battery">Baterai</string>
+    <string name="tools_action_scan">Pindai</string>
+    <string name="tools_action_details">Detail</string>
+    <string name="tools_action_monitor">Pantau</string>
+
+    <string name="monitor_title">Baterai</string>
+    <string name="monitor_recent_days">3 hari terakhir</string>
+    <string name="monitor_chart_title">Riwayat baterai</string>
+    <string name="monitor_last_charge">Pengisian terakhir</string>
+    <string name="monitor_last_speed">Pengisian terakhir</string>
+    <string name="monitor_last_source">Mode pengisian</string>
+    <string name="monitor_last_duration">Lama pengisian</string>
+    <string name="monitor_last_quality">Rentang pengisian</string>
+    <string name="monitor_since_full">Sejak terakhir penuh</string>
+    <string name="monitor_range">Dari %1$d%% ke %2$d%%</string>
+    <string name="monitor_no_result">Tidak ada data</string>
+
+    <string name="usage_battery_health">Kesehatan baterai</string>
+    <string name="usage_health_desc">Membandingkan perkiraan kapasitas dengan kapasitas pabrik menunjukkan seberapa turun kondisi baterai. Siklus pengisian yang lebih panjang membuat perkiraan makin akurat.</string>
+    <string name="usage_estimated_capacity">Perkiraan kapasitas</string>
+    <string name="usage_design_capacity">Kapasitas pabrik</string>
+    <string name="usage_set_design_capacity">Atur kapasitas pabrik</string>
+    <string name="usage_average">Rata-rata pemakaian</string>
+    <string name="usage_combined">Gabungan</string>
+    <string name="usage_based_on">Berdasarkan</string>
+    <string name="usage_screen_on">Layar menyala</string>
+    <string name="usage_screen_off">Layar mati</string>
+    <string name="usage_last_7_days">dalam 7 hari terakhir</string>
+    <string name="usage_rate_detail">%1$.1f %% dalam %2$.1f jam</string>
+    <string name="usage_health_basis">Berdasarkan %1$d sesi dengan total %2$d %% terisi, atau %3$d mAh.</string>
+    <string name="usage_charge_since">sejak %1$s</string>
+    <string name="usage_charge_daily">Rata-rata terisi per hari</string>
+    <string name="usage_charge_rate_detail">dalam 7 hari terakhir • %1$.1f %%/jam</string>
+    <string name="usage_charging_now">Sesi pengisian saat ini</string>
+    <string name="usage_charging_since">Mengisi sejak</string>
+
+    <string name="usage_apps">Pemakaian baterai per aplikasi</string>
+    <string name="usage_apps_desc">Android tidak mengizinkan aplikasi membaca berapa daya yang dipakai tiap aplikasi — hanya Setelan sistem yang punya angka itu. Yang tampil di bawah adalah porsi waktu tiap aplikasi di latar depan; angkanya mengikuti konsumsi baterai cukup dekat, tetapi tidak menghitung aplikasi yang boros di latar belakang.</string>
+    <string name="usage_apps_permission_title">Perlu akses penggunaan</string>
+    <string name="usage_apps_permission_desc">Mengurutkan aplikasi berdasarkan pemakaian butuh izin Akses penggunaan, yang belum diberikan.</string>
+    <string name="usage_apps_grant">BERI AKSES</string>
+    <string name="usage_apps_empty">Data pemakaian belum cukup.</string>
+    <string name="usage_full_estimate">Perkiraan waktu saat baterai penuh</string>
+    <string name="usage_charged">Baterai terisi</string>
+    <string name="usage_measuring">mengukur…</string>
+    <string name="usage_chart_legend">Level</string>
+    <string name="usage_no_data">Belum ada data untuk hari ini</string>
+    <string name="usage_full_estimate_desc">Perkiraan ini menunjukkan berapa lama baterai yang terisi 100%% bisa bertahan, berdasarkan riwayat pengisianmu.</string>
+    <string name="usage_charge_count">Total pengisian</string>
+    <string name="usage_charge_average">Rata-rata per pengisian</string>
+    <string name="usage_capacity_dialog_title">Kapasitas pabrik (mAh)</string>
+    <string name="usage_health_note">Berkurang %1$d mAh dari kapasitas pabrik</string>
+    <string name="usage_capacity_invalid">Masukkan nilai antara 500 dan 30000 mAh</string>
+
+    <string name="value_placeholder">-</string>
+    <string name="action_ok">OK</string>
+    <string name="action_cancel">Batal</string>
+
+    <string name="check_title">Cek sumber daya</string>
+    <string name="check_average">Rata-rata</string>
+    <string name="check_max">Maks.</string>
+    <string name="check_turn_off">SETELAN</string>
+    <string name="check_settings_unavailable">Perangkat ini tidak punya halaman setelan itu</string>
+
+    <string name="speed_unknown">MENGUKUR</string>
+    <string name="speed_not_charging">TIDAK MENGISI</string>
+    <string name="speed_slow">LAMBAT</string>
+    <string name="speed_normal">NORMAL</string>
+    <string name="speed_fast">CEPAT</string>
+    <string name="speed_very_fast">SANGAT CEPAT</string>
+
+    <string name="feature_power_source">Cek sumber daya</string>
+    <string name="feature_power_source_desc">Pakai charger listrik agar arus pengisian lebih besar</string>
+    <string name="feature_location">Cek GPS</string>
+    <string name="feature_location_desc">Mematikan GPS mengurangi konsumsi daya</string>
+    <string name="feature_brightness">Cek kecerahan</string>
+    <string name="feature_brightness_desc">Aktifkan kecerahan otomatis agar layar lebih hemat</string>
+    <string name="feature_bluetooth">Cek Bluetooth</string>
+    <string name="feature_bluetooth_desc">Matikan Bluetooth untuk mengurangi konsumsi daya</string>
+    <string name="feature_auto_sync">Cek sinkronisasi</string>
+    <string name="feature_auto_sync_desc">Matikan sinkronisasi sistem untuk mengurangi konsumsi daya</string>
+    <string name="feature_temperature">Cek suhu</string>
+    <string name="feature_temperature_desc">Suhu ponsel</string>
+
+    <string name="check_current_in">Arus masuk: %1$s</string>
+    <string name="check_current_idle">Arus diam: %1$s</string>
+    <string name="check_power_source">CEK SUMBER DAYA</string>
+    <string name="check_x_charge">X-CHARGE</string>
+    <string name="check_detect">Deteksi</string>
+    <string name="check_ok">OK</string>
+
+    <string name="source_rated_power">Perkiraan daya nominal:</string>
+    <string name="source_actual_power">Perkiraan daya sebenarnya:</string>
+    <string name="source_verdict_low">Kecepatan pengisian sedang rendah</string>
+    <string name="source_verdict_normal">Kecepatan pengisian normal</string>
+    <string name="source_verdict_high">Kecepatan pengisian tinggi</string>
+    <string name="source_verdict_unplugged">Tidak ada charger tersambung</string>
+    <string name="action_ok_short">OK</string>
+
+    <string name="xcharge_optimizing">Optimasi yang aktif</string>
+    <string name="xcharge_line_done">✓  %1$s</string>
+    <string name="xcharge_line_manual">!  %1$s — matikan secara manual</string>
+    <string name="xcharge_line_warn">!  %1$s</string>
+    <string name="xcharge_done_screen">Layar diredupkan di halaman ini</string>
+    <string name="xcharge_done_sync">Sinkronisasi otomatis dimatikan</string>
+    <string name="xcharge_done_brightness">Kecerahan sistem diturunkan</string>
+    <string name="xcharge_grant_brightness">Izinkan aplikasi menurunkan kecerahan sistem</string>
+    <string name="xcharge_manual_off">Matikan item yang tersisa</string>
+    <string name="xcharge_elapsed">Berjalan</string>
+    <string name="xcharge_exit">Keluar</string>
+    <string name="xcharge_all_good">Semua siap untuk mengisi daya</string>
+    <string name="warn_overheat">Baterai panas — lepas casing dan berhenti memakai ponsel</string>
+    <string name="warn_draining">Baterai tetap turun — sumber daya tidak sanggup mengejar</string>
+    <string name="warn_low_current">Arus pengisian rendah — periksa kabel dan adaptor</string>
+    <string name="warn_usb_source">Mengisi lewat port USB — adaptor listrik jauh lebih cepat</string>
+    <string name="warn_nearly_full">Di atas 90%% — segera dicabut membuat baterai lebih awet</string>
+    <string name="stage_fast">CEPAT</string>
+    <string name="stage_cycle">SIKLUS</string>
+    <string name="stage_trickle">TETES</string>
+    <string name="xcharge_remaining">Sekitar %1$s lagi sampai penuh</string>
+    <string name="xcharge_calculating">Menghitung sisa waktu…</string>
+    <string name="xcharge_not_charging">Tidak mengisi</string>
+    <string name="xcharge_plug_in">Sambungkan charger untuk mulai</string>
+    <string name="xcharge_warn_hot">Baterai luar biasa panas. Cabut dan biarkan mendingin.</string>
+    <string name="xcharge_warn_slow">Arus pengisian sangat rendah. Periksa charger dan kabelmu.</string>
+    <string name="xcharge_actions">Dalam mode ini aplikasi menjaga layar tetap menyala, memantau suhu dan arus baterai secara langsung, dan memperingatkanmu jika ada yang tidak beres.</string>
+
+    <string name="alarm_dismiss">HENTIKAN ALARM</string>
+
+    <string name="vip_subtitle">Tingkatkan untuk menghapus semua iklan</string>
+    <string name="vip_active">Kamu anggota VIP</string>
+    <string name="vip_purchase">Jadi VIP</string>
+    <string name="vip_purchase_price">Jadi VIP · %1$s</string>
+    <string name="vip_benefit_format">✓  %1$s</string>
+    <string name="vip_thanks">Terima kasih! Semua iklan telah dihapus.</string>
+    <string name="vip_unavailable">Pembelian sedang tidak tersedia. Coba lagi nanti.</string>
+    <string name="vip_note">Pembayaran sekali bayar. Pembelian terikat pada akun Google-mu dan bisa dipulihkan setelah memasang ulang aplikasi.</string>
+
+    <string name="temp_detect">DETEKSI</string>
+    <string name="temp_state_normal">Suhu normal</string>
+    <string name="temp_state_warm">Baterai mulai hangat</string>
+    <string name="temp_state_hot">Baterai terlalu panas, biarkan mendingin</string>
+    <string name="temp_advice_normal">Suhu ponselmu normal. Untuk saat ini tidak ada yang perlu dikhawatirkan.</string>
+    <string name="temp_advice_warm">Ponselmu lebih hangat dari biasanya, kemungkinan karena beban CPU atau arus pengisian. Untuk mendinginkannya, coba langkah berikut:\n1. Cabut charger dan hentikan pengisian.\n2. Tutup aplikasi berat yang berjalan di latar belakang.\n3. Letakkan ponsel sejenak di tempat berventilasi baik.</string>
+    <string name="temp_advice_hot">Ponselmu saat ini terlalu panas, mungkin karena beban CPU tinggi atau arus pengisian besar. Untuk mendinginkannya, coba langkah berikut:\n1. Cabut charger dan hentikan pengisian.\n2. Tutup aplikasi berat yang berjalan di latar belakang.\n3. Letakkan ponsel sejenak di tempat berventilasi baik.</string>
+
+    <string name="settings_title">Setelan</string>
+    <string name="settings_version">Versi %1$s</string>
+    <string name="settings_battery_logging">Catat riwayat baterai</string>
+    <string name="settings_battery_logging_desc">Tiap bagian di bawah butuh layanan latar belakang saat aplikasi tertutup. Layanan itu tidak menjajaki baterai secara berkala, jadi bebannya sangat kecil, dan berhenti begitu ketiga sakelar dimatikan. Alarm pengisian, jumlah pengisian, dan kesehatan baterai tetap jalan tanpa semua ini.</string>
+    <string name="alarm_exact_warning">Peringatan bisa tertunda sampai kamu membuka aplikasi. Ketuk di sini untuk mengizinkan alarm presisi.</string>
+    <string name="settings_log_chart">Grafik level baterai</string>
+    <string name="settings_log_chart_desc">Mencatat level baterai sepanjang hari agar grafik 00:00–24:00 tidak terputus.</string>
+    <string name="settings_log_screen">Statistik layar</string>
+    <string name="settings_log_screen_desc">Memisahkan konsumsi menurut kondisi layar, untuk angka %/jam dan perkiraan daya tahan.</string>
+    <string name="settings_log_details">Angka langsung di notifikasi</string>
+    <string name="settings_log_details_desc">Menampilkan arus saat ini, arus rata-rata, dan waktu layar di notifikasi tetap. Jika dimatikan hanya level baterai yang tersisa.</string>
+    <string name="settings_notification_access">Akses notifikasi</string>
+    <string name="settings_app_info">Info aplikasi</string>
+    <string name="about_us_message">%1$s membantumu mengisi daya lebih aman dan memahami baterai lebih baik.\n\nVersi %2$s</string>
+    <string name="feedback_no_email_app">Aplikasi email tidak ditemukan</string>
+    <string name="cache_cleared">Cache dibersihkan</string>
+    <string name="cache_clear_confirm">Bersihkan cache sementara aplikasi?</string>
+    <string name="settings_clipboard_confirm">Hapus isi papan klip?</string>
+    <string name="settings_clipboard_cleared">Papan klip dibersihkan</string>
+    <string name="settings_clipboard_failed">Tidak bisa membersihkan papan klip</string>
+    <string name="language_system">Bahasa sistem</string>
+
+    <string name="cpu_unavailable">Perangkat ini tidak mengizinkan pembacaan penggunaan CPU</string>
+    <string name="cpu_estimated_note">Perangkat ini memblokir pembacaan CPU yang akurat, jadi beban di bawah diperkirakan dari frekuensi dan biasanya terbaca lebih tinggi dari angka sebenarnya.</string>
+
+    <string name="cpu_core_label">CPU %1$d</string>
+    <string name="cpu_freq_range">%1$s - %2$s</string>
+    <string name="cpu_spec_name">Nama</string>
+    <string name="cpu_spec_vendor">Produsen</string>
+    <string name="cpu_spec_speed">Kecepatan</string>
+    <string name="cpu_spec_cores">Inti</string>
+    <string name="cpu_spec_arch">Arsitektur</string>
+    <string name="cpu_current_clock">Kecepatan saat ini</string>
+    <string name="cpu_core_min">Min.</string>
+    <string name="cpu_core_max">Maks.</string>
+
+    <string name="charging_screen_charging">Mengisi daya</string>
+    <string name="charging_screen_charging_left">Mengisi daya\n(sisa %1$s)</string>
+    <string name="charging_screen_full">Terisi penuh</string>
+    <string name="charging_screen_unplugged">Tercabut</string>
+    <string name="charging_screen_source">%1$s, %2$s</string>
+    <string name="charging_screen_detect">Cek kecepatan pengisian &gt;&gt;</string>
+    <string name="charging_screen_swipe">Geser ke atas untuk membuka</string>
+    <string name="charging_screen_open_app">Buka aplikasi</string>
+
+    <string name="clean_title">Bersihkan</string>
+    <string name="clean_junk_cache">Berkas sampah</string>
+    <string name="clean_app_cache">Cache aplikasi</string>
+    <string name="clean_obsolete_apk">APK usang</string>
+    <string name="clean_ad_cache">Cache iklan</string>
+    <string name="clean_downloads">Berkas unduhan</string>
+    <string name="clean_large_files">Berkas besar</string>
+    <string name="clean_scanning">Memindai…</string>
+    <string name="clean_scan_done">Pemindaian selesai</string>
+    <string name="clean_cleaning">Membersihkan…</string>
+    <string name="clean_action">Bersihkan</string>
+    <string name="clean_selected">Dipilih: %1$s</string>
+    <string name="clean_select_group">Pilih grup ini</string>
+    <string name="clean_pick_files">%1$s (%2$d berkas)</string>
+    <string name="clean_file_entry">%1$s — %2$s</string>
+    <string name="clean_file_count">%1$d/%2$d berkas</string>
+    <string name="clean_freed">%1$s dibebaskan</string>
+    <string name="clean_confirm_title">Hapus berkas ini?</string>
+    <string name="clean_confirm_message">%1$s akan dihapus dari: %2$s.\n\nTindakan ini tidak bisa dibatalkan.</string>
+    <string name="clean_grant_permission">Beri akses</string>
+    <string name="clean_stale_files">Berkas lama tak terpakai</string>
+    <string name="clean_permission_required">Perlu akses penyimpanan</string>
+    <string name="clean_permission_message">Pemindaian butuh akses penuh ke berkas. Tanpa itu Android menyembunyikan berkas aplikasi lain, sehingga pemindaian tidak bisa melihat atau menghapus sampah apa pun. Beri izin untuk melanjutkan.</string>
+    <string name="clean_permission_unavailable">Perangkat ini tidak punya halaman untuk memberi izin itu</string>
+    <string name="clean_permission_notification">Membersihkan notifikasi butuh akses notifikasi. Android hanya mengizinkannya lewat Setelan sistem, dan tanpa itu layar ini tidak bisa melihat satu notifikasi pun.</string>
+    <string name="clean_title_count">BERSIHKAN NOTIFIKASI (%1$d)</string>
+    <string name="clean_action_all">BERSIHKAN SEMUA</string>
+    <string name="clean_time_today">%1$s Hari ini</string>
+    <string name="clean_time_other">%1$s %2$s</string>
+    <string name="clean_card_title">Deteksi pengisian</string>
+    <string name="clean_card_desc">Cek kecepatan pengisian dan status sumber daya</string>
+    <string name="notif_stat_now">Sekarang: %1$d mA (%2$.1f W) • %3$.1f%%/jam • %4$s</string>
+    <string name="notif_stat_avg">Rata-rata: %1$d mA • %2$.1f%%/jam • %3$.0f mAh (%4$.0f%%)</string>
+    <string name="notif_stat_screen_on">Layar menyala: %1$s • %2$.0f mAh (%3$.1f%%)</string>
+    <string name="notif_stat_screen_off">Layar mati: %1$s • %2$.0f mAh (%3$.1f%%)</string>
+    <string name="notif_stat_sleep">Aktif: %1$s (%2$.0f%%) • Tidur dalam: %3$s (%4$.0f%%)</string>
+
+    <string name="clipboard_title_count">BERSIHKAN PAPAN KLIP (%1$d)</string>
+    <string name="clipboard_item_label">Konten yang disalin</string>
+    <string name="clipboard_cleared">Papan klip dibersihkan</string>
+    <string name="clean_permission_restricted">Muncul \"Setelan dibatasi\"? Android memblokir izin ini untuk aplikasi yang dipasang dari berkas APK. Buka Setelan › Aplikasi › Charging Master, ketuk ⋮ di pojok atas dan pilih \"Izinkan setelan yang dibatasi\", lalu kembali ke sini.</string>
+
+    <string name="clean_nothing">Tidak ada yang perlu dibersihkan</string>
+    <string name="clean_done">Notifikasi dibersihkan</string>
+
+    <string name="cd_back">Kembali</string>
+
+    <string name="history_empty">Belum ada sesi pengisian yang tercatat</string>
+    <string name="history_detail_title">Detail sesi</string>
+    <string name="history_gain_format">+%1$d%% (%2$d→%3$d)</string>
+    <string name="history_start_time">Mulai</string>
+    <string name="history_end_time">Selesai</string>
+    <string name="history_ongoing">Sedang berjalan</string>
+    <string name="history_duration">Durasi</string>
+    <string name="history_gain">Terisi</string>
+    <string name="history_plug_type">Sumber daya</string>
+    <string name="history_max_temp">Suhu tertinggi</string>
+    <string name="history_charged_mah">Energi terisi</string>
+
+    <string name="alarm_threshold_setting">Peringatan level baterai</string>
+    <string name="alarm_threshold_desc">Memberi tahu saat baterai mencapai level yang kamu atur. Menjaga di bawah 80%% membuat baterai awet lebih lama.</string>
+    <string name="alarm_full_setting">Peringatan baterai penuh</string>
+    <string name="alarm_full_desc">Memberi tahu saat baterai terisi penuh.</string>
+    <string name="alarm_overheat_setting">Peringatan panas berlebih</string>
+    <string name="alarm_overheat_desc">Memberi tahu saat baterai terlalu panas, bahkan ketika tidak mengisi daya.</string>
+    <string name="alarm_permission_warning">Notifikasi dimatikan, jadi peringatan tidak bisa tampil. Aktifkan di setelan sistem.</string>
+    <string name="alarm_threshold_title">Level baterai tercapai</string>
+    <string name="alarm_threshold_message">Baterai di %1$d%%. Cabut charger untuk menjaga umur baterai.</string>
+    <string name="alarm_full_title">Baterai penuh</string>
+    <string name="alarm_full_message">Baterai di %1$d%%. Charger sudah bisa dicabut.</string>
+    <string name="alarm_overheat_title">Baterai terlalu panas</string>
+    <string name="alarm_overheat_message">Baterai kepanasan di %1$d%%. Cabut charger dan biarkan mendingin.</string>
+    <string name="notif_channel_alarm">Peringatan pengisian</string>
+    <string name="notif_channel_alarm_desc">Peringatan level baterai, baterai penuh, dan panas berlebih</string>
+
+    <string name="detail_tab_device">PERANGKAT</string>
+    <string name="detail_tab_system">SISTEM</string>
+    <string name="detail_tab_cpu">CPU</string>
+    <string name="detail_tab_display">LAYAR</string>
+    <string name="detail_tab_network">JARINGAN</string>
+    <string name="detail_tab_sensor">SENSOR</string>
+    <string name="detail_empty">Tidak ada informasi</string>
+    <string name="detail_yes">Ya</string>
+    <string name="detail_no">Tidak</string>
+
+    <string name="detail_device_name">Nama perangkat</string>
+    <string name="detail_bluetooth_le">Bluetooth LE</string>
+    <string name="detail_nfc_present">NFC tersedia</string>
+    <string name="detail_nfc_enabled">NFC aktif</string>
+    <string name="detail_ring_mode">Mode dering</string>
+    <string name="detail_ring_silent">Senyap</string>
+    <string name="detail_ring_vibrate">Getar</string>
+    <string name="detail_ring_normal">Normal</string>
+    <string name="detail_system_time">Waktu sistem</string>
+    <string name="detail_brightness_level">Tingkat kecerahan</string>
+    <string name="detail_orientation">Orientasi</string>
+    <string name="detail_portrait">Potret</string>
+    <string name="detail_landscape">Lanskap</string>
+    <string name="detail_sdcard">Kartu SD</string>
+    <string name="detail_emulator">Emulator</string>
+
+    <string name="detail_host">Host</string>
+    <string name="detail_user">Pengguna</string>
+    <string name="detail_build_tags">Tag build</string>
+    <string name="detail_language">Bahasa</string>
+    <string name="detail_code_name">Nama kode</string>
+    <string name="detail_released_time">Waktu rilis</string>
+    <string name="detail_device_type">Jenis perangkat</string>
+    <string name="detail_root_access">Akses root</string>
+
+    <string name="detail_processor_name">Nama prosesor</string>
+    <string name="detail_cpu_hardware">Perangkat keras CPU</string>
+    <string name="detail_processor">Prosesor</string>
+    <string name="detail_running_cpus">CPU aktif</string>
+    <string name="detail_cpu_temperature">Suhu CPU</string>
+
+    <string name="detail_physical_size">Ukuran fisik</string>
+
+    <string name="detail_network_available">Jaringan tersedia</string>
+    <string name="detail_wifi_enabled">Wi-Fi aktif</string>
+    <string name="detail_wifi_bssid">BSSID Wi-Fi</string>
+    <string name="detail_wifi_link_speed">Kecepatan tautan</string>
+    <string name="detail_wifi_ssid">SSID Wi-Fi</string>
+    <string name="detail_wifi_mac">Alamat MAC Wi-Fi</string>
+    <string name="detail_ipv6_address">Alamat IPv6</string>
+    <string name="detail_sim_carrier">Operator SIM</string>
+
+    <string name="detail_model">Model</string>
+    <string name="detail_brand">Merek</string>
+    <string name="detail_manufacturer">Produsen</string>
+    <string name="detail_device">Perangkat</string>
+    <string name="detail_product">Produk</string>
+    <string name="detail_board">Papan</string>
+    <string name="detail_hardware">Perangkat keras</string>
+    <string name="detail_bootloader">Bootloader</string>
+    <string name="detail_abi">ABI yang didukung</string>
+
+    <string name="detail_android_version">Versi Android</string>
+    <string name="detail_api_level">Level API</string>
+    <string name="detail_security_patch">Patch keamanan</string>
+    <string name="detail_fingerprint">Fingerprint</string>
+    <string name="detail_kernel">Kernel</string>
+
+    <string name="detail_cores">Inti</string>
+    <string name="detail_core_idle">Diam</string>
+
+    <string name="detail_resolution">Resolusi</string>
+    <string name="detail_density">Kepadatan</string>
+    <string name="detail_refresh_rate">Laju penyegaran</string>
+    <string name="detail_brightness_mode">Mode kecerahan</string>
+    <string name="detail_brightness_auto">Otomatis</string>
+    <string name="detail_brightness_manual">Manual</string>
+
+    <string name="detail_network_type">Koneksi</string>
+    <string name="detail_ip_address">Alamat IPv4</string>
+    <string name="detail_sim_country">Negara SIM</string>
+    <string name="detail_network_none">Tidak ada</string>
+
+    <string name="language_title">Bahasa</string>
+
+    <string name="notif_log_title">Pencatatan baterai</string>
+    <string name="notif_log_content">Mencatat level baterai • %1$d%%</string>
+    <string name="notif_log_starting">Memulai…</string>
+    <string name="notif_channel_monitor">Pencatatan baterai</string>
+    <string name="notif_channel_monitor_desc">Mencatat level baterai dari waktu ke waktu untuk membangun grafik riwayat</string>
+
+    <string name="cd_battery_icon">Ikon baterai</string>
+    <string name="cd_remove_ads">Hapus iklan</string>
+    <string name="cd_menu">Menu</string>
+</resources>

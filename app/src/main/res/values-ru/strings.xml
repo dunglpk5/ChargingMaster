@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Русский -->
+<resources>
+    <string name="app_name">Charging Master</string>
+
+    <string name="tab_home">Главная</string>
+    <string name="tab_tools">Инструменты</string>
+    <string name="tab_battery_usage">Расход батареи</string>
+
+    <string name="home_detect">Проверить</string>
+    <string name="home_ad_badge">AD</string>
+    <string name="home_battery_word">Батарея</string>
+    <string name="home_battery_life">Примерное время работы</string>
+    <string name="home_health_label">Состояние</string>
+    <string name="home_time_to_full">До полной зарядки</string>
+    <string name="home_charge_status">Состояние зарядки</string>
+    <string name="home_battery_status">Состояние батареи</string>
+    <string name="home_charge_speed_avg">Скорость зарядки</string>
+    <string name="msg_coming_soon">Скоро появится</string>
+    <string name="home_plugged">Подключено</string>
+    <string name="home_temperature">Температура</string>
+    <string name="home_health">Износ</string>
+    <string name="home_current">Ток зарядки</string>
+    <string name="home_voltage">Напряжение</string>
+    <string name="home_capacity">Ёмкость</string>
+    <string name="home_technology">Тип батареи</string>
+    <string name="home_model">Модель</string>
+
+    <string name="plug_ac">Сетевая зарядка</string>
+    <string name="plug_usb">USB</string>
+    <string name="plug_wireless">Беспроводная</string>
+    <string name="plug_none">От батареи</string>
+
+    <string name="health_good">Хорошее</string>
+    <string name="health_overheat">Перегрев</string>
+    <string name="health_dead">Неисправна</string>
+    <string name="health_over_voltage">Перенапряжение</string>
+    <string name="health_cold">Переохлаждение</string>
+    <string name="health_unknown">Неизвестно</string>
+
+    <string name="tools_group_tools">Инструменты</string>
+    <string name="tools_group_vip">VIP</string>
+    <string name="tools_all_title">Все функции</string>
+    <string name="tools_group_detect">Диагностика</string>
+    <string name="tools_group_general">Общее</string>
+    <string name="tools_group_other">Прочее</string>
+    <string name="tools_manage_apps">Управление приложениями</string>
+    <string name="tools_shortcut">Ярлык</string>
+    <string name="tools_clear_cache">Очистить кеш</string>
+    <string name="tools_feedback">Обратная связь</string>
+    <string name="tools_privacy_policy">Политика конфиденциальности</string>
+    <string name="tools_about_us">О приложении</string>
+    <string name="tools_no_ads">Без рекламы</string>
+    <string name="tools_charge_alarm">Оповещение о зарядке</string>
+    <string name="tools_priority_support">Приоритетная поддержка</string>
+    <string name="tools_charge_history">История зарядок</string>
+    <string name="tools_x_charge">X-Charge</string>
+    <string name="tools_more">Ещё</string>
+    <string name="tools_device_info">Об устройстве</string>
+    <string name="tools_clean_notification">Очистка уведомлений</string>
+    <string name="tools_clean_clipboard">Очистка буфера обмена</string>
+    <string name="tools_phone_temperature">Температура телефона</string>
+    <string name="tools_charge_detect">Проверка зарядки</string>
+    <string name="tools_cpu_usage">Загрузка ЦП</string>
+    <string name="tools_stat_storage">Память</string>
+    <string name="tools_stat_ram">ОЗУ</string>
+    <string name="tools_stat_battery">Батарея</string>
+    <string name="tools_action_scan">Сканировать</string>
+    <string name="tools_action_details">Подробнее</string>
+    <string name="tools_action_monitor">Следить</string>
+
+    <string name="monitor_title">Батарея</string>
+    <string name="monitor_recent_days">Последние 3 дня</string>
+    <string name="monitor_chart_title">История заряда</string>
+    <string name="monitor_last_charge">Последняя зарядка</string>
+    <string name="monitor_last_speed">Последняя зарядка</string>
+    <string name="monitor_last_source">Режим зарядки</string>
+    <string name="monitor_last_duration">Время зарядки</string>
+    <string name="monitor_last_quality">Диапазон зарядки</string>
+    <string name="monitor_since_full">С последней полной зарядки</string>
+    <string name="monitor_range">С %1$d%% до %2$d%%</string>
+    <string name="monitor_no_result">Нет данных</string>
+
+    <string name="usage_battery_health">Состояние батареи</string>
+    <string name="usage_health_desc">Сравнение расчётной ёмкости с заводской показывает, насколько износилась батарея. Чем длиннее циклы зарядки, тем точнее оценка.</string>
+    <string name="usage_estimated_capacity">Расчётная ёмкость</string>
+    <string name="usage_design_capacity">Заводская ёмкость</string>
+    <string name="usage_set_design_capacity">Указать заводскую ёмкость</string>
+    <string name="usage_average">Средний расход</string>
+    <string name="usage_combined">Суммарно</string>
+    <string name="usage_based_on">На основе</string>
+    <string name="usage_screen_on">Экран включён</string>
+    <string name="usage_screen_off">Экран выключен</string>
+    <string name="usage_last_7_days">за последние 7 дней</string>
+    <string name="usage_rate_detail">%1$.1f %% за %2$.1f ч</string>
+    <string name="usage_health_basis">На основе %1$d зарядок, всего %2$d %% или %3$d мА·ч.</string>
+    <string name="usage_charge_since">с %1$s</string>
+    <string name="usage_charge_daily">В среднем за день</string>
+    <string name="usage_charge_rate_detail">за последние 7 дней • %1$.1f %%/ч</string>
+    <string name="usage_charging_now">Текущая зарядка</string>
+    <string name="usage_charging_since">Заряжается с</string>
+
+    <string name="usage_apps">Расход по приложениям</string>
+    <string name="usage_apps_desc">Android не позволяет приложениям узнать, сколько энергии израсходовала каждая программа — эта цифра есть только в системных настройках. Ниже показана доля времени работы каждого приложения на переднем плане: она тесно связана с расходом, но не учитывает программы, тратящие энергию в фоне.</string>
+    <string name="usage_apps_permission_title">Нужен доступ к статистике</string>
+    <string name="usage_apps_permission_desc">Для сортировки приложений по времени работы нужно разрешение «Доступ к данным об использовании», оно ещё не выдано.</string>
+    <string name="usage_apps_grant">ВЫДАТЬ ДОСТУП</string>
+    <string name="usage_apps_empty">Пока недостаточно данных.</string>
+    <string name="usage_full_estimate">Время работы при полном заряде</string>
+    <string name="usage_charged">Заряжено</string>
+    <string name="usage_measuring">измерение…</string>
+    <string name="usage_chart_legend">Заряд</string>
+    <string name="usage_no_data">За этот день данных пока нет</string>
+    <string name="usage_full_estimate_desc">Оценка показывает, сколько может продержаться батарея, заряженная на 100%%, исходя из вашей истории зарядок.</string>
+    <string name="usage_charge_count">Всего зарядок</string>
+    <string name="usage_charge_average">В среднем за зарядку</string>
+    <string name="usage_capacity_dialog_title">Заводская ёмкость (мА·ч)</string>
+    <string name="usage_health_note">Потеряно %1$d мА·ч от заводской ёмкости</string>
+    <string name="usage_capacity_invalid">Введите значение от 500 до 30000 мА·ч</string>
+
+    <string name="value_placeholder">-</string>
+    <string name="action_ok">ОК</string>
+    <string name="action_cancel">Отмена</string>
+
+    <string name="check_title">Проверка источника</string>
+    <string name="check_average">Среднее</string>
+    <string name="check_max">Макс.</string>
+    <string name="check_turn_off">НАСТРОЙКИ</string>
+    <string name="check_settings_unavailable">На этом устройстве нет такого экрана настроек</string>
+
+    <string name="speed_unknown">ИЗМЕРЕНИЕ</string>
+    <string name="speed_not_charging">НЕ ЗАРЯЖАЕТСЯ</string>
+    <string name="speed_slow">МЕДЛЕННО</string>
+    <string name="speed_normal">НОРМАЛЬНО</string>
+    <string name="speed_fast">БЫСТРО</string>
+    <string name="speed_very_fast">ОЧЕНЬ БЫСТРО</string>
+
+    <string name="feature_power_source">Проверка источника</string>
+    <string name="feature_power_source_desc">Сетевая зарядка даёт больший ток</string>
+    <string name="feature_location">Проверка GPS</string>
+    <string name="feature_location_desc">Отключение GPS снижает расход</string>
+    <string name="feature_brightness">Проверка яркости</string>
+    <string name="feature_brightness_desc">Автояркость уменьшает расход на экран</string>
+    <string name="feature_bluetooth">Проверка Bluetooth</string>
+    <string name="feature_bluetooth_desc">Отключите Bluetooth, чтобы снизить расход</string>
+    <string name="feature_auto_sync">Проверка синхронизации</string>
+    <string name="feature_auto_sync_desc">Отключите системную синхронизацию, чтобы снизить расход</string>
+    <string name="feature_temperature">Проверка температуры</string>
+    <string name="feature_temperature_desc">Температура телефона</string>
+
+    <string name="check_current_in">Входящий ток: %1$s</string>
+    <string name="check_current_idle">Ток покоя: %1$s</string>
+    <string name="check_power_source">ПРОВЕРИТЬ ИСТОЧНИК</string>
+    <string name="check_x_charge">X-CHARGE</string>
+    <string name="check_detect">Проверить</string>
+    <string name="check_ok">ОК</string>
+
+    <string name="source_rated_power">Расчётная номинальная мощность:</string>
+    <string name="source_actual_power">Расчётная фактическая мощность:</string>
+    <string name="source_verdict_low">Скорость зарядки низкая</string>
+    <string name="source_verdict_normal">Скорость зарядки обычная</string>
+    <string name="source_verdict_high">Скорость зарядки высокая</string>
+    <string name="source_verdict_unplugged">Зарядное устройство не подключено</string>
+    <string name="action_ok_short">ОК</string>
+
+    <string name="xcharge_optimizing">Применённые оптимизации</string>
+    <string name="xcharge_line_done">✓  %1$s</string>
+    <string name="xcharge_line_manual">!  %1$s — отключите вручную</string>
+    <string name="xcharge_line_warn">!  %1$s</string>
+    <string name="xcharge_done_screen">Экран приглушён на этой странице</string>
+    <string name="xcharge_done_sync">Автосинхронизация отключена</string>
+    <string name="xcharge_done_brightness">Системная яркость снижена</string>
+    <string name="xcharge_grant_brightness">Разрешите приложению снижать системную яркость</string>
+    <string name="xcharge_manual_off">Отключите оставшиеся пункты</string>
+    <string name="xcharge_elapsed">Прошло</string>
+    <string name="xcharge_exit">Выйти</string>
+    <string name="xcharge_all_good">Всё готово к зарядке</string>
+    <string name="warn_overheat">Батарея горячая — снимите чехол и отложите телефон</string>
+    <string name="warn_draining">Заряд продолжает падать — источник не справляется</string>
+    <string name="warn_low_current">Ток зарядки низкий — проверьте кабель и блок питания</string>
+    <string name="warn_usb_source">Зарядка через USB-порт — от сетевого блока намного быстрее</string>
+    <string name="warn_nearly_full">Выше 90%% — если отключить сейчас, батарея прослужит дольше</string>
+    <string name="stage_fast">БЫСТРАЯ</string>
+    <string name="stage_cycle">ЦИКЛ</string>
+    <string name="stage_trickle">ПОДЗАРЯД</string>
+    <string name="xcharge_remaining">Около %1$s до полной зарядки</string>
+    <string name="xcharge_calculating">Расчёт оставшегося времени…</string>
+    <string name="xcharge_not_charging">Не заряжается</string>
+    <string name="xcharge_plug_in">Подключите зарядное устройство</string>
+    <string name="xcharge_warn_hot">Батарея необычно горячая. Отключите зарядку и дайте ей остыть.</string>
+    <string name="xcharge_warn_slow">Ток зарядки необычно низкий. Проверьте зарядное устройство и кабель.</string>
+    <string name="xcharge_actions">В этом режиме приложение держит экран включённым, следит за температурой и током в реальном времени и предупреждает, если что-то идёт не так.</string>
+
+    <string name="alarm_dismiss">ОСТАНОВИТЬ</string>
+
+    <string name="vip_subtitle">Оформите VIP и уберите всю рекламу</string>
+    <string name="vip_active">Вы VIP-пользователь</string>
+    <string name="vip_purchase">Стать VIP</string>
+    <string name="vip_purchase_price">Стать VIP · %1$s</string>
+    <string name="vip_benefit_format">✓  %1$s</string>
+    <string name="vip_thanks">Спасибо! Вся реклама убрана.</string>
+    <string name="vip_unavailable">Покупка сейчас недоступна. Попробуйте позже.</string>
+    <string name="vip_note">Разовый платёж. Покупка привязана к вашему аккаунту Google и восстанавливается после переустановки.</string>
+
+    <string name="temp_detect">ПРОВЕРИТЬ</string>
+    <string name="temp_state_normal">Температура в норме</string>
+    <string name="temp_state_warm">Батарея нагревается</string>
+    <string name="temp_state_hot">Батарея слишком горячая, дайте ей остыть</string>
+    <string name="temp_advice_normal">Температура телефона в норме. Пока беспокоиться не о чем.</string>
+    <string name="temp_advice_warm">Телефон теплее обычного — скорее всего, из-за нагрузки на процессор или тока зарядки. Чтобы охладить его, попробуйте:\n1. Отключить зарядное устройство и приостановить зарядку.\n2. Закрыть тяжёлые приложения в фоне.\n3. Оставить телефон на время в хорошо проветриваемом месте.</string>
+    <string name="temp_advice_hot">Телефон сейчас слишком горячий — возможно, из-за высокой нагрузки на процессор или большого тока зарядки. Чтобы охладить его, попробуйте:\n1. Отключить зарядное устройство и приостановить зарядку.\n2. Закрыть тяжёлые приложения в фоне.\n3. Оставить телефон на время в хорошо проветриваемом месте.</string>
+
+    <string name="settings_title">Настройки</string>
+    <string name="settings_version">Версия %1$s</string>
+    <string name="settings_battery_logging">Запись истории батареи</string>
+    <string name="settings_battery_logging_desc">Каждому пункту ниже нужна фоновая служба, пока приложение закрыто. Служба не опрашивает батарею по таймеру, поэтому расход ничтожен, и она останавливается, как только все три переключателя выключены. Оповещение о зарядке, счётчик зарядок и износ батареи работают и без этого.</string>
+    <string name="alarm_exact_warning">Оповещения могут задерживаться до открытия приложения. Нажмите здесь, чтобы разрешить точные будильники.</string>
+    <string name="settings_log_chart">График заряда</string>
+    <string name="settings_log_chart_desc">Записывает уровень заряда весь день, чтобы график с 00:00 до 24:00 был непрерывным.</string>
+    <string name="settings_log_screen">Статистика экрана</string>
+    <string name="settings_log_screen_desc">Разделяет расход по состоянию экрана — для показателей %/ч и оценки времени работы.</string>
+    <string name="settings_log_details">Данные в уведомлении</string>
+    <string name="settings_log_details_desc">Показывает текущий ток, средний ток и время экрана в постоянном уведомлении. При отключении остаётся только уровень заряда.</string>
+    <string name="settings_notification_access">Доступ к уведомлениям</string>
+    <string name="settings_app_info">О приложении</string>
+    <string name="about_us_message">%1$s помогает заряжать безопаснее и лучше понимать свою батарею.\n\nВерсия %2$s</string>
+    <string name="feedback_no_email_app">Почтовое приложение не найдено</string>
+    <string name="cache_cleared">Кеш очищен</string>
+    <string name="cache_clear_confirm">Очистить временный кеш приложения?</string>
+    <string name="settings_clipboard_confirm">Очистить содержимое буфера обмена?</string>
+    <string name="settings_clipboard_cleared">Буфер обмена очищен</string>
+    <string name="settings_clipboard_failed">Не удалось очистить буфер обмена</string>
+    <string name="language_system">Язык системы</string>
+
+    <string name="cpu_unavailable">Это устройство не позволяет читать загрузку процессора</string>
+    <string name="cpu_estimated_note">Устройство блокирует точные данные о процессоре, поэтому загрузка ниже рассчитана по частоте и обычно оказывается выше реальной.</string>
+
+    <string name="cpu_core_label">CPU %1$d</string>
+    <string name="cpu_freq_range">%1$s - %2$s</string>
+    <string name="cpu_spec_name">Название</string>
+    <string name="cpu_spec_vendor">Производитель</string>
+    <string name="cpu_spec_speed">Частота</string>
+    <string name="cpu_spec_cores">Ядра</string>
+    <string name="cpu_spec_arch">Архитектура</string>
+    <string name="cpu_current_clock">Текущая частота</string>
+    <string name="cpu_core_min">Мин.</string>
+    <string name="cpu_core_max">Макс.</string>
+
+    <string name="charging_screen_charging">Зарядка</string>
+    <string name="charging_screen_charging_left">Зарядка\n(осталось %1$s)</string>
+    <string name="charging_screen_full">Заряжено полностью</string>
+    <string name="charging_screen_unplugged">Отключено</string>
+    <string name="charging_screen_source">%1$s, %2$s</string>
+    <string name="charging_screen_detect">Проверить скорость зарядки &gt;&gt;</string>
+    <string name="charging_screen_swipe">Проведите вверх, чтобы разблокировать</string>
+    <string name="charging_screen_open_app">Открыть приложение</string>
+
+    <string name="clean_title">Очистка</string>
+    <string name="clean_junk_cache">Мусорные файлы</string>
+    <string name="clean_app_cache">Кеш приложений</string>
+    <string name="clean_obsolete_apk">Устаревшие APK</string>
+    <string name="clean_ad_cache">Кеш рекламы</string>
+    <string name="clean_downloads">Загруженные файлы</string>
+    <string name="clean_large_files">Большие файлы</string>
+    <string name="clean_scanning">Сканирование…</string>
+    <string name="clean_scan_done">Сканирование завершено</string>
+    <string name="clean_cleaning">Очистка…</string>
+    <string name="clean_action">Очистить</string>
+    <string name="clean_selected">Выбрано: %1$s</string>
+    <string name="clean_select_group">Выбрать эту группу</string>
+    <string name="clean_pick_files">%1$s (файлов: %2$d)</string>
+    <string name="clean_file_entry">%1$s — %2$s</string>
+    <string name="clean_file_count">%1$d/%2$d файлов</string>
+    <string name="clean_freed">Освобождено %1$s</string>
+    <string name="clean_confirm_title">Удалить эти файлы?</string>
+    <string name="clean_confirm_message">%1$s будет удалено из: %2$s.\n\nЭто действие необратимо.</string>
+    <string name="clean_grant_permission">Выдать доступ</string>
+    <string name="clean_stale_files">Давно не используемые файлы</string>
+    <string name="clean_permission_required">Нужен доступ к памяти</string>
+    <string name="clean_permission_message">Для сканирования нужен полный доступ к файлам. Без него Android скрывает файлы других приложений, и сканирование не увидит и не удалит ни одного файла. Выдайте разрешение, чтобы продолжить.</string>
+    <string name="clean_permission_unavailable">На этом устройстве нет экрана для выдачи этого разрешения</string>
+    <string name="clean_permission_notification">Для очистки уведомлений нужен доступ к уведомлениям. Android разрешает выдать его только в системных настройках, а без него этот экран не видит ни одного уведомления.</string>
+    <string name="clean_title_count">ОЧИСТКА УВЕДОМЛЕНИЙ (%1$d)</string>
+    <string name="clean_action_all">ОЧИСТИТЬ ВСЁ</string>
+    <string name="clean_time_today">%1$s Сегодня</string>
+    <string name="clean_time_other">%1$s %2$s</string>
+    <string name="clean_card_title">Проверка зарядки</string>
+    <string name="clean_card_desc">Проверьте скорость зарядки и состояние источника</string>
+    <string name="notif_stat_now">Сейчас: %1$d мА (%2$.1f Вт) • %3$.1f%%/ч • %4$s</string>
+    <string name="notif_stat_avg">Средний: %1$d мА • %2$.1f%%/ч • %3$.0f мА·ч (%4$.0f%%)</string>
+    <string name="notif_stat_screen_on">Экран включён: %1$s • %2$.0f мА·ч (%3$.1f%%)</string>
+    <string name="notif_stat_screen_off">Экран выключен: %1$s • %2$.0f мА·ч (%3$.1f%%)</string>
+    <string name="notif_stat_sleep">Активен: %1$s (%2$.0f%%) • Глубокий сон: %3$s (%4$.0f%%)</string>
+
+    <string name="clipboard_title_count">ОЧИСТКА БУФЕРА ОБМЕНА (%1$d)</string>
+    <string name="clipboard_item_label">Скопированное содержимое</string>
+    <string name="clipboard_cleared">Буфер обмена очищен</string>
+    <string name="clean_permission_restricted">Видите «Ограниченные настройки»? Android блокирует это разрешение для приложений, установленных из APK-файла. Откройте Настройки › Приложения › Charging Master, нажмите ⋮ вверху и выберите «Разрешить ограниченные настройки», затем вернитесь сюда.</string>
+
+    <string name="clean_nothing">Очищать нечего</string>
+    <string name="clean_done">Уведомления очищены</string>
+
+    <string name="cd_back">Назад</string>
+
+    <string name="history_empty">Ни одной зарядки пока не записано</string>
+    <string name="history_detail_title">Подробности зарядки</string>
+    <string name="history_gain_format">+%1$d%% (%2$d→%3$d)</string>
+    <string name="history_start_time">Начало</string>
+    <string name="history_end_time">Окончание</string>
+    <string name="history_ongoing">Идёт сейчас</string>
+    <string name="history_duration">Длительность</string>
+    <string name="history_gain">Заряжено</string>
+    <string name="history_plug_type">Источник питания</string>
+    <string name="history_max_temp">Максимальная температура</string>
+    <string name="history_charged_mah">Полученная энергия</string>
+
+    <string name="alarm_threshold_setting">Оповещение об уровне</string>
+    <string name="alarm_threshold_desc">Предупредит, когда заряд достигнет выбранного уровня. Держать ниже 80%% полезнее для батареи.</string>
+    <string name="alarm_full_setting">Оповещение о полной зарядке</string>
+    <string name="alarm_full_desc">Предупредит, когда батарея зарядится полностью.</string>
+    <string name="alarm_overheat_setting">Оповещение о перегреве</string>
+    <string name="alarm_overheat_desc">Предупредит, когда батарея слишком нагреется — даже без зарядки.</string>
+    <string name="alarm_permission_warning">Уведомления отключены, поэтому оповещения не появятся. Включите их в системных настройках.</string>
+    <string name="alarm_threshold_title">Уровень заряда достигнут</string>
+    <string name="alarm_threshold_message">Заряд %1$d%%. Отключите зарядку, чтобы продлить срок службы батареи.</string>
+    <string name="alarm_full_title">Батарея заряжена</string>
+    <string name="alarm_full_message">Заряд %1$d%%. Можно отключать.</string>
+    <string name="alarm_overheat_title">Батарея перегрелась</string>
+    <string name="alarm_overheat_message">Батарея перегревается при %1$d%%. Отключите зарядку и дайте ей остыть.</string>
+    <string name="notif_channel_alarm">Оповещения о зарядке</string>
+    <string name="notif_channel_alarm_desc">Оповещения об уровне заряда, полной зарядке и перегреве</string>
+
+    <string name="detail_tab_device">УСТРОЙСТВО</string>
+    <string name="detail_tab_system">СИСТЕМА</string>
+    <string name="detail_tab_cpu">ЦП</string>
+    <string name="detail_tab_display">ЭКРАН</string>
+    <string name="detail_tab_network">СЕТЬ</string>
+    <string name="detail_tab_sensor">ДАТЧИКИ</string>
+    <string name="detail_empty">Информация недоступна</string>
+    <string name="detail_yes">Да</string>
+    <string name="detail_no">Нет</string>
+
+    <string name="detail_device_name">Имя устройства</string>
+    <string name="detail_bluetooth_le">Bluetooth LE</string>
+    <string name="detail_nfc_present">NFC есть</string>
+    <string name="detail_nfc_enabled">NFC включён</string>
+    <string name="detail_ring_mode">Режим звонка</string>
+    <string name="detail_ring_silent">Без звука</string>
+    <string name="detail_ring_vibrate">Вибрация</string>
+    <string name="detail_ring_normal">Обычный</string>
+    <string name="detail_system_time">Системное время</string>
+    <string name="detail_brightness_level">Уровень яркости</string>
+    <string name="detail_orientation">Ориентация</string>
+    <string name="detail_portrait">Портретная</string>
+    <string name="detail_landscape">Альбомная</string>
+    <string name="detail_sdcard">SD-карта</string>
+    <string name="detail_emulator">Эмулятор</string>
+
+    <string name="detail_host">Хост сборки</string>
+    <string name="detail_user">Пользователь сборки</string>
+    <string name="detail_build_tags">Теги сборки</string>
+    <string name="detail_language">Язык</string>
+    <string name="detail_code_name">Кодовое имя</string>
+    <string name="detail_released_time">Дата выпуска</string>
+    <string name="detail_device_type">Тип устройства</string>
+    <string name="detail_root_access">Root-доступ</string>
+
+    <string name="detail_processor_name">Название процессора</string>
+    <string name="detail_cpu_hardware">Оборудование ЦП</string>
+    <string name="detail_processor">Процессор</string>
+    <string name="detail_running_cpus">Активные ядра</string>
+    <string name="detail_cpu_temperature">Температура ЦП</string>
+
+    <string name="detail_physical_size">Физический размер</string>
+
+    <string name="detail_network_available">Сеть доступна</string>
+    <string name="detail_wifi_enabled">Wi-Fi включён</string>
+    <string name="detail_wifi_bssid">BSSID Wi-Fi</string>
+    <string name="detail_wifi_link_speed">Скорость соединения</string>
+    <string name="detail_wifi_ssid">SSID Wi-Fi</string>
+    <string name="detail_wifi_mac">MAC-адрес Wi-Fi</string>
+    <string name="detail_ipv6_address">IPv6-адрес</string>
+    <string name="detail_sim_carrier">Оператор SIM</string>
+
+    <string name="detail_model">Модель</string>
+    <string name="detail_brand">Бренд</string>
+    <string name="detail_manufacturer">Производитель</string>
+    <string name="detail_device">Устройство</string>
+    <string name="detail_product">Продукт</string>
+    <string name="detail_board">Плата</string>
+    <string name="detail_hardware">Оборудование</string>
+    <string name="detail_bootloader">Загрузчик</string>
+    <string name="detail_abi">Поддерживаемые ABI</string>
+
+    <string name="detail_android_version">Версия Android</string>
+    <string name="detail_api_level">Уровень API</string>
+    <string name="detail_security_patch">Патч безопасности</string>
+    <string name="detail_fingerprint">Отпечаток сборки</string>
+    <string name="detail_kernel">Ядро</string>
+
+    <string name="detail_cores">Ядра</string>
+    <string name="detail_core_idle">Простой</string>
+
+    <string name="detail_resolution">Разрешение</string>
+    <string name="detail_density">Плотность</string>
+    <string name="detail_refresh_rate">Частота обновления</string>
+    <string name="detail_brightness_mode">Режим яркости</string>
+    <string name="detail_brightness_auto">Автоматически</string>
+    <string name="detail_brightness_manual">Вручную</string>
+
+    <string name="detail_network_type">Подключение</string>
+    <string name="detail_ip_address">IPv4-адрес</string>
+    <string name="detail_sim_country">Страна SIM</string>
+    <string name="detail_network_none">Нет</string>
+
+    <string name="language_title">Язык</string>
+
+    <string name="notif_log_title">Запись батареи</string>
+    <string name="notif_log_content">Записывается уровень заряда • %1$d%%</string>
+    <string name="notif_log_starting">Запуск…</string>
+    <string name="notif_channel_monitor">Запись батареи</string>
+    <string name="notif_channel_monitor_desc">Записывает уровень заряда со временем, чтобы построить график истории</string>
+
+    <string name="cd_battery_icon">Значок батареи</string>
+    <string name="cd_remove_ads">Убрать рекламу</string>
+    <string name="cd_menu">Меню</string>
+</resources>

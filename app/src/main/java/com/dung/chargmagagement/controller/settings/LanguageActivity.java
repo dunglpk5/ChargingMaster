@@ -16,6 +16,7 @@ import com.dung.chargmagagement.common.LocaleManager;
 import com.dung.chargmagagement.controller.base.BaseActivity;
 import com.dung.chargmagagement.databinding.ActivityLanguageBinding;
 import com.dung.chargmagagement.databinding.ItemLanguageBinding;
+import com.dung.chargmagagement.model.ui.AppLanguage;
 
 /**
  * Màn chọn ngôn ngữ.
@@ -25,19 +26,6 @@ import com.dung.chargmagagement.databinding.ItemLanguageBinding;
  * công. Màn này chỉ việc đóng lại để người dùng thấy ngay màn trước đã đổi ngôn ngữ.
  */
 public class LanguageActivity extends BaseActivity<ActivityLanguageBinding> {
-
-    /** Danh sách ngôn ngữ hỗ trợ; thêm ngôn ngữ mới chỉ cần thêm một dòng ở đây. */
-    private static final String[] LANGUAGE_TAGS = {
-            LocaleManager.LANG_SYSTEM,
-            LocaleManager.LANG_VI,
-            LocaleManager.LANG_EN
-    };
-
-    private static final int[] LANGUAGE_LABELS = {
-            R.string.language_system,
-            R.string.language_vi,
-            R.string.language_en
-    };
 
     public static void start(@NonNull Context context) {
         context.startActivity(new Intent(context, LanguageActivity.class));
@@ -61,12 +49,13 @@ public class LanguageActivity extends BaseActivity<ActivityLanguageBinding> {
         final String current = LocaleManager.getCurrentLanguage(prefs);
         final LayoutInflater inflater = getLayoutInflater();
 
-        for (int i = 0; i < LANGUAGE_TAGS.length; i++) {
-            final String tag = LANGUAGE_TAGS[i];
+        for (AppLanguage language : AppLanguage.values()) {
+            final String tag = language.getTag();
 
             ItemLanguageBinding item = ItemLanguageBinding.inflate(
                     inflater, binding.container, false);
-            item.tvLanguage.setText(LANGUAGE_LABELS[i]);
+            item.tvFlag.setText(language.getFlag());
+            item.tvLanguage.setText(language.getLabelRes());
             item.radioSelected.setChecked(tag.equals(current));
 
             // Cả dòng và nút tròn đều bấm được, người dùng không phải nhắm vào nút nhỏ

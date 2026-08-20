@@ -430,8 +430,6 @@
     <string name="detail_network_none">Không có</string>
 
     <string name="language_title">Ngôn ngữ</string>
-    <string name="language_en">English</string>
-    <string name="language_vi">Tiếng Việt</string>
 
     <string name="notif_log_title">Ghi lại mức pin</string>
     <string name="notif_log_content">Đang ghi lại mức pin • %1$d%%</string>

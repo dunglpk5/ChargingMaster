@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="usage_sessions">
+        <item quantity="one">%1$d सत्र</item>
+        <item quantity="other">%1$d सत्र</item>
+    </plurals>
+
+    <plurals name="clean_found">
+        <item quantity="one">%1$d सूचना साफ़ की जा सकती है</item>
+        <item quantity="other">%1$d सूचनाएँ साफ़ की जा सकती हैं</item>
+    </plurals>
+</resources>

@@ -69,6 +69,17 @@ public final class PrefManager {
         prefs.edit().putString(key, value).apply();
     }
 
+    /**
+     * Ghi ngay xuống đĩa thay vì để hệ thống ghi sau.
+     *
+     * <p>Dùng cho những giá trị được lưu ngay trước một hành động có thể giết tiến
+     * trình - đổi ngôn ngữ chẳng hạn: {@code apply()} ghi bất đồng bộ, nếu hệ thống
+     * dựng lại tiến trình trước khi ghi xong thì lựa chọn mất trắng.
+     */
+    public void putStringNow(String key, String value) {
+        prefs.edit().putString(key, value).commit();
+    }
+
     public int getInt(String key, int defaultValue) {
         return prefs.getInt(key, defaultValue);
     }

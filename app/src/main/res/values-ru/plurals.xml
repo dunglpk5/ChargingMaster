@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Русский требует четыре формы: 1 сеанс, 2 сеанса, 5 сеансов, 1,5 сеанса -->
+<resources>
+    <plurals name="usage_sessions">
+        <item quantity="one">%1$d сеанс</item>
+        <item quantity="few">%1$d сеанса</item>
+        <item quantity="many">%1$d сеансов</item>
+        <item quantity="other">%1$d сеанса</item>
+    </plurals>
+
+    <plurals name="clean_found">
+        <item quantity="one">Можно очистить %1$d уведомление</item>
+        <item quantity="few">Можно очистить %1$d уведомления</item>
+        <item quantity="many">Можно очистить %1$d уведомлений</item>
+        <item quantity="other">Можно очистить %1$d уведомления</item>
+    </plurals>
+</resources>

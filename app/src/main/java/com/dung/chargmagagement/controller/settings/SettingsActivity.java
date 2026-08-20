@@ -22,6 +22,7 @@ import com.dung.chargmagagement.controller.alarm.ChargeAlarmActivity;
 import com.dung.chargmagagement.controller.base.BaseActivity;
 import com.dung.chargmagagement.common.PrefManager;
 import com.dung.chargmagagement.databinding.ActivitySettingsBinding;
+import com.dung.chargmagagement.model.ui.AppLanguage;
 import com.dung.chargmagagement.databinding.ViewSettingsSwitchRowBinding;
 
 /**
@@ -61,16 +62,9 @@ public class SettingsActivity extends BaseActivity<ActivitySettingsBinding> {
     }
 
     private void updateLanguageSummary() {
-        final String current = LocaleManager.getCurrentLanguage(prefs);
-        final int labelRes;
-        if (LocaleManager.LANG_VI.equals(current)) {
-            labelRes = R.string.language_vi;
-        } else if (LocaleManager.LANG_EN.equals(current)) {
-            labelRes = R.string.language_en;
-        } else {
-            labelRes = R.string.language_system;
-        }
-        binding.tvLanguageValue.setText(labelRes);
+        final AppLanguage current =
+                AppLanguage.fromTag(LocaleManager.getCurrentLanguage(prefs));
+        binding.tvLanguageValue.setText(current.getLabelRes());
     }
 
     // ==================== Dọn dẹp clipboard ====================

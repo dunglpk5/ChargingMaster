@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="usage_sessions">
+        <item quantity="other">%1$d 段</item>
+    </plurals>
+
+    <plurals name="clean_found">
+        <item quantity="other">有 %1$d 条通知可清理</item>
+    </plurals>
+</resources>

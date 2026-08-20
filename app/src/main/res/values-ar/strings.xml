@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- العربية -->
+<resources>
+    <string name="app_name">Charging Master</string>
+
+    <string name="tab_home">الرئيسية</string>
+    <string name="tab_tools">الأدوات</string>
+    <string name="tab_battery_usage">استهلاك البطارية</string>
+
+    <string name="home_detect">فحص</string>
+    <string name="home_ad_badge">AD</string>
+    <string name="home_battery_word">البطارية</string>
+    <string name="home_battery_life">مدة التشغيل المتوقعة</string>
+    <string name="home_health_label">الحالة</string>
+    <string name="home_time_to_full">الوقت حتى الشحن الكامل</string>
+    <string name="home_charge_status">حالة الشحن</string>
+    <string name="home_battery_status">حالة البطارية</string>
+    <string name="home_charge_speed_avg">سرعة الشحن</string>
+    <string name="msg_coming_soon">قريبًا</string>
+    <string name="home_plugged">موصول</string>
+    <string name="home_temperature">درجة الحرارة</string>
+    <string name="home_health">الصحة</string>
+    <string name="home_current">تيار الشحن</string>
+    <string name="home_voltage">الجهد</string>
+    <string name="home_capacity">السعة</string>
+    <string name="home_technology">نوع البطارية</string>
+    <string name="home_model">الطراز</string>
+
+    <string name="plug_ac">شاحن كهربائي</string>
+    <string name="plug_usb">USB</string>
+    <string name="plug_wireless">لاسلكي</string>
+    <string name="plug_none">يعمل بالبطارية</string>
+
+    <string name="health_good">جيدة</string>
+    <string name="health_overheat">ارتفاع الحرارة</string>
+    <string name="health_dead">تالفة</string>
+    <string name="health_over_voltage">جهد زائد</string>
+    <string name="health_cold">باردة</string>
+    <string name="health_unknown">غير معروفة</string>
+
+    <string name="tools_group_tools">الأدوات</string>
+    <string name="tools_group_vip">VIP</string>
+    <string name="tools_all_title">كل الميزات</string>
+    <string name="tools_group_detect">الفحص</string>
+    <string name="tools_group_general">عام</string>
+    <string name="tools_group_other">أخرى</string>
+    <string name="tools_manage_apps">إدارة التطبيقات</string>
+    <string name="tools_shortcut">اختصار</string>
+    <string name="tools_clear_cache">مسح ذاكرة التخزين المؤقت</string>
+    <string name="tools_feedback">ملاحظات</string>
+    <string name="tools_privacy_policy">سياسة الخصوصية</string>
+    <string name="tools_about_us">عن التطبيق</string>
+    <string name="tools_no_ads">بدون إعلانات</string>
+    <string name="tools_charge_alarm">تنبيه الشحن</string>
+    <string name="tools_priority_support">دعم ذو أولوية</string>
+    <string name="tools_charge_history">سجل الشحن</string>
+    <string name="tools_x_charge">X-Charge</string>
+    <string name="tools_more">المزيد</string>
+    <string name="tools_device_info">معلومات الجهاز</string>
+    <string name="tools_clean_notification">تنظيف الإشعارات</string>
+    <string name="tools_clean_clipboard">تنظيف الحافظة</string>
+    <string name="tools_phone_temperature">حرارة الهاتف</string>
+    <string name="tools_charge_detect">فحص الشحن</string>
+    <string name="tools_cpu_usage">استخدام المعالج</string>
+    <string name="tools_stat_storage">التخزين</string>
+    <string name="tools_stat_ram">الذاكرة</string>
+    <string name="tools_stat_battery">البطارية</string>
+    <string name="tools_action_scan">فحص</string>
+    <string name="tools_action_details">التفاصيل</string>
+    <string name="tools_action_monitor">مراقبة</string>
+
+    <string name="monitor_title">البطارية</string>
+    <string name="monitor_recent_days">آخر ٣ أيام</string>
+    <string name="monitor_chart_title">سجل البطارية</string>
+    <string name="monitor_last_charge">آخر شحن</string>
+    <string name="monitor_last_speed">آخر شحن</string>
+    <string name="monitor_last_source">طريقة الشحن</string>
+    <string name="monitor_last_duration">مدة الشحن</string>
+    <string name="monitor_last_quality">نطاق الشحن</string>
+    <string name="monitor_since_full">منذ آخر شحن كامل</string>
+    <string name="monitor_range">من %1$d%% إلى %2$d%%</string>
+    <string name="monitor_no_result">لا توجد بيانات</string>
+
+    <string name="usage_battery_health">صحة البطارية</string>
+    <string name="usage_health_desc">مقارنة السعة المقدَّرة بالسعة الأصلية تبيّن مقدار تدهور البطارية. كلما طالت دورات الشحن صار التقدير أدق.</string>
+    <string name="usage_estimated_capacity">السعة المقدَّرة</string>
+    <string name="usage_design_capacity">السعة الأصلية</string>
+    <string name="usage_set_design_capacity">تعيين السعة الأصلية</string>
+    <string name="usage_average">متوسط الاستهلاك</string>
+    <string name="usage_combined">الاستخدام الإجمالي</string>
+    <string name="usage_based_on">بناءً على</string>
+    <string name="usage_screen_on">الشاشة تعمل</string>
+    <string name="usage_screen_off">الشاشة مطفأة</string>
+    <string name="usage_last_7_days">خلال آخر ٧ أيام</string>
+    <string name="usage_rate_detail">%1$.1f %% خلال %2$.1f ساعة</string>
+    <string name="usage_health_basis">بناءً على %1$d جلسة شحن بمجموع %2$d %% أي نحو %3$d mAh.</string>
+    <string name="usage_charge_since">منذ %1$s</string>
+    <string name="usage_charge_daily">متوسط الشحن اليومي</string>
+    <string name="usage_charge_rate_detail">خلال آخر ٧ أيام • %1$.1f %%/ساعة</string>
+    <string name="usage_charging_now">جلسة الشحن الحالية</string>
+    <string name="usage_charging_since">يشحن منذ</string>
+
+    <string name="usage_apps">استهلاك التطبيقات</string>
+    <string name="usage_apps_desc">لا يسمح أندرويد للتطبيقات بقراءة كمية الطاقة التي استهلكها كل تطبيق؛ هذا الرقم موجود في إعدادات النظام فقط. ما يظهر أدناه هو نسبة وقت كل تطبيق في المقدمة، وهي تتبع الاستهلاك عن قرب لكنها لا تحسب التطبيقات التي تستهلك الطاقة في الخلفية.</string>
+    <string name="usage_apps_permission_title">يلزم إذن الوصول للاستخدام</string>
+    <string name="usage_apps_permission_desc">ترتيب التطبيقات حسب الاستخدام يحتاج إذن «الوصول إلى بيانات الاستخدام»، ولم يُمنح بعد.</string>
+    <string name="usage_apps_grant">منح الإذن</string>
+    <string name="usage_apps_empty">لا توجد بيانات استخدام كافية بعد.</string>
+    <string name="usage_full_estimate">المدة المتوقعة ببطارية ممتلئة</string>
+    <string name="usage_charged">ما تم شحنه</string>
+    <string name="usage_measuring">جارٍ القياس…</string>
+    <string name="usage_chart_legend">المستوى</string>
+    <string name="usage_no_data">لا توجد بيانات لهذا اليوم بعد</string>
+    <string name="usage_full_estimate_desc">يوضح هذا التقدير كم قد تدوم بطارية مشحونة بنسبة %100 اعتمادًا على سجل الشحن لديك.</string>
+    <string name="usage_charge_count">إجمالي مرات الشحن</string>
+    <string name="usage_charge_average">المتوسط لكل شحنة</string>
+    <string name="usage_capacity_dialog_title">السعة الأصلية (mAh)</string>
+    <string name="usage_health_note">نقص %1$d mAh عن السعة الأصلية</string>
+    <string name="usage_capacity_invalid">أدخل قيمة بين ٥٠٠ و٣٠٠٠٠ mAh</string>
+
+    <string name="value_placeholder">-</string>
+    <string name="action_ok">موافق</string>
+    <string name="action_cancel">إلغاء</string>
+
+    <string name="check_title">فحص مصدر الطاقة</string>
+    <string name="check_average">المتوسط</string>
+    <string name="check_max">الأقصى</string>
+    <string name="check_turn_off">الإعدادات</string>
+    <string name="check_settings_unavailable">لا تتوفر في هذا الجهاز شاشة الإعدادات هذه</string>
+
+    <string name="speed_unknown">جارٍ القياس</string>
+    <string name="speed_not_charging">لا يشحن</string>
+    <string name="speed_slow">بطيء</string>
+    <string name="speed_normal">عادي</string>
+    <string name="speed_fast">سريع</string>
+    <string name="speed_very_fast">سريع جدًا</string>
+
+    <string name="feature_power_source">فحص مصدر الطاقة</string>
+    <string name="feature_power_source_desc">الشاحن الكهربائي يرفع تيار الشحن</string>
+    <string name="feature_location">فحص GPS</string>
+    <string name="feature_location_desc">إيقاف GPS يقلل الاستهلاك</string>
+    <string name="feature_brightness">فحص السطوع</string>
+    <string name="feature_brightness_desc">تشغيل السطوع التلقائي يقلل استهلاك الشاشة</string>
+    <string name="feature_bluetooth">فحص البلوتوث</string>
+    <string name="feature_bluetooth_desc">إيقاف البلوتوث يقلل الاستهلاك</string>
+    <string name="feature_auto_sync">فحص المزامنة</string>
+    <string name="feature_auto_sync_desc">إيقاف مزامنة النظام يقلل الاستهلاك</string>
+    <string name="feature_temperature">فحص الحرارة</string>
+    <string name="feature_temperature_desc">حرارة الهاتف</string>
+
+    <string name="check_current_in">تيار الدخل: %1$s</string>
+    <string name="check_current_idle">تيار السكون: %1$s</string>
+    <string name="check_power_source">افحص مصدر الطاقة</string>
+    <string name="check_x_charge">X-CHARGE</string>
+    <string name="check_detect">فحص</string>
+    <string name="check_ok">موافق</string>
+
+    <string name="source_rated_power">القدرة الاسمية المقدَّرة:</string>
+    <string name="source_actual_power">القدرة الفعلية المقدَّرة:</string>
+    <string name="source_verdict_low">سرعة الشحن منخفضة حاليًا</string>
+    <string name="source_verdict_normal">سرعة الشحن عادية</string>
+    <string name="source_verdict_high">سرعة الشحن مرتفعة</string>
+    <string name="source_verdict_unplugged">لا يوجد شاحن موصول</string>
+    <string name="action_ok_short">موافق</string>
+
+    <string name="xcharge_optimizing">التحسينات المطبَّقة</string>
+    <string name="xcharge_line_done">✓  %1$s</string>
+    <string name="xcharge_line_manual">!  %1$s — أوقفه يدويًا</string>
+    <string name="xcharge_line_warn">!  %1$s</string>
+    <string name="xcharge_done_screen">تم خفض سطوع هذه الصفحة</string>
+    <string name="xcharge_done_sync">تم إيقاف المزامنة التلقائية</string>
+    <string name="xcharge_done_brightness">تم خفض سطوع النظام</string>
+    <string name="xcharge_grant_brightness">اسمح للتطبيق بخفض سطوع النظام</string>
+    <string name="xcharge_manual_off">أوقف العناصر المتبقية</string>
+    <string name="xcharge_elapsed">الوقت المنقضي</string>
+    <string name="xcharge_exit">خروج</string>
+    <string name="xcharge_all_good">كل شيء جاهز للشحن</string>
+    <string name="warn_overheat">البطارية ساخنة — انزع الغطاء وتوقف عن استخدام الهاتف</string>
+    <string name="warn_draining">الشحن ما زال ينخفض — مصدر الطاقة لا يكفي</string>
+    <string name="warn_low_current">تيار الشحن منخفض — افحص الكابل والمحوّل</string>
+    <string name="warn_usb_source">الشحن عبر منفذ USB — المحوّل الكهربائي أسرع بكثير</string>
+    <string name="warn_nearly_full">فوق %%٩٠ — فصل الشاحن قريبًا يحافظ على البطارية</string>
+    <string name="stage_fast">سريع</string>
+    <string name="stage_cycle">دورة</string>
+    <string name="stage_trickle">تدفق بطيء</string>
+    <string name="xcharge_remaining">نحو %1$s حتى الامتلاء</string>
+    <string name="xcharge_calculating">جارٍ حساب الوقت المتبقي…</string>
+    <string name="xcharge_not_charging">لا يشحن</string>
+    <string name="xcharge_plug_in">وصّل شاحنًا للبدء</string>
+    <string name="xcharge_warn_hot">حرارة البطارية مرتفعة بشكل غير معتاد. افصل الشاحن ودعها تبرد.</string>
+    <string name="xcharge_warn_slow">تيار الشحن منخفض بشكل غير معتاد. افحص الشاحن والكابل.</string>
+    <string name="xcharge_actions">في هذا الوضع يبقي التطبيق الشاشة مضاءة، ويراقب حرارة البطارية والتيار مباشرةً، وينبهك إذا بدا شيء غير سليم.</string>
+
+    <string name="alarm_dismiss">إيقاف التنبيه</string>
+
+    <string name="vip_subtitle">ترقَّ لإزالة كل الإعلانات</string>
+    <string name="vip_active">أنت عضو VIP</string>
+    <string name="vip_purchase">الترقية إلى VIP</string>
+    <string name="vip_purchase_price">الترقية إلى VIP · %1$s</string>
+    <string name="vip_benefit_format">✓  %1$s</string>
+    <string name="vip_thanks">شكرًا لك! تمت إزالة جميع الإعلانات.</string>
+    <string name="vip_unavailable">الشراء غير متاح حاليًا. حاول لاحقًا.</string>
+    <string name="vip_note">دفعة واحدة. الشراء مرتبط بحساب Google الخاص بك ويمكن استعادته بعد إعادة تثبيت التطبيق.</string>
+
+    <string name="temp_detect">فحص</string>
+    <string name="temp_state_normal">الحرارة طبيعية</string>
+    <string name="temp_state_warm">البطارية تسخن</string>
+    <string name="temp_state_hot">البطارية ساخنة جدًا، دعها تبرد</string>
+    <string name="temp_advice_normal">حرارة هاتفك طبيعية. لا داعي للقلق الآن.</string>
+    <string name="temp_advice_warm">هاتفك أدفأ من المعتاد، غالبًا بسبب حِمل المعالج أو تيار الشحن. لتبريده جرّب ما يلي:\n١. افصل الشاحن وأوقف الشحن.\n٢. أغلق التطبيقات الثقيلة العاملة في الخلفية.\n٣. اترك الهاتف فترة في مكان جيد التهوية.</string>
+    <string name="temp_advice_hot">هاتفك ساخن جدًا الآن، ربما بسبب حِمل عالٍ على المعالج أو تيار شحن كبير. لتبريده جرّب ما يلي:\n١. افصل الشاحن وأوقف الشحن.\n٢. أغلق التطبيقات الثقيلة العاملة في الخلفية.\n٣. اترك الهاتف فترة في مكان جيد التهوية.</string>
+
+    <string name="settings_title">الإعدادات</string>
+    <string name="settings_version">الإصدار %1$s</string>
+    <string name="settings_battery_logging">تسجيل سجل البطارية</string>
+    <string name="settings_battery_logging_desc">كل بند أدناه يحتاج خدمة في الخلفية أثناء إغلاق التطبيق. الخدمة لا تستعلم عن البطارية دوريًا، لذا فتكلفتها لا تُذكر، وتتوقف فور إيقاف المفاتيح الثلاثة. تنبيه الشحن وعدد مرات الشحن وصحة البطارية تعمل دون أي من ذلك.</string>
+    <string name="alarm_exact_warning">قد تتأخر التنبيهات حتى تفتح التطبيق. اضغط هنا للسماح بالمنبهات الدقيقة.</string>
+    <string name="settings_log_chart">مخطط مستوى البطارية</string>
+    <string name="settings_log_chart_desc">يسجّل مستوى البطارية طوال اليوم ليبقى مخطط ٠٠:٠٠–٢٤:٠٠ متصلًا.</string>
+    <string name="settings_log_screen">إحصاءات الشاشة</string>
+    <string name="settings_log_screen_desc">يفصل الاستهلاك حسب حالة الشاشة، من أجل أرقام %/ساعة وتقدير مدة التشغيل.</string>
+    <string name="settings_log_details">أرقام مباشرة في الإشعار</string>
+    <string name="settings_log_details_desc">يعرض التيار الحالي والتيار المتوسط ووقت الشاشة في الإشعار الدائم. عند الإيقاف يبقى مستوى البطارية فقط.</string>
+    <string name="settings_notification_access">الوصول إلى الإشعارات</string>
+    <string name="settings_app_info">معلومات التطبيق</string>
+    <string name="about_us_message">‏%1$s يساعدك على الشحن بأمان أكبر وفهم بطاريتك بشكل أفضل.\n\nالإصدار %2$s</string>
+    <string name="feedback_no_email_app">لم يُعثر على تطبيق بريد</string>
+    <string name="cache_cleared">تم مسح الذاكرة المؤقتة</string>
+    <string name="cache_clear_confirm">هل تريد مسح الذاكرة المؤقتة للتطبيق؟</string>
+    <string name="settings_clipboard_confirm">هل تريد مسح محتوى الحافظة؟</string>
+    <string name="settings_clipboard_cleared">تم مسح الحافظة</string>
+    <string name="settings_clipboard_failed">تعذّر مسح الحافظة</string>
+    <string name="language_system">لغة النظام</string>
+
+    <string name="cpu_unavailable">لا يسمح هذا الجهاز بقراءة استخدام المعالج</string>
+    <string name="cpu_estimated_note">يحجب هذا الجهاز قراءات المعالج الدقيقة، لذا فالحِمل أدناه مقدَّر من تردد التشغيل وغالبًا ما يظهر أعلى من الواقع.</string>
+
+    <string name="cpu_core_label">CPU %1$d</string>
+    <string name="cpu_freq_range">%1$s - %2$s</string>
+    <string name="cpu_spec_name">الاسم</string>
+    <string name="cpu_spec_vendor">الشركة المصنّعة</string>
+    <string name="cpu_spec_speed">السرعة</string>
+    <string name="cpu_spec_cores">الأنوية</string>
+    <string name="cpu_spec_arch">المعمارية</string>
+    <string name="cpu_current_clock">السرعة الحالية</string>
+    <string name="cpu_core_min">الأدنى</string>
+    <string name="cpu_core_max">الأقصى</string>
+
+    <string name="charging_screen_charging">جارٍ الشحن</string>
+    <string name="charging_screen_charging_left">جارٍ الشحن\n(يتبقى %1$s)</string>
+    <string name="charging_screen_full">مشحونة بالكامل</string>
+    <string name="charging_screen_unplugged">تم فصل الشاحن</string>
+    <string name="charging_screen_source">%1$s، %2$s</string>
+    <string name="charging_screen_detect">تحقق من سرعة الشحن &gt;&gt;</string>
+    <string name="charging_screen_swipe">اسحب لأعلى لإلغاء القفل</string>
+    <string name="charging_screen_open_app">افتح التطبيق</string>
+
+    <string name="clean_title">تنظيف</string>
+    <string name="clean_junk_cache">ملفات غير مفيدة</string>
+    <string name="clean_app_cache">ذاكرة التطبيقات المؤقتة</string>
+    <string name="clean_obsolete_apk">ملفات APK قديمة</string>
+    <string name="clean_ad_cache">ذاكرة الإعلانات</string>
+    <string name="clean_downloads">الملفات المنزَّلة</string>
+    <string name="clean_large_files">ملفات كبيرة</string>
+    <string name="clean_scanning">جارٍ الفحص…</string>
+    <string name="clean_scan_done">اكتمل الفحص</string>
+    <string name="clean_cleaning">جارٍ التنظيف…</string>
+    <string name="clean_action">تنظيف</string>
+    <string name="clean_selected">المحدد: %1$s</string>
+    <string name="clean_select_group">اختر هذه المجموعة</string>
+    <string name="clean_pick_files">%1$s (%2$d ملفًا)</string>
+    <string name="clean_file_entry">%1$s — %2$s</string>
+    <string name="clean_file_count">%1$d/%2$d ملف</string>
+    <string name="clean_freed">تم تحرير %1$s</string>
+    <string name="clean_confirm_title">هل تريد حذف هذه الملفات؟</string>
+    <string name="clean_confirm_message">سيتم حذف %1$s من: %2$s.\n\nلا يمكن التراجع عن ذلك.</string>
+    <string name="clean_grant_permission">منح الإذن</string>
+    <string name="clean_stale_files">ملفات لم تُستخدم منذ زمن</string>
+    <string name="clean_permission_required">يلزم إذن الوصول إلى التخزين</string>
+    <string name="clean_permission_message">يحتاج الفحص إلى وصول كامل للملفات. بدونه يخفي أندرويد ملفات التطبيقات الأخرى، فلا يستطيع الفحص رؤية أي ملف أو حذفه. امنح الإذن للمتابعة.</string>
+    <string name="clean_permission_unavailable">لا توجد في هذا الجهاز شاشة لمنح هذا الإذن</string>
+    <string name="clean_permission_notification">يحتاج تنظيف الإشعارات إلى إذن الوصول للإشعارات. لا يسمح أندرويد بمنحه إلا من إعدادات النظام، وبدونه لا ترى هذه الشاشة أي إشعار.</string>
+    <string name="clean_title_count">تنظيف الإشعارات (%1$d)</string>
+    <string name="clean_action_all">تنظيف الكل</string>
+    <string name="clean_time_today">%1$s اليوم</string>
+    <string name="clean_time_other">%1$s %2$s</string>
+    <string name="clean_card_title">فحص الشحن</string>
+    <string name="clean_card_desc">تحقق من سرعة الشحن وحالة مصدر الطاقة</string>
+    <string name="notif_stat_now">الآن: %1$d mA (%2$.1f W) • %3$.1f%%/ساعة • %4$s</string>
+    <string name="notif_stat_avg">المتوسط: %1$d mA • %2$.1f%%/ساعة • %3$.0f mAh (%4$.0f%%)</string>
+    <string name="notif_stat_screen_on">الشاشة تعمل: %1$s • %2$.0f mAh (%3$.1f%%)</string>
+    <string name="notif_stat_screen_off">الشاشة مطفأة: %1$s • %2$.0f mAh (%3$.1f%%)</string>
+    <string name="notif_stat_sleep">نشط: %1$s (%2$.0f%%) • سبات عميق: %3$s (%4$.0f%%)</string>
+
+    <string name="clipboard_title_count">تنظيف الحافظة (%1$d)</string>
+    <string name="clipboard_item_label">المحتوى المنسوخ</string>
+    <string name="clipboard_cleared">تم مسح الحافظة</string>
+    <string name="clean_permission_restricted">هل ترى «إعداد مقيَّد»؟ يحجب أندرويد هذا الإذن عن التطبيقات المثبَّتة من ملف APK. افتح الإعدادات ‹ التطبيقات ‹ Charging Master، واضغط ⋮ في الأعلى واختر «السماح بالإعدادات المقيَّدة»، ثم عد إلى هنا.</string>
+
+    <string name="clean_nothing">لا يوجد ما يحتاج تنظيفًا</string>
+    <string name="clean_done">تم تنظيف الإشعارات</string>
+
+    <string name="cd_back">رجوع</string>
+
+    <string name="history_empty">لم تُسجَّل أي جلسة شحن بعد</string>
+    <string name="history_detail_title">تفاصيل الجلسة</string>
+    <string name="history_gain_format">+%1$d%% (%2$d→%3$d)</string>
+    <string name="history_start_time">البداية</string>
+    <string name="history_end_time">النهاية</string>
+    <string name="history_ongoing">جارية</string>
+    <string name="history_duration">المدة</string>
+    <string name="history_gain">ما تم شحنه</string>
+    <string name="history_plug_type">مصدر الطاقة</string>
+    <string name="history_max_temp">أعلى حرارة</string>
+    <string name="history_charged_mah">الطاقة المشحونة</string>
+
+    <string name="alarm_threshold_setting">تنبيه مستوى الشحن</string>
+    <string name="alarm_threshold_desc">ينبهك عندما تصل البطارية إلى المستوى الذي تحدده. البقاء دون %%٨٠ يبقي البطارية سليمة لفترة أطول.</string>
+    <string name="alarm_full_setting">تنبيه اكتمال الشحن</string>
+    <string name="alarm_full_desc">ينبهك عندما تُشحن البطارية بالكامل.</string>
+    <string name="alarm_overheat_setting">تنبيه ارتفاع الحرارة</string>
+    <string name="alarm_overheat_desc">ينبهك عندما ترتفع حرارة البطارية كثيرًا، حتى أثناء عدم الشحن.</string>
+    <string name="alarm_permission_warning">الإشعارات مغلقة، لذا لا يمكن عرض التنبيهات. فعّلها من إعدادات النظام.</string>
+    <string name="alarm_threshold_title">تم بلوغ مستوى الشحن</string>
+    <string name="alarm_threshold_message">البطارية عند %1$d%%. افصل الشاحن للحفاظ على عمرها.</string>
+    <string name="alarm_full_title">البطارية ممتلئة</string>
+    <string name="alarm_full_message">البطارية عند %1$d%%. يمكنك فصل الشاحن الآن.</string>
+    <string name="alarm_overheat_title">البطارية ساخنة جدًا</string>
+    <string name="alarm_overheat_message">ترتفع حرارة البطارية عند %1$d%%. افصل الشاحن ودعها تبرد.</string>
+    <string name="notif_channel_alarm">تنبيهات الشحن</string>
+    <string name="notif_channel_alarm_desc">تنبيهات مستوى الشحن والاكتمال وارتفاع الحرارة</string>
+
+    <string name="detail_tab_device">الجهاز</string>
+    <string name="detail_tab_system">النظام</string>
+    <string name="detail_tab_cpu">المعالج</string>
+    <string name="detail_tab_display">الشاشة</string>
+    <string name="detail_tab_network">الشبكة</string>
+    <string name="detail_tab_sensor">المستشعرات</string>
+    <string name="detail_empty">لا تتوفر معلومات</string>
+    <string name="detail_yes">نعم</string>
+    <string name="detail_no">لا</string>
+
+    <string name="detail_device_name">اسم الجهاز</string>
+    <string name="detail_bluetooth_le">Bluetooth LE</string>
+    <string name="detail_nfc_present">يدعم NFC</string>
+    <string name="detail_nfc_enabled">NFC مفعّل</string>
+    <string name="detail_ring_mode">وضع الرنين</string>
+    <string name="detail_ring_silent">صامت</string>
+    <string name="detail_ring_vibrate">اهتزاز</string>
+    <string name="detail_ring_normal">عادي</string>
+    <string name="detail_system_time">وقت النظام</string>
+    <string name="detail_brightness_level">مستوى السطوع</string>
+    <string name="detail_orientation">الاتجاه</string>
+    <string name="detail_portrait">عمودي</string>
+    <string name="detail_landscape">أفقي</string>
+    <string name="detail_sdcard">بطاقة SD</string>
+    <string name="detail_emulator">محاكي</string>
+
+    <string name="detail_host">مضيف البناء</string>
+    <string name="detail_user">مستخدم البناء</string>
+    <string name="detail_build_tags">وسوم البناء</string>
+    <string name="detail_language">اللغة</string>
+    <string name="detail_code_name">الاسم الرمزي</string>
+    <string name="detail_released_time">تاريخ الإصدار</string>
+    <string name="detail_device_type">نوع الجهاز</string>
+    <string name="detail_root_access">صلاحية الروت</string>
+
+    <string name="detail_processor_name">اسم المعالج</string>
+    <string name="detail_cpu_hardware">عتاد المعالج</string>
+    <string name="detail_processor">المعالج</string>
+    <string name="detail_running_cpus">الأنوية العاملة</string>
+    <string name="detail_cpu_temperature">حرارة المعالج</string>
+
+    <string name="detail_physical_size">الحجم الفعلي</string>
+
+    <string name="detail_network_available">الشبكة متاحة</string>
+    <string name="detail_wifi_enabled">الواي فاي مفعّل</string>
+    <string name="detail_wifi_bssid">BSSID الواي فاي</string>
+    <string name="detail_wifi_link_speed">سرعة الاتصال</string>
+    <string name="detail_wifi_ssid">SSID الواي فاي</string>
+    <string name="detail_wifi_mac">عنوان MAC للواي فاي</string>
+    <string name="detail_ipv6_address">عنوان IPv6</string>
+    <string name="detail_sim_carrier">مشغّل شريحة SIM</string>
+
+    <string name="detail_model">الطراز</string>
+    <string name="detail_brand">العلامة التجارية</string>
+    <string name="detail_manufacturer">الشركة المصنّعة</string>
+    <string name="detail_device">الجهاز</string>
+    <string name="detail_product">المنتج</string>
+    <string name="detail_board">اللوحة</string>
+    <string name="detail_hardware">العتاد</string>
+    <string name="detail_bootloader">محمّل الإقلاع</string>
+    <string name="detail_abi">واجهات ABI المدعومة</string>
+
+    <string name="detail_android_version">إصدار أندرويد</string>
+    <string name="detail_api_level">مستوى API</string>
+    <string name="detail_security_patch">تصحيح الأمان</string>
+    <string name="detail_fingerprint">بصمة البناء</string>
+    <string name="detail_kernel">النواة</string>
+
+    <string name="detail_cores">الأنوية</string>
+    <string name="detail_core_idle">خامل</string>
+
+    <string name="detail_resolution">الدقة</string>
+    <string name="detail_density">الكثافة</string>
+    <string name="detail_refresh_rate">معدل التحديث</string>
+    <string name="detail_brightness_mode">وضع السطوع</string>
+    <string name="detail_brightness_auto">تلقائي</string>
+    <string name="detail_brightness_manual">يدوي</string>
+
+    <string name="detail_network_type">الاتصال</string>
+    <string name="detail_ip_address">عنوان IPv4</string>
+    <string name="detail_sim_country">بلد الشريحة</string>
+    <string name="detail_network_none">لا يوجد</string>
+
+    <string name="language_title">اللغة</string>
+
+    <string name="notif_log_title">تسجيل البطارية</string>
+    <string name="notif_log_content">جارٍ تسجيل مستوى البطارية • %1$d%%</string>
+    <string name="notif_log_starting">جارٍ البدء…</string>
+    <string name="notif_channel_monitor">تسجيل البطارية</string>
+    <string name="notif_channel_monitor_desc">يسجّل مستوى البطارية عبر الوقت لبناء مخطط السجل</string>
+
+    <string name="cd_battery_icon">رمز البطارية</string>
+    <string name="cd_remove_ads">إزالة الإعلانات</string>
+    <string name="cd_menu">القائمة</string>
+</resources>
